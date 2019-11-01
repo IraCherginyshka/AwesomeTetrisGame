@@ -21,4 +21,4 @@ Technologies
 
 Nice to have requirements
 -----------------------------------
-Game implementation in group at the same time and with showing of all progress while playing(????)
+Game implementation in group at the same time and with showing of all progress while playing (using WebSocket)
