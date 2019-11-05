@@ -1,27 +1,30 @@
+@import "./src/assets/styles/variables";
+
 .player {
   display: flex;
   align-items: center;
 
   & .icon {
-    max-width: 7rem; //var
+    max-width: $max-width-icon;
   }
+
   &-inf {
-    margin: 0 2rem; //var
-    font-size: 2rem; //var
+    margin: $secondary-indent;
+    font-size: $label-font-size;
     & span {
-      font-size: 1rem; //var
+      font-size: $default-font-size;
     }
   }
 }
 
 .game {
-  padding-top: 1.7rem; //var
+  padding-top: $primary-indent;
   display: flex;
 
   &-board {
-    width: 25rem; //var
-    height: 35rem; //var
-    border: 1px solid grey; //var
-    background-color: darkblue; //var
+    width: $board-width;
+    height: $board-height;
+    border: $primary-border;
+    background-color: $background-color;
   }
 }

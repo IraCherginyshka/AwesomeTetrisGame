@@ -1,17 +1,9 @@
-.container {
-  max-width: 1100px; //var
-  margin: 0 auto; //var
-  padding: 0 2rem; //var
-}
+@import "./src/assets/styles/variables";
 
-.main {
-  padding-top: 1.7rem; //var
-  min-height: 88.5vh; //var
-}
 .app {
-  background-color: black; //var
-  font-family: Impact, sans-serif; //var
-  color: white; //var
-  //font-size: ; //var
+  background-color: $primary-color;
+  font-family: $primary-font;
+  color: $default-color;
+  font-size: $default-font-size;
   text-transform: uppercase;
 }
