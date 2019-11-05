@@ -6,8 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent implements OnInit {
-  // constructor() { }
-
   ngOnInit() {
   }
 }
