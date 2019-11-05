@@ -1,0 +1,42 @@
+//Color Palette
+$primary-color: #000;
+$secondary-color: #FA0000;
+$default-color: #FFF;
+$service-color: #979797;
+$background-color: #2B3A42;
+
+//Figures
+$figure-color-first: #FD0404;
+$figure-color-second: #2E36D5;
+$figure-color-third: #19AF09;
+$figure-color-fourth: #F8AB05;
+$figure-color-fifth: #13E4E7;
+$figure-color-sixth: #FF3C00;
+$figure-color-seventh: #2E36D5;
+$figure-size: 1.7rem;
+$figure-quantity-width: 12;
+$figure-quantity-height: 20;
+
+//Fonts
+$primary-font: Impact, sans-serif;
+$default-font-size: 2rem;
+$h1-font-size: 5rem;
+$label-font-size: 3rem;
+$secondary-text-font-size: 1.5rem;
+
+//Sizes
+$inform-field-width: 10rem;
+$inform-field-height: 5rem;
+$inform-field-padding: 1rem;
+$inform-field-margin: 2rem 0;
+$controls-button-width: 7rem;
+$controls-button-height: 3rem;
+$controls-button-padding: 1rem;
+$controls-button-margin: 2rem;
+$center: 0 auto;
+$board-width: $figure-size * $figure-quantity-width;
+$board-height: $figure-size * $figure-quantity-height;
+
+//General
+$primary-border: 2px solid $service-color;
+$hover-border: 2px solid $secondary-color;
