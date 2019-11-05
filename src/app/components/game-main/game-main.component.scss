@@ -1,0 +1,27 @@
+.player {
+  display: flex;
+  align-items: center;
+
+  & .icon {
+    max-width: 7rem; //var
+  }
+  &-inf {
+    margin: 0 2rem; //var
+    font-size: 2rem; //var
+    & span {
+      font-size: 1rem; //var
+    }
+  }
+}
+
+.game {
+  padding-top: 1.7rem; //var
+  display: flex;
+
+  &-board {
+    width: 25rem; //var
+    height: 35rem; //var
+    border: 1px solid grey; //var
+    background-color: darkblue; //var
+  }
+}
