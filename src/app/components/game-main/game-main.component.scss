@@ -1,0 +1,30 @@
+@import './src/assets/styles/variables';
+
+.player {
+  display: flex;
+  align-items: center;
+
+  & .icon {
+    max-width: $max-width-icon;
+  }
+
+  &-inf {
+    margin: $secondary-indent;
+    font-size: $label-font-size;
+    & span {
+      font-size: $default-font-size;
+    }
+  }
+}
+
+.game {
+  padding-top: $primary-indent;
+  display: flex;
+
+  &-board {
+    width: $board-width;
+    height: $board-height;
+    border: $primary-border;
+    background-color: $background-color;
+  }
+}

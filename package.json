@@ -6,7 +6,12 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "eslint": "eslint --ext .js,.ts ./src --fix"
+    "eslint": "eslint --ext .html,.js,.ts, ./src --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run eslint"
+    }
   },
   "private": true,
   "dependencies": {
@@ -18,7 +23,7 @@
     "@angular/platform-browser": "~8.2.13",
     "@angular/platform-browser-dynamic": "~8.2.13",
     "@angular/router": "~8.2.13",
-    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -34,10 +39,13 @@
     "@typescript-eslint/eslint-plugin": "^2.6.0",
     "@typescript-eslint/parser": "^2.6.0",
     "codelyzer": "^5.0.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.1.0",
     "eslint-config-airbnb-angular": "^1.0.0",
     "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -45,6 +53,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "prettier": "^1.18.2",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "typescript": "~3.5.3"

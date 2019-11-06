@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./src/assets/styles/variables";
+
+html {
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: $max-width;
+  margin: $center;
+  padding: $secondary-indent;
+}
+
+.main {
+  padding-top: $primary-indent;
+  min-height: $min-height-main;
+}

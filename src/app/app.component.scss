@@ -1,0 +1,9 @@
+@import "./src/assets/styles/variables";
+
+.app {
+  background-color: $primary-color;
+  font-family: $primary-font;
+  color: $default-color;
+  font-size: $default-font-size;
+  text-transform: uppercase;
+}
