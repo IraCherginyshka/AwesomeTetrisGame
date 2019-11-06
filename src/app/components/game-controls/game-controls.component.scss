@@ -1,0 +1,29 @@
+@import './src/assets/styles/variables';
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: $controls-button-height;
+
+  &-action {
+    width: $controls-button-height;
+    height: $controls-button-height;
+    margin-top: $primary-indent;
+    border-radius: 50%;
+    border: $primary-border;
+    background-color: $secondary-color;
+    line-height: $controls-button-height - 0.2;
+    text-align: center;
+
+    & i {
+      font-style: normal;
+      font-size: $secondary-text-font-size;
+    }
+
+    &:hover {
+      border: $hover-border-controls $default-color;
+    }
+  }
+}
