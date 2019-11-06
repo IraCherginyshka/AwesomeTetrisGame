@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "eslint": "eslint --ext .html,.js,.ts, ./src"
+    "eslint": "eslint --ext .html,.js,.ts, ./src --fix"
   },
   "husky": {
     "hooks": {

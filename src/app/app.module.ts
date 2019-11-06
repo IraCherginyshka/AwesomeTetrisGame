@@ -30,11 +30,9 @@ import { GameLoaderComponent } from './components/game-loader/game-loader.compon
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot([
-      { path: '', component: GameMainComponent },
-    ]),
+    RouterModule.forRoot([{ path: '', component: GameMainComponent }]),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

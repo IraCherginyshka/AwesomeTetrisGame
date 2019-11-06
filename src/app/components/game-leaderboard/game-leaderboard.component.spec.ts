@@ -9,8 +9,7 @@ describe('GameLeaderboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GameLeaderboardComponent],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

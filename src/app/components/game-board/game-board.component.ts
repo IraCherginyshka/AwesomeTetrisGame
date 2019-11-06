@@ -6,6 +6,5 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit {
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
