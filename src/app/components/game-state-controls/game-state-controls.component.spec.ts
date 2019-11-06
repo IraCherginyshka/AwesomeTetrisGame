@@ -9,8 +9,7 @@ describe('GameStateControlsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GameStateControlsComponent],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

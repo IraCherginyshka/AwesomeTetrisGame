@@ -9,8 +9,7 @@ describe('GameLoaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GameLoaderComponent],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

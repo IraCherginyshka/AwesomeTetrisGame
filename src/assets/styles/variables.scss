@@ -1,18 +1,18 @@
 //Color Palette
 $primary-color: #000;
-$secondary-color: #FA0000;
-$default-color: #FFF;
+$secondary-color: #fa0000;
+$default-color: #fff;
 $service-color: #979797;
-$background-color: #2B3A42;
+$background-color: #2b3a42;
 
 //Figures
-$figure-color-first: #FD0404;
-$figure-color-second: #2E36D5;
-$figure-color-third: #19AF09;
-$figure-color-fourth: #F8AB05;
-$figure-color-fifth: #13E4E7;
-$figure-color-sixth: #FF3C00;
-$figure-color-seventh: #2E36D5;
+$figure-color-first: #fd0404;
+$figure-color-second: #2e36d5;
+$figure-color-third: #19af09;
+$figure-color-fourth: #f8ab05;
+$figure-color-fifth: #13e4e7;
+$figure-color-sixth: #ff3c00;
+$figure-color-seventh: #2e36d5;
 $figure-size: 1.9rem;
 $figure-quantity-width: 12;
 $figure-quantity-height: 20;
@@ -40,7 +40,6 @@ $board-width: $figure-size * $figure-quantity-width;
 $board-height: $figure-size * $figure-quantity-height;
 $primary-indent: 1rem;
 $secondary-indent: 0 2rem;
-
 
 //General
 $primary-border: 1px solid $service-color;
