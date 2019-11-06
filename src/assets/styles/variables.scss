@@ -19,27 +19,31 @@ $figure-quantity-height: 20;
 
 //Fonts
 $primary-font: Impact, sans-serif;
-$default-font-size: 1rem;
+$default-font-size: 1.33rem;
 $h1-font-size: 5rem;
 $label-font-size: 2rem;
 $secondary-text-font-size: 1.5rem;
 
 //Sizes
+$center: 0 auto;
+$max-width: 1100px;
+$primary-indent: 1rem;
+$secondary-indent: 0 2rem;
+$min-height-main: 88.5vh;
+$max-width-icon: 7rem;
+$width-logo: 14.2rem;
+$height-bar-links: 3rem;
+$width-links: 7rem;
+$width-information: 39rem;
 $inform-field-width: 10rem;
-$inform-field-height: 5rem;
+$inform-field-height: 55px;
 $inform-field-margin: 2rem 0;
 $controls-button-width: 7rem;
 $controls-button-height: 3rem;
 $controls-button-padding: 1rem;
 $controls-button-margin: 2rem;
-$center: 0 auto;
-$max-width: 1100px;
-$max-width-icon: 7rem;
-$min-height-main: 88.5vh;
 $board-width: $figure-size * $figure-quantity-width;
 $board-height: $figure-size * $figure-quantity-height;
-$primary-indent: 1rem;
-$secondary-indent: 0 2rem;
 
 //General
 $primary-border: 1px solid $service-color;
