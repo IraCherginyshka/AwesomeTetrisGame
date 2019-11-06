@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es6: true
   },
-  extends: [ "eslint:recommended", "airbnb-angular" ],
+  extends: ["eslint:recommended", "airbnb-angular"],
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly"
@@ -13,9 +13,10 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module"
   },
-  plugins: ["@typescript-eslint", "eslint-plugin-html","html"],
+  plugins: ["@typescript-eslint", "eslint-plugin-html", "html"],
   rules: {
     "global-require": 0,
+
     "import/no-extraneous-dependencies": [
       "error",
       {
