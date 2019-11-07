@@ -6,11 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "eslint": "eslint --ext .html,.js,.ts, ./src --fix"
+    "eslint": "eslint --ext .html,.js,.ts, ./src"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run eslint"
+      "pre-commit": "npm run eslint"
     }
   },
   "private": true,
