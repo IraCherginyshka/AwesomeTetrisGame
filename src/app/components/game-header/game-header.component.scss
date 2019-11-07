@@ -1,0 +1,45 @@
+@import './src/assets/styles/variables';
+
+.header {
+  text-align: center;
+  padding-top: $primary-indent;
+
+  & .logo {
+    width: $width-logo;
+    margin: $center;
+    font-size: $h1-font-size;
+    background-color: $secondary-color;
+    line-height: $h1-font-size - 0.3rem;
+  }
+
+  & .wrap-links {
+    margin-top: $primary-indent;
+    border-top: $primary-border;
+    border-bottom: $primary-border;
+
+    &:hover {
+      border-top: $hover-border;
+      border-bottom: $hover-border;
+    }
+  }
+
+  & .bar-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $height-bar-links;
+  }
+
+  &-link {
+    flex-basis: $width-links;
+    color: $default-color;
+    text-decoration: none;
+
+    &:first-child {
+      text-align: left;
+    }
+    &:last-child {
+      text-align: right;
+    }
+  }
+}
