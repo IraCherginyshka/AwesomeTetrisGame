@@ -1,0 +1,36 @@
+@import './src/assets/styles/variables';
+
+.information {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: $width-information;
+  padding-left: 5rem;
+
+  &-block {
+    width: 40%;
+    margin-top: $primary-indent;
+    &__next {
+      width: 73%;
+      margin: $center;
+      & .information-field {
+        height: $inform-field-height * 2.7;
+      }
+    }
+  }
+
+  &-label {
+    margin-bottom: $primary-indent;
+    font-size: $default-font-size;
+  }
+
+  &-field {
+    height: $inform-field-height;
+    background-color: $background-color;
+    border: $primary-border;
+    line-height: $inform-field-height;
+    font-size: $default-font-size;
+    text-align: center;
+  }
+}
