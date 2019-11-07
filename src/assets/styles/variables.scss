@@ -39,7 +39,7 @@ $inform-field-width: 10rem;
 $inform-field-height: 55px;
 $inform-field-margin: 2rem 0;
 $controls-button-width: 7rem;
-$controls-button-height: 3rem;
+$controls-button-height: 3.5rem;
 $controls-button-padding: 1rem;
 $controls-button-margin: 2rem;
 $board-width: $figure-size * $figure-quantity-width;
@@ -48,3 +48,4 @@ $board-height: $figure-size * $figure-quantity-height;
 //General
 $primary-border: 1px solid $service-color;
 $hover-border: 1px solid $secondary-color;
+$hover-border-controls: 2px solid;
