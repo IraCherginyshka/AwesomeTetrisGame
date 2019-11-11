@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +13,14 @@ import { GameInformationComponent } from './components/game-information/game-inf
 import { GameControlOptionComponent } from './components/game-control-option/game-control-option.component';
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
+
+const appRouter: Routes = [
+  { path: 'option', component: GameControlOptionComponent },
+  { path: 'leaderboard', component: GameLeaderboardComponent },
+  { path: 'game', component: GameMainComponent },
+  { path: '', redirectTo: '/game', pathMatch: 'full' },
+  { path: '**', redirectTo: '/game', pathMatch: 'full' },
+];
 
 @NgModule({
   declarations: [
@@ -27,11 +35,7 @@ import { GameLoaderComponent } from './components/game-loader/game-loader.compon
     GameLeaderboardComponent,
     GameLoaderComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule.forRoot([{ path: '', component: GameMainComponent }]),
-  ],
+  imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
   providers: [],
   bootstrap: [AppComponent],
 })
