@@ -16,10 +16,11 @@
     margin-top: $primary-indent;
     border-top: $primary-border;
     border-bottom: $primary-border;
+    transition: 0.35s ease-out;
 
     &:hover {
-      border-top: $hover-border;
-      border-bottom: $hover-border;
+      border-color: $primary-color;
+      box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
     }
   }
 
