@@ -1,0 +1,49 @@
+//Color Palette
+$primary-color: #000;
+$secondary-color: #bf0117;
+$default-color: #fff;
+$service-color: #979797;
+$background-color: #2b3a42;
+
+//Figures
+$figure-color-first: #fd0404;
+$figure-color-second: #2e36d5;
+$figure-color-third: #19af09;
+$figure-color-fourth: #f8ab05;
+$figure-color-fifth: #13e4e7;
+$figure-color-sixth: #ff3c00;
+$figure-color-seventh: #2e36d5;
+$figure-size: 1.9rem;
+$figure-quantity-width: 12;
+$figure-quantity-height: 20;
+
+//Fonts
+$primary-font: Impact, sans-serif;
+$default-font-size: 1.33rem;
+$h1-font-size: 5rem;
+$label-font-size: 2rem;
+$secondary-text-font-size: 1.5rem;
+
+//Sizes
+$center: 0 auto;
+$max-width: 1100px;
+$primary-indent: 1rem;
+$secondary-indent: 0 2rem;
+$min-height-main: 88.5vh;
+$max-width-icon: 7rem;
+$width-logo: 14.2rem;
+$height-bar-links: 3rem;
+$width-links: 7rem;
+$width-information: 50rem;
+$inform-field-width: 10rem;
+$inform-field-height: 55px;
+$inform-field-margin: 2rem 0;
+$controls-button-width: 7rem;
+$controls-button-height: 3.5rem;
+$board-width: $figure-size * $figure-quantity-width;
+$board-height: $figure-size * $figure-quantity-height;
+
+//General
+$primary-border: 1px solid $service-color;
+$hover-border: 1px solid $secondary-color;
+$hover-border-controls: 3px solid;

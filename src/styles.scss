@@ -1,0 +1,38 @@
+@import './src/assets/styles/variables';
+$fa-font-path: '../node_modules/@fortawesome/fontawesome-free/webfonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/v4-shims';
+
+html {
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+button {
+  cursor: pointer;
+}
+
+.container {
+  max-width: $max-width;
+  margin: $center;
+  padding: $secondary-indent;
+}
+
+.main {
+  padding-top: $primary-indent;
+  min-height: $min-height-main;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
