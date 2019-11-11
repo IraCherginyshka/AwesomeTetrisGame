@@ -26,3 +26,10 @@ html {
   padding-top: $primary-indent;
   min-height: $min-height-main;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
