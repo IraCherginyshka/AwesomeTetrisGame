@@ -13,14 +13,13 @@ import { GameInformationComponent } from './components/game-information/game-inf
 import { GameControlOptionComponent } from './components/game-control-option/game-control-option.component';
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const appRouter: Routes = [
   { path: 'option', component: GameControlOptionComponent },
   { path: 'leaderboard', component: GameLeaderboardComponent },
   { path: 'game', component: GameMainComponent },
   { path: '', redirectTo: '/game', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '/game', pathMatch: 'full' },
 ];
 
 @NgModule({
@@ -35,7 +34,6 @@ const appRouter: Routes = [
     GameControlOptionComponent,
     GameLeaderboardComponent,
     GameLoaderComponent,
-    PageNotFoundComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
   providers: [],
