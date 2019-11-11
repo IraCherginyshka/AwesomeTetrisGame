@@ -20,11 +20,24 @@
 .game {
   padding-top: $primary-indent;
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
   &-board {
     width: $board-width;
     height: $board-height;
     border: $primary-border;
     background-color: $background-color;
+  }
+
+  & .wrap-option {
+    width: 55%;
+  }
+
+  & .wrap-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $primary-indent;
   }
 }

@@ -1,0 +1,32 @@
+@import './src/assets/styles/variables';
+
+.state-controls {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: $primary-indent;
+
+  & .state-control {
+    width: $controls-button-width;
+    height: $controls-button-height;
+    outline: none;
+    line-height: $controls-button-height - 0.3rem;
+    margin: $primary-indent / 2;
+    background-color: $background-color;
+    border: $hover-border-controls $secondary-color;
+    border-radius: 10px;
+    text-align: center;
+    font-size: inherit;
+    text-transform: inherit;
+    font-family: inherit;
+    color: $default-color;
+
+    &:hover {
+      border-color: $primary-color;
+      background-color: $secondary-color;
+    }
+  }
+  & .horizontal {
+    display: flex;
+  }
+}
