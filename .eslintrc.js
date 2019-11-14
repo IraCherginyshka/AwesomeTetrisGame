@@ -17,6 +17,13 @@ module.exports = {
   rules: {
     'global-require': 0,
     'linebreak-style': 0,
+    'no-plusplus': 0,
+    'object-curly-newline': [
+      'error',
+      {
+        ImportDeclaration: { minProperties: 7, consistent: false, multiline: true },
+      },
+    ],
     'import/no-extraneous-dependencies': [
       'error',
       {
