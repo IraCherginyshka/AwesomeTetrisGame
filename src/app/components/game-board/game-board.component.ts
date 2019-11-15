@@ -1,11 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import Figure from '../../models/Figure.model';
-import Block from '../../models/Block.model';
-import {
-  QUANTITY_BLOCKS_WIDTH,
-  QUANTITY_BLOCKS_HEIGHT,
-  DELAY_FIRST_LEVEL,
-} from '../../constants/board-component-constants';
+import { FigureModel } from '../../models/figure.model';
+import { BlockModel } from '../../models/block.model';
+import { QUANTITY_BLOCKS_WIDTH, QUANTITY_BLOCKS_HEIGHT, DELAY_FIRST_LEVEL } from '../../constants/board-component.const';
 
 @Component({
   selector: 'atg-game-board',
@@ -40,10 +36,10 @@ export class GameBoardComponent implements OnInit {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => {
         if (!item) {
-          const block = new Block(this.ctx, 'darkblue');
+          const block = new BlockModel(this.ctx, 'darkblue');
           block.fillBoardBlock(indexX, indexY);
         } else {
-          const block = new Block(this.ctx, 'red');
+          const block = new BlockModel(this.ctx, 'red');
           block.fillBoardBlock(indexX, indexY);
         }
       });
@@ -52,7 +48,7 @@ export class GameBoardComponent implements OnInit {
 
   play() {
     let height = 0;
-    const newFigure = new Figure();
+    const newFigure = new FigureModel();
     const { figureMatrix } = newFigure;
 
     const interval = setInterval(() => {

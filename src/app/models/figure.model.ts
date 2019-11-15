@@ -1,9 +1,9 @@
-import { CENTRAL_ITEM } from '../constants/board-component-constants';
+import { CENTRAL_ITEM } from '../constants/board-component.const';
 
-export default class FigureModel {
+export class FigureModel {
   public figureMatrix = [[1, 1], [1, 1]];
 
-  showFigure(height: number, boardMatrix: any[]) {
+  showFigure(height: number, boardMatrix: any[]): any[] {
     const matrixWithFigure = boardMatrix.slice();
     let figureLine = 0;
     for (let i = height; i < this.figureMatrix.length + height; i++) {
