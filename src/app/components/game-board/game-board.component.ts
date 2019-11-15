@@ -22,7 +22,7 @@ export class GameBoardComponent implements OnInit {
     this.play();
   }
 
-  makeBoardEmptyMatrix(width, height) {
+  makeBoardEmptyMatrix(width, height): any[] {
     let lineNumber = height;
     const matrix = [];
     while (lineNumber !== 0) {
@@ -32,7 +32,7 @@ export class GameBoardComponent implements OnInit {
     return matrix;
   }
 
-  drawBoard(matrix) {
+  drawBoard(matrix): void {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => {
         if (!item) {
@@ -46,7 +46,7 @@ export class GameBoardComponent implements OnInit {
     });
   }
 
-  play() {
+  play(): void {
     let height = 0;
     const newFigure = new FigureModel();
     const { figureMatrix } = newFigure;
