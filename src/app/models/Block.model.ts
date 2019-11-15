@@ -1,6 +1,6 @@
 import { FIGURE_SIZE, BORDER_COLOR } from '../constants/board-component-constants';
 
-export default class Block {
+export default class BlockModel {
   constructor(private ctx: CanvasRenderingContext2D, color: string) {
     this.ctx.fillStyle = color;
     this.ctx.strokeStyle = BORDER_COLOR;
