@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import Figure from '../../models/Figure';
-import Block from '../../models/Block';
+import Figure from '../../models/Figure.model';
+import Block from '../../models/Block.model';
 import {
   QUANTITY_BLOCKS_WIDTH,
   QUANTITY_BLOCKS_HEIGHT,

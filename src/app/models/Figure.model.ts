@@ -1,6 +1,6 @@
 import { CENTRAL_ITEM } from '../constants/board-component-constants';
 
-export default class Figure {
+export default class FigureModel {
   public figureMatrix = [[1, 1], [1, 1]];
 
   showFigure(height: number, boardMatrix: any[]) {
