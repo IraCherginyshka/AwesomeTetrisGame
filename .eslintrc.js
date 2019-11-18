@@ -24,6 +24,7 @@ module.exports = {
         ImportDeclaration: { minProperties: 7, consistent: false, multiline: true },
       },
     ],
+    'lines-between-class-members': 0,
     'import/no-extraneous-dependencies': [
       'error',
       {
