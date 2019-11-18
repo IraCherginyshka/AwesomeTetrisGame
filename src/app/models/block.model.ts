@@ -1,4 +1,4 @@
-import { BLOCK_SIZE, BORDER_COLOR } from '../constants/board-component-constants';
+import { BLOCK_SIZE, BORDER_COLOR } from '../constants/board-component.const';
 
 export class BlockModel {
   constructor(private ctx: CanvasRenderingContext2D, color: string) {
