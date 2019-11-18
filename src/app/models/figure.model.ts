@@ -9,17 +9,12 @@ export class FigureModel {
 
   showFigure(height: number, boardMatrix: FiguresColors[][]): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
-    let figureLine = 0;
-    for (let i = height; i < this.figureMatrix.length + height; i++) {
-      const lineWithFigure = [...boardMatrix[i]];
-      lineWithFigure.splice(
-        CENTRAL_ITEM,
-        this.figureMatrix[figureLine].length,
-        ...this.figureMatrix[figureLine],
-      );
-      matrixWithFigure[i] = lineWithFigure.slice();
-      figureLine += 1;
-    }
+
+    this.figureMatrix.forEach((line, index) => {
+      const targetLine = [...boardMatrix[index + height]];
+      targetLine.splice(CENTRAL_ITEM, line.length, ...line);
+      matrixWithFigure[index + height] = [...targetLine];
+    });
     return matrixWithFigure;
   }
 }

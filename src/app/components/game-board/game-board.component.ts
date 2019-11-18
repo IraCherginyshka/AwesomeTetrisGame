@@ -1,7 +1,13 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { FigureModel } from '../../models/figure.model';
 import { BlockModel } from '../../models/block.model';
-import { QUANTITY_BLOCKS_WIDTH, QUANTITY_BLOCKS_HEIGHT, DELAY_FIRST_LEVEL, CANVAS_WIDTH, CANVAS_HEIGHT } from '../../constants/board-component.const';
+import {
+  QUANTITY_BLOCKS_WIDTH,
+  QUANTITY_BLOCKS_HEIGHT,
+  DELAY_FIRST_LEVEL,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+} from '../../constants/board-component.const';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 
 @Component({
@@ -12,21 +18,24 @@ import { FiguresColors } from '../../enums/figures-colors.enum';
 export class GameBoardComponent implements OnInit {
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
-  private boardMatrix: any[];
+  private boardMatrix: FiguresColors[][];
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.boardMatrix = this.makeBoardEmptyMatrix(QUANTITY_BLOCKS_WIDTH, QUANTITY_BLOCKS_HEIGHT);
+    this.boardMatrix = GameBoardComponent.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
     this.play();
   }
 
-  makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
+  private static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
     return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
   }
 
-  play(): void {
+  private play(): void {
     let height = 0;
     const newFigure = new FigureModel();
     const itemHeight = newFigure.figureMatrix.length;
@@ -42,15 +51,7 @@ export class GameBoardComponent implements OnInit {
 
   private drawBoard(matrix: FiguresColors[][]): void {
     matrix.forEach((line, indexY) => {
-      line.forEach((item, indexX) => {
-        if (item === FiguresColors.DEFAULT) {
-          const block = new BlockModel(this.ctx, FiguresColors.DEFAULT);
-          block.fillBoardBlock(indexX, indexY);
-        } else {
-          const block = new BlockModel(this.ctx, item);
-          block.fillBoardBlock(indexX, indexY);
-        }
-      });
+      line.forEach((item, indexX) => new BlockModel(this.ctx, item).fillBoardBlock(indexX, indexY));
     });
   }
 }
