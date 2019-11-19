@@ -1,11 +1,9 @@
 import { CENTRAL_ITEM } from '../constants/board-component.const';
 import { FiguresColors } from '../enums/figures-colors.enum';
+import { FiguresMatrixConst } from '../constants/figures-matrix.const';
 
 export class FigureModel {
-  public figureMatrix = [
-    [FiguresColors.FIRST, FiguresColors.FIRST],
-    [FiguresColors.FIRST, FiguresColors.FIRST],
-  ];
+  public figureMatrix = FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
 
   showFigure(height: number, boardMatrix: FiguresColors[][]): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
