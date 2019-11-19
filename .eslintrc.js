@@ -8,7 +8,7 @@ module.exports = {
     'airbnb-angular',
     'prettier',
     'prettier/@typescript-eslint',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -19,12 +19,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: [
-    '@typescript-eslint',
-    'prettier',
-    'eslint-plugin-html',
-    'html'
-  ],
+  plugins: ['@typescript-eslint', 'prettier', 'eslint-plugin-html', 'html'],
   rules: {
     'no-unused-vars': 2,
     'prettier/prettier': 'error',
