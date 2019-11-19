@@ -3,7 +3,13 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: ['eslint:recommended', 'airbnb-angular'],
+  extends: [
+    'eslint:recommended',
+    'airbnb-angular',
+    'prettier',
+    'prettier/@typescript-eslint',
+    'plugin:@typescript-eslint/recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -13,8 +19,10 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'eslint-plugin-html', 'html'],
+  plugins: ['@typescript-eslint', 'prettier', 'eslint-plugin-html', 'html'],
   rules: {
+    'no-unused-vars': 2,
+    'prettier/prettier': 'error',
     'global-require': 0,
     'linebreak-style': 0,
     'no-plusplus': 0,
