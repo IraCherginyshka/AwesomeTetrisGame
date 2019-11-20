@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameMovementService } from '../../services/game-movement.service';
 import { FigureModel } from '../../models/figure.model';
@@ -19,7 +19,7 @@ import { FiguresMovement } from '../../enums/figures-movement.enum';
   templateUrl: './game-board.component.html',
   styleUrls: ['./game-board.component.scss'],
 })
-export class GameBoardComponent implements OnInit {
+export class GameBoardComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -47,6 +47,10 @@ export class GameBoardComponent implements OnInit {
           this.figurePosition += gameMove;
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionMove.unsubscribe();
   }
 
   private static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
