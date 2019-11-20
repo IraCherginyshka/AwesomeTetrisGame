@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FigureModel } from '../../models/figure.model';
 import { MatrixModel } from '../../models/matrix.model';
@@ -18,11 +18,11 @@ import {
   templateUrl: './game-board.component.html',
   styleUrls: ['./game-board.component.scss'],
 })
-export class GameBoardComponent implements OnInit {
+export class GameBoardComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
-  private subscription: Subscription;
+  private subscriptionState: Subscription;
   private timeInterval: number;
   private lineWithFigure: number;
 
@@ -37,14 +37,20 @@ export class GameBoardComponent implements OnInit {
       QUANTITY_BLOCKS_HEIGHT,
     );
     this.play();
-    this.subscription = this.gameStateService.getGameState().subscribe((gameState: GameState) => {
-      if (gameState === GameState.RESET) {
-        this.reset();
-      }
-      if (gameState === GameState.PAUSE) {
-        this.pause();
-      }
-    });
+    this.subscriptionState = this.gameStateService
+      .getGameState()
+      .subscribe((gameState: GameState) => {
+        if (gameState === GameState.RESET) {
+          this.reset();
+        }
+        if (gameState === GameState.PAUSE) {
+          this.pause();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionState.unsubscribe();
   }
 
   private play(): void {
