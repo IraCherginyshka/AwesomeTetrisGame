@@ -1,9 +1,33 @@
+import { FiguresColors } from '../enums/figures-colors.enum';
+
 export const FiguresMatrixConst = [
-  [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]],
-  [[2, 2], [2, 2]],
-  [[3, 3, 0], [0, 3, 3]],
-  [[0, 4, 4], [4, 4, 0]],
-  [[5, 5, 5], [0, 5, 0]],
-  [[0, 6, 0], [0, 6, 0], [0, 6, 6]],
-  [[0, 7, 0], [0, 7, 0], [7, 7, 0]],
+  [
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
+  ],
+  [[FiguresColors.SECOND, FiguresColors.SECOND], [FiguresColors.SECOND, FiguresColors.SECOND]],
+  [
+    [FiguresColors.THIRD, FiguresColors.THIRD, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.THIRD, FiguresColors.THIRD],
+  ],
+  [
+    [FiguresColors.DEFAULT, FiguresColors.FOURTH, FiguresColors.FOURTH],
+    [FiguresColors.FOURTH, FiguresColors.FOURTH, FiguresColors.DEFAULT],
+  ],
+  [
+    [FiguresColors.FIFTH, FiguresColors.FIFTH, FiguresColors.FIFTH],
+    [FiguresColors.DEFAULT, FiguresColors.FIFTH, FiguresColors.DEFAULT],
+  ],
+  [
+    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.SIXTH],
+  ],
+  [
+    [FiguresColors.DEFAULT, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
+    [FiguresColors.SEVENTH, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
+  ],
 ];

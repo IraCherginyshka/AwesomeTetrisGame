@@ -1,13 +1,15 @@
 import { CENTRAL_ITEM } from '../constants/board-component.const';
 import { FiguresColors } from '../enums/figures-colors.enum';
+import { FiguresMatrixConst } from '../constants/figures-matrix.const';
 
 export class FigureModel {
-  public figureMatrix = [
-    [FiguresColors.FIRST, FiguresColors.FIRST],
-    [FiguresColors.FIRST, FiguresColors.FIRST],
-  ];
+  public figureMatrix: FiguresColors[][];
 
-  showFigure(height: number, boardMatrix: FiguresColors[][]): FiguresColors[][] {
+  constructor() {
+    this.figureMatrix = FigureModel.getRandomFigure();
+  }
+
+  public showFigure(height: number, boardMatrix: FiguresColors[][]): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
 
     this.figureMatrix.forEach((line, index) => {
@@ -16,5 +18,9 @@ export class FigureModel {
       matrixWithFigure[index + height] = [...targetLine];
     });
     return matrixWithFigure;
+  }
+
+  private static getRandomFigure(): FiguresColors[][] {
+    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
   }
 }
