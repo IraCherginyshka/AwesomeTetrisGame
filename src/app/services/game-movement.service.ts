@@ -10,7 +10,7 @@ export class GameMovementService {
     this.movementSubject.next(step);
   }
 
-  public getMoveStep(): Observable<> {
+  public onNextStep(): Observable<FiguresMovement> {
     return this.movementSubject.asObservable();
   }
 }

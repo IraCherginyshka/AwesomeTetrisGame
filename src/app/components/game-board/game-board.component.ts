@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { GameMovementService } from '../../services/game-movement.service';
 import { FigureModel } from '../../models/figure.model';
 import { BlockModel } from '../../models/block.model';
@@ -12,7 +13,6 @@ import {
   CENTRAL_ITEM,
 } from '../../constants/board-component.const';
 import { FiguresColors } from '../../enums/figures-colors.enum';
-import { FiguresMovement } from '../../enums/figures-movement.enum';
 
 @Component({
   selector: 'atg-game-board',
@@ -37,15 +37,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_HEIGHT,
     );
     this.play();
+
     this.subscriptionMove = this.gameMovementService
-      .getMoveStep()
-      .subscribe((gameMove: FiguresMovement) => {
-        if (
-          this.figurePosition + gameMove >= 0 &&
-          this.figurePosition + gameMove <= QUANTITY_BLOCKS_WIDTH
-        ) {
-          this.figurePosition += gameMove;
-        }
+      .onNextStep()
+      .pipe(
+        map((value) => value + this.figurePosition),
+        filter((nextPosition) => nextPosition >= 0 && nextPosition <= QUANTITY_BLOCKS_WIDTH),
+      )
+      .subscribe((nextPosition: number) => {
+        this.figurePosition = nextPosition;
       });
   }
 
