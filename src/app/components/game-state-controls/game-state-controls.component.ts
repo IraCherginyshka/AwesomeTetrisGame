@@ -4,22 +4,18 @@ import { GameState } from '../../enums/game-state.enum';
 import { GameStateService } from '../../services/game-state.service';
 
 @Component({
-  selector: 'atg-game-controls',
+  selector: 'atg-game-state-controls',
   templateUrl: './game-state-controls.component.html',
   styleUrls: ['./game-state-controls.component.scss'],
 })
 export class GameStateControlsComponent {
   constructor(private gameStateService: GameStateService) {}
 
-  private playGame(): void {
-    this.gameStateService.setGameState(GameState.START);
-  }
-
-  private resetGame(): void {
+  public resetGame(): void {
     this.gameStateService.setGameState(GameState.RESET);
   }
 
-  private pauseGame(): void {
+  public pauseGame(): void {
     this.gameStateService.setGameState(GameState.PAUSE);
   }
 }

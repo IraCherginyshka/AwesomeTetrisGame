@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FigureModel } from '../../models/figure.model';
-import { MatrixModel } from '../../models/matrix.model';
+import { BlockModel } from '../../models/block.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { GameStateService } from '../../services/game-state.service';
 import { GameState } from '../../enums/game-state.enum';
@@ -32,7 +32,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.boardMatrix = MatrixModel.makeBoardEmptyMatrix(
+    this.boardMatrix = GameBoardComponent.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
@@ -52,15 +52,23 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionState.unsubscribe();
   }
+  public static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
+    return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
+  }
+
+  public drawBoard(matrix: FiguresColors[][]): void {
+    return matrix.forEach((line, indexY) => {
+      line.forEach((item, indexX) => new BlockModel(this.ctx, item).fillBoardBlock(indexX, indexY));
+    });
+  }
 
   private play(): void {
     this.lineWithFigure = 0;
     const newFigure = new FigureModel();
     const itemHeight = newFigure.figureMatrix.length;
-    const newMatrix = new MatrixModel(this.ctx);
 
     this.timeInterval = window.setInterval(() => {
-      newMatrix.drawBoard(newFigure.showFigure(this.lineWithFigure, this.boardMatrix));
+      this.drawBoard(newFigure.showFigure(this.lineWithFigure, this.boardMatrix));
       if (this.lineWithFigure + itemHeight === QUANTITY_BLOCKS_HEIGHT) {
         clearInterval(this.timeInterval);
         this.play();

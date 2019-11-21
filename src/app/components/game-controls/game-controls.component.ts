@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'atg-game-state-controls',
+  selector: 'atg-game-controls',
   templateUrl: './game-controls.component.html',
   styleUrls: ['./game-controls.component.scss'],
 })
