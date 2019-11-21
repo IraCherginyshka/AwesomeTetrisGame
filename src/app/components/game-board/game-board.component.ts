@@ -52,12 +52,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionState.unsubscribe();
   }
+
   static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
     return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
   }
 
   private drawBoard(matrix: FiguresColors[][]): void {
-    return matrix.forEach((line, indexY) => {
+    matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => new BlockModel(this.ctx, item).fillBoardBlock(indexX, indexY));
     });
   }
