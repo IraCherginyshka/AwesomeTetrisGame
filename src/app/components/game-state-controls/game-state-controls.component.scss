@@ -1,32 +1,29 @@
 @import './src/assets/styles/variables';
 
-.state-controls {
+.controls {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin-bottom: $primary-indent;
+  justify-content: center;
+  align-items: center;
 
-  & .state-control {
-    width: $controls-button-width;
-    height: $controls-button-height;
+  &-action {
+    background: none;
     outline: none;
-    line-height: $controls-button-height - 0.3rem;
-    margin: $primary-indent / 2;
-    background-color: $background-color;
-    border: $hover-border-controls $secondary-color;
+    border: $hover-border-controls;
     border-radius: 10px;
-    text-align: center;
+    width: $controls-button-width;
+    line-height: $controls-button-height;
+    margin: $primary-indent;
     font-size: inherit;
     text-transform: inherit;
     font-family: inherit;
     color: $default-color;
+    transition: 0.3s ease-out;
 
     &:hover {
       border-color: $primary-color;
-      background-color: $secondary-color;
+      box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+      cursor: pointer;
     }
-  }
-  & .horizontal {
-    display: flex;
   }
 }
