@@ -10,8 +10,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run eslint"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "./src/**/*.{ts,js}": [
+      "eslint"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -24,7 +29,7 @@
     "@angular/platform-browser-dynamic": "~8.2.13",
     "@angular/router": "~8.2.13",
     "eslint-config-prettier": "^6.5.0",
-    "rxjs": "~6.4.0",
+    "rxjs": "^6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
@@ -54,6 +59,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "lint-staged": "^9.4.3",
     "prettier": "^1.18.2",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",

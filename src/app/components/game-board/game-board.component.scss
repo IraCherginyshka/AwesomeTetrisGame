@@ -1,0 +1,6 @@
+@import './src/assets/styles/variables';
+
+.board-canvas {
+  border: $primary-border;
+  background-color: $background-color;
+}
