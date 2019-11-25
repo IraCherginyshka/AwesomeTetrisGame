@@ -18,6 +18,9 @@ export class GameControlsComponent {
       case 'ArrowLeft':
         this.gameMovementService.setMoveStep(FiguresMovement.LEFT);
         break;
+      case 'ArrowUp':
+        this.gameMovementService.setMoveStep(FiguresMovement.ROTATE);
+        break;
       default:
         break;
     }

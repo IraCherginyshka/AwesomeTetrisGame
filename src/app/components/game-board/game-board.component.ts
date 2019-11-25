@@ -1,11 +1,11 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { GameMovementService } from '../../services/game-movement.service';
+import { GameStateService } from '../../services/game-state.service';
 import { FigureModel } from '../../models/figure.model';
 import { BlockModel } from '../../models/block.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
-import { GameStateService } from '../../services/game-state.service';
+import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
 import {
   QUANTITY_BLOCKS_WIDTH,
@@ -15,6 +15,7 @@ import {
   CANVAS_HEIGHT,
   CENTRAL_ITEM,
 } from '../../constants/board-component.const';
+import { FiguresMatrixConst } from '../../constants/figures-matrix.const';
 
 @Component({
   selector: 'atg-game-board',
@@ -30,6 +31,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private figurePosition: number;
   private timeInterval: number;
   private lineWithFigure: number;
+  private currentFigure: FiguresColors[][];
 
   constructor(
     private gameStateService: GameStateService,
@@ -44,26 +46,31 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-    this.play();
+    this.setInitialBoardState();
+
     this.subscriptionState = this.gameStateService
       .getGameState()
       .subscribe((gameState: GameState) => {
         if (gameState === GameState.RESET) {
-          this.reset();
+          this.resetGame();
         }
         if (gameState === GameState.PAUSE) {
-          this.pause();
+          this.stopGame();
         }
       });
 
     this.subscriptionMove = this.gameMovementService
       .onNextStep()
-      .pipe(
-        map((value) => value + this.figurePosition),
-        filter((nextPosition) => nextPosition >= 0 && nextPosition <= QUANTITY_BLOCKS_WIDTH),
-      )
-      .subscribe((nextPosition: number) => {
-        this.figurePosition = nextPosition;
+      .subscribe((nextPosition: string) => {
+        if (nextPosition === FiguresMovement.LEFT) {
+          this.figurePosition -= 1;
+        }
+        if (nextPosition === FiguresMovement.RIGHT) {
+          this.figurePosition += 1;
+        }
+        if (nextPosition === FiguresMovement.ROTATE) {
+          this.currentFigure = this.rotateFigure(this.currentFigure);
+        }
       });
   }
 
@@ -72,8 +79,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subscriptionMove.unsubscribe();
   }
 
-  static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
+  private static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
     return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
+  }
+
+  private static getRandomFigure(): FiguresColors[][] {
+    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
   }
 
   private drawBoard(matrix: FiguresColors[][]): void {
@@ -82,32 +93,44 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  private play(): void {
+  private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
+    figureMatrix.reverse();
+    return figureMatrix[0].map((item, index) => figureMatrix.map((line) => line[index]));
+  }
+
+  private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
     this.lineWithFigure = 0;
-    const newFigure = new FigureModel();
-    const itemHeight = newFigure.figureMatrix.length;
+    this.currentFigure = GameBoardComponent.getRandomFigure();
+  }
 
+  private playGame(): void {
+    const newFigure = new FigureModel();
     this.timeInterval = window.setInterval(() => {
       this.drawBoard(
-        newFigure.showFigure(this.lineWithFigure, this.boardMatrix, this.figurePosition),
+        newFigure.showFigure(
+          this.lineWithFigure,
+          this.currentFigure,
+          this.boardMatrix,
+          this.figurePosition,
+        ),
       );
-      if (this.lineWithFigure + itemHeight === QUANTITY_BLOCKS_HEIGHT) {
-        clearInterval(this.timeInterval);
-        this.play();
+      if (this.lineWithFigure + this.currentFigure.length === QUANTITY_BLOCKS_HEIGHT) {
+        this.setInitialBoardState();
       } else {
         this.lineWithFigure += 1;
       }
     }, DELAY_FIRST_LEVEL);
   }
 
-  private pause(): void {
+  private stopGame(): void {
     clearInterval(this.timeInterval);
   }
 
-  private reset(): void {
+  private resetGame(): void {
     clearInterval(this.timeInterval);
-    this.play();
+    this.setInitialBoardState();
+    this.playGame();
   }
 }
