@@ -11,6 +11,7 @@ export class GameControlsComponent {
   constructor(private gameMovementService: GameMovementService) {}
 
   @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
+    event.preventDefault();
     switch (event.code) {
       case 'ArrowRight':
         this.gameMovementService.setMoveStep(FiguresMovement.RIGHT);
