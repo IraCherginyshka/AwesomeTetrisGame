@@ -13,6 +13,7 @@ import { GameInformationComponent } from './components/game-information/game-inf
 import { GameControlOptionComponent } from './components/game-control-option/game-control-option.component';
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
+import { GameNextFigureComponent } from './components/game-next-figure/game-next-figure.component';
 
 const appRouter: Routes = [
   { path: 'option', component: GameControlOptionComponent },
@@ -34,6 +35,7 @@ const appRouter: Routes = [
     GameControlOptionComponent,
     GameLeaderboardComponent,
     GameLoaderComponent,
+    GameNextFigureComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
   providers: [],
