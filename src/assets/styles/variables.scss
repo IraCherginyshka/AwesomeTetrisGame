@@ -27,7 +27,7 @@ $secondary-text-font-size: 1.5rem;
 //Sizes
 $center: 0 auto;
 $max-width: 1100px;
-$primary-indent: 1rem;
+$primary-indent: 2rem;
 $secondary-indent: 0 2rem;
 $min-height-main: 88.5vh;
 $max-width-icon: 7rem;
@@ -35,15 +35,15 @@ $width-logo: 14.2rem;
 $height-bar-links: 3rem;
 $width-links: 7rem;
 $width-information: 50rem;
-$inform-field-width: 10rem;
+$inform-field-width: 7rem;
 $inform-field-height: 55px;
-$inform-field-margin: 2rem 0;
+$inform-field-margin: 1rem;
 $controls-button-width: 7rem;
 $controls-button-height: 3.5rem;
 $board-width: $figure-size * $figure-quantity-width;
 $board-height: $figure-size * $figure-quantity-height;
 
 //General
-$primary-border: 1px solid $service-color;
+$primary-border: 1.5px solid $default-color;
 $hover-border: 1px solid $secondary-color;
 $hover-border-controls: 3px solid;

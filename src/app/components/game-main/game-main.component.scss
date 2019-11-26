@@ -3,6 +3,7 @@
 .player {
   display: flex;
   align-items: center;
+  padding: $primary-indent;
 
   & .icon {
     max-width: $max-width-icon;
@@ -18,19 +19,11 @@
 }
 
 .game {
-  padding-top: $primary-indent;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  & .wrap-option {
-    width: 55%;
-  }
+  justify-content: space-around;
+  flex-direction: row;
 
   & .wrap-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: $primary-indent;
+    margin-top: $primary-indent;
   }
 }

@@ -1,30 +1,21 @@
 @import './src/assets/styles/variables';
 
 .information {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-
   &-block {
-    width: 40%;
-    margin-top: $primary-indent;
-    &__next {
-      width: 73%;
-      margin: $center;
-      & .information-field {
-        height: $inform-field-height * 2.7;
-      }
-    }
+    margin-bottom: $primary-indent;
   }
 
   &-label {
-    margin-bottom: $primary-indent;
+    margin-bottom: $inform-field-margin;
     font-size: $default-font-size;
+    text-align: center;
+    color: $service-color;
   }
 
   &-field {
+    margin: $center;
     height: $inform-field-height;
+    width: $inform-field-width;
     background-color: $background-color;
     border: $primary-border;
     line-height: $inform-field-height;
