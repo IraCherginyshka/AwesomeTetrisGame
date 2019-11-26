@@ -15,7 +15,6 @@ import {
   CANVAS_HEIGHT,
   CENTRAL_ITEM,
 } from '../../constants/board-component.const';
-import { FiguresMatrixConst } from '../../constants/figures-matrix.const';
 
 @Component({
   selector: 'atg-game-board',
@@ -83,10 +82,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
   }
 
-  private static getRandomFigure(): FiguresColors[][] {
-    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
-  }
-
   private drawBoard(matrix: FiguresColors[][]): void {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => new BlockModel(this.ctx, item).fillBoardBlock(indexX, indexY));
@@ -102,7 +97,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
     this.lineWithFigure = 0;
-    this.currentFigure = GameBoardComponent.getRandomFigure();
+    this.currentFigure = FigureModel.getRandomFigure();
   }
 
   private playGame(): void {

@@ -1,6 +1,10 @@
 import { FiguresColors } from '../enums/figures-colors.enum';
+import { FiguresMatrixConst } from '../constants/figures-matrix.const';
 
 export class FigureModel {
+  public static getRandomFigure(): FiguresColors[][] {
+    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
+  }
   public showFigure(
     height: number,
     figureMatrix: FiguresColors[][],
