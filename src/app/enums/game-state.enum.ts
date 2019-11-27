@@ -1,5 +1,5 @@
 export enum GameState {
-  START = 'start',
+  PLAY = 'play',
   PAUSE = 'pause',
   RESET = 'reset',
 }

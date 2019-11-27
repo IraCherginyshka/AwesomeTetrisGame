@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GameMovementService } from '../../services/game-movement.service';
-import { GameStateService } from '../../services/game-state.service';
+import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BlockModel } from '../../models/block.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
@@ -22,6 +21,7 @@ import {
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
+  public isPlaying: boolean;
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -32,10 +32,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private lineWithFigure: number;
   private currentFigure: FiguresColors[][];
 
-  constructor(
-    private gameStateService: GameStateService,
-    private gameMovementService: GameMovementService,
-  ) {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
@@ -47,20 +44,22 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     );
     this.setInitialBoardState();
 
-    this.subscriptionState = this.gameStateService
-      .getGameState()
-      .subscribe((gameState: GameState) => {
-        if (gameState === GameState.RESET) {
-          this.resetGame();
-        }
-        if (gameState === GameState.PAUSE) {
-          this.stopGame();
-        }
-      });
+    this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
+      this.isPlaying = this.gameService.isPlaying;
+      if (gameState === GameState.RESET) {
+        this.resetGame();
+      }
+      if (gameState === GameState.PAUSE) {
+        this.stopGame();
+      }
+      if (gameState === GameState.PLAY) {
+        this.playGame();
+      }
+    });
 
-    this.subscriptionMove = this.gameMovementService
+    this.subscriptionMove = this.gameService
       .onNextStep()
-      .subscribe((nextPosition: string) => {
+      .subscribe((nextPosition: FiguresMovement) => {
         if (nextPosition === FiguresMovement.LEFT) {
           this.figurePosition -= 1;
         }
@@ -89,8 +88,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
-    figureMatrix.reverse();
-    return figureMatrix[0].map((item, index) => figureMatrix.map((line) => line[index]));
+    const reverseMatrix = [...figureMatrix];
+    reverseMatrix.reverse();
+    return reverseMatrix[0].map((item, index) => reverseMatrix.map((line) => line[index]));
   }
 
   private setInitialBoardState(): void {

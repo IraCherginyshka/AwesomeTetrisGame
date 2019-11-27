@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { GameMovementService } from '../../services/game-movement.service';
+import { GameService } from '../../services/game.service';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 
 @Component({
@@ -8,19 +8,19 @@ import { FiguresMovement } from '../../enums/figures-movement.enum';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent {
-  constructor(private gameMovementService: GameMovementService) {}
+  constructor(private gameService: GameService) {}
 
   @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
     event.preventDefault();
     switch (event.code) {
       case 'ArrowRight':
-        this.gameMovementService.setMoveStep(FiguresMovement.RIGHT);
+        this.gameService.setMoveStep(FiguresMovement.RIGHT);
         break;
       case 'ArrowLeft':
-        this.gameMovementService.setMoveStep(FiguresMovement.LEFT);
+        this.gameService.setMoveStep(FiguresMovement.LEFT);
         break;
       case 'ArrowUp':
-        this.gameMovementService.setMoveStep(FiguresMovement.ROTATE);
+        this.gameService.setMoveStep(FiguresMovement.ROTATE);
         break;
       default:
         break;
