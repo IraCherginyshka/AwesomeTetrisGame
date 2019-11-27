@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { FiguresMovement } from '../enums/figures-movement.enum';
 import { GameState } from '../enums/game-state.enum';
 
@@ -20,11 +20,7 @@ export class GameService {
   }
 
   public setGameState(action: GameState): void {
-    if (action === GameState.PAUSE) {
-      this.isPlaying = false;
-    } else {
-      this.isPlaying = true;
-    }
+    this.isPlaying = action !== GameState.PAUSE;
     this.gameStateSubject.next(action);
   }
 
