@@ -8,6 +8,9 @@
     text-align: center;
   }
   &__field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: $center;
     width: $inform-field-width * 2;
     height: $inform-field-height * 2;

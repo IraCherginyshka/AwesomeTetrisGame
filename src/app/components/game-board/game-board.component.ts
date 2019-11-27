@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/co
 import { Subscription } from 'rxjs';
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
-import { BlockModel } from '../../models/block.model';
+import { BoardModel } from '../../models/board.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
@@ -38,7 +38,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.boardMatrix = GameBoardComponent.makeBoardEmptyMatrix(
+    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
@@ -77,16 +77,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subscriptionMove.unsubscribe();
   }
 
-  private static makeBoardEmptyMatrix(width: number, height: number): FiguresColors[][] {
-    return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
-  }
-
-  private drawBoard(matrix: FiguresColors[][]): void {
-    matrix.forEach((line, indexY) => {
-      line.forEach((item, indexX) => new BlockModel(this.ctx, item).fillBoardBlock(indexX, indexY));
-    });
-  }
-
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
     const reverseMatrix = [...figureMatrix];
     reverseMatrix.reverse();
@@ -96,22 +86,24 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
-    this.lineWithFigure = 0;
-    this.currentFigure = FigureModel.getRandomFigure();
+    this.currentFigure = this.gameService.currentFigure;
   }
 
   private playGame(): void {
     const newFigure = new FigureModel();
+    const newBoard = new BoardModel(this.ctx);
     this.timeInterval = window.setInterval(() => {
-      this.drawBoard(
+      newBoard.drawBoard(
         newFigure.showFigure(
           this.lineWithFigure,
           this.currentFigure,
           this.boardMatrix,
           this.figurePosition,
         ),
+        false,
       );
       if (this.lineWithFigure + this.currentFigure.length === QUANTITY_BLOCKS_HEIGHT) {
+        this.gameService.updateFigures();
         this.setInitialBoardState();
       } else {
         this.lineWithFigure += 1;
