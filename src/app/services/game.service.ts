@@ -12,7 +12,10 @@ export class GameService {
   private nextFigure = FigureModel.getRandomFigure();
   private movementSubject = new Subject<FiguresMovement>();
   private gameStateSubject = new Subject<GameState>();
-  private nextFigureSubject = new Subject<FiguresColors[][][]>();
+  private nextFigureSubject = new Subject<{
+    previousFigure: FiguresColors[][];
+    randomNextFigure: FiguresColors[][];
+  }>();
 
   public setMoveStep(step: FiguresMovement): void {
     if (this.isPlaying) {
@@ -38,10 +41,16 @@ export class GameService {
     const previousFigure = this.currentFigure;
     const randomNextFigure = FigureModel.getRandomFigure();
     this.nextFigure = randomNextFigure;
-    this.nextFigureSubject.next([previousFigure, randomNextFigure]);
+    this.nextFigureSubject.next({
+      previousFigure,
+      randomNextFigure,
+    });
   }
 
-  public onNewFigureCreated(): Observable<FiguresColors[][][]> {
+  public onNewFigureCreated(): Observable<{
+    previousFigure: FiguresColors[][];
+    randomNextFigure: FiguresColors[][];
+  }> {
     return this.nextFigureSubject.asObservable();
   }
 }

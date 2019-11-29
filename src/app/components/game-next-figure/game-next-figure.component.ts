@@ -20,9 +20,11 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ctx = this.nextCanvas.nativeElement.getContext('2d');
-    this.subscriptionNext = this.gameService.onNewFigureCreated().subscribe((figures) => {
-      this.setInitialState(figures);
-    });
+    this.subscriptionNext = this.gameService
+      .onNewFigureCreated()
+      .subscribe(({ randomNextFigure }) => {
+        this.setInitialState(randomNextFigure);
+      });
     this.gameService.updateFigures();
   }
 
@@ -30,8 +32,8 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
     this.subscriptionNext.unsubscribe();
   }
 
-  private setInitialState(nextFigure: FiguresColors[][][]): void {
-    [, this.nextFigure] = nextFigure;
+  private setInitialState(nextFigure: FiguresColors[][]): void {
+    this.nextFigure = nextFigure;
     const newBoard = new BoardModel(this.ctx, true);
     this.nextCanvas.nativeElement.width = this.nextFigure[0].length * BLOCK_SIZE;
     this.nextCanvas.nativeElement.height = this.nextFigure.length * BLOCK_SIZE;

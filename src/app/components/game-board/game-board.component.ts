@@ -71,10 +71,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.subscriptionNext = this.gameService.onNewFigureCreated().subscribe((figures) => {
-      [this.currentFigure] = figures;
-      this.setInitialBoardState();
-    });
+    this.subscriptionNext = this.gameService
+      .onNewFigureCreated()
+      .subscribe(({ previousFigure }) => {
+        this.currentFigure = previousFigure;
+        this.setInitialBoardState();
+      });
 
     this.gameService.updateFigures();
   }
