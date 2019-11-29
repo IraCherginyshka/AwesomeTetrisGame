@@ -129,24 +129,19 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private checkCollisionDetection(step: number, figure: FiguresColors[][]): boolean {
-    let isValid = true;
-    let result: boolean;
-    figure.forEach((line, indexY) => {
-      line.forEach((block, indexX) => {
+    return figure.every((line, indexY) => {
+      return line.every((block, indexX) => {
         if (block !== FiguresColors.DEFAULT) {
           const x = this.figurePosition + indexX + step;
           const y = this.lineWithFigure + indexY;
           if (x >= 0 && x <= QUANTITY_BLOCKS_WIDTH && y < QUANTITY_BLOCKS_HEIGHT) {
-            result = this.boardMatrix[y][x] === FiguresColors.DEFAULT;
-            isValid = isValid && result;
-          } else {
-            isValid = false;
+            return this.boardMatrix[y][x] === FiguresColors.DEFAULT;
           }
+          return false;
         }
+        return true;
       });
     });
-
-    return isValid;
   }
 
   private stopGame(): void {
