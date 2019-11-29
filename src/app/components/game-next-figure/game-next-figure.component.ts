@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FiguresColors } from '../../enums/figures-colors.enum';
 import { BoardModel } from '../../models/board.model';
 import { GameService } from '../../services/game.service';
 import { BLOCK_SIZE } from '../../constants/board-component.const';
+import { FiguresColors } from '../../enums/figures-colors.enum';
 
 @Component({
   selector: 'atg-game-next-figure',
@@ -20,21 +20,21 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ctx = this.nextCanvas.nativeElement.getContext('2d');
-    this.subscriptionNext = this.gameService.onUpdateFigures().subscribe(() => {
-      this.setInitialState();
+    this.subscriptionNext = this.gameService.onNewFigureCreated().subscribe((figures) => {
+      this.setInitialState(figures);
     });
-    this.setInitialState();
+    this.gameService.updateFigures();
   }
 
   ngOnDestroy(): void {
     this.subscriptionNext.unsubscribe();
   }
 
-  private setInitialState(): void {
-    const newBoard = new BoardModel(this.ctx);
-    this.nextFigure = this.gameService.nextFigure;
+  private setInitialState(nextFigure: FiguresColors[][][]): void {
+    [, this.nextFigure] = nextFigure;
+    const newBoard = new BoardModel(this.ctx, true);
     this.nextCanvas.nativeElement.width = this.nextFigure[0].length * BLOCK_SIZE;
     this.nextCanvas.nativeElement.height = this.nextFigure.length * BLOCK_SIZE;
-    newBoard.drawBoard(this.nextFigure, true);
+    newBoard.drawBoard(this.nextFigure);
   }
 }

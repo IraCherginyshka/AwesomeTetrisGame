@@ -27,6 +27,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private boardMatrix: FiguresColors[][];
   private subscriptionState: Subscription;
   private subscriptionMove: Subscription;
+  private subscriptionNext: Subscription;
   private figurePosition: number;
   private timeInterval: number;
   private lineWithFigure: number;
@@ -42,10 +43,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-    this.setInitialBoardState();
 
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
-      this.isPlaying = this.gameService.isPlaying;
+      this.isPlaying = gameState !== GameState.PAUSE;
       if (gameState === GameState.RESET) {
         this.resetGame();
       }
@@ -70,6 +70,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           this.currentFigure = this.rotateFigure(this.currentFigure);
         }
       });
+
+    this.subscriptionNext = this.gameService.onNewFigureCreated().subscribe((figures) => {
+      [this.currentFigure] = figures;
+      this.setInitialBoardState();
+    });
+
+    this.gameService.updateFigures();
   }
 
   ngOnDestroy(): void {
@@ -86,12 +93,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
-    this.currentFigure = this.gameService.currentFigure;
   }
 
   private playGame(): void {
     const newFigure = new FigureModel();
-    const newBoard = new BoardModel(this.ctx);
+    const newBoard = new BoardModel(this.ctx, false);
     this.timeInterval = window.setInterval(() => {
       newBoard.drawBoard(
         newFigure.showFigure(
@@ -100,11 +106,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           this.boardMatrix,
           this.figurePosition,
         ),
-        false,
       );
       if (this.lineWithFigure + this.currentFigure.length === QUANTITY_BLOCKS_HEIGHT) {
         this.gameService.updateFigures();
-        this.setInitialBoardState();
       } else {
         this.lineWithFigure += 1;
       }
@@ -117,6 +121,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   private resetGame(): void {
     clearInterval(this.timeInterval);
+    this.gameService.updateFigures();
     this.setInitialBoardState();
     this.playGame();
   }

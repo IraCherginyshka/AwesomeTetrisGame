@@ -3,16 +3,16 @@ import { Observable, Subject } from 'rxjs';
 import { FiguresMovement } from '../enums/figures-movement.enum';
 import { GameState } from '../enums/game-state.enum';
 import { FigureModel } from '../models/figure.model';
+import { FiguresColors } from '../enums/figures-colors.enum';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
-  public isPlaying = false;
-  public currentFigure = FigureModel.getRandomFigure();
-  public nextFigure = FigureModel.getRandomFigure();
-
+  private isPlaying = false;
+  private currentFigure: FiguresColors[][];
+  private nextFigure = FigureModel.getRandomFigure();
   private movementSubject = new Subject<FiguresMovement>();
   private gameStateSubject = new Subject<GameState>();
-  private nextFigureSubject = new Subject<void>();
+  private nextFigureSubject = new Subject<FiguresColors[][][]>();
 
   public setMoveStep(step: FiguresMovement): void {
     if (this.isPlaying) {
@@ -35,11 +35,13 @@ export class GameService {
 
   public updateFigures(): void {
     this.currentFigure = this.nextFigure;
-    this.nextFigure = FigureModel.getRandomFigure();
-    this.nextFigureSubject.next();
+    const previousFigure = this.currentFigure;
+    const randomNextFigure = FigureModel.getRandomFigure();
+    this.nextFigure = randomNextFigure;
+    this.nextFigureSubject.next([previousFigure, randomNextFigure]);
   }
 
-  public onUpdateFigures(): Observable<void> {
+  public onNewFigureCreated(): Observable<FiguresColors[][][]> {
     return this.nextFigureSubject.asObservable();
   }
 }
