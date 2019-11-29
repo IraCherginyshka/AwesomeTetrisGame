@@ -17,9 +17,9 @@ export const FiguresMatrixConst = [
     [FiguresColors.FOURTH, FiguresColors.FOURTH, FiguresColors.DEFAULT],
   ],
   [
+    [FiguresColors.DEFAULT, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
     [FiguresColors.FIFTH, FiguresColors.FIFTH, FiguresColors.FIFTH],
     [FiguresColors.DEFAULT, FiguresColors.FIFTH, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
   ],
   [
     [FiguresColors.SIXTH, FiguresColors.DEFAULT],

@@ -14,9 +14,24 @@ export class FigureModel {
     const matrixWithFigure = [...boardMatrix];
 
     figureMatrix.forEach((line, index) => {
-      const targetLine = [...boardMatrix[index + height]];
-      targetLine.splice(figurePosition, line.length, ...line);
-      matrixWithFigure[index + height] = [...targetLine];
+      let activePosition = 0;
+      let hasActiveBlock = false;
+      const activeBlocksLine = line.filter((block, ind) => {
+        if (block !== FiguresColors.DEFAULT && !hasActiveBlock) {
+          activePosition = ind;
+          hasActiveBlock = true;
+        }
+        return block !== FiguresColors.DEFAULT;
+      });
+      if (hasActiveBlock) {
+        const targetLine = [...boardMatrix[index + height]];
+        targetLine.splice(
+          figurePosition + activePosition,
+          activeBlocksLine.length,
+          ...activeBlocksLine,
+        );
+        matrixWithFigure[index + height] = [...targetLine];
+      }
     });
     return matrixWithFigure;
   }

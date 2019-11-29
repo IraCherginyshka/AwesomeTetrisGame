@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
@@ -7,12 +7,12 @@ import { FiguresColors } from '../../enums/figures-colors.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
 import {
-  QUANTITY_BLOCKS_WIDTH,
-  QUANTITY_BLOCKS_HEIGHT,
-  DELAY_FIRST_LEVEL,
-  CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  CANVAS_WIDTH,
   CENTRAL_ITEM,
+  DELAY_FIRST_LEVEL,
+  QUANTITY_BLOCKS_HEIGHT,
+  QUANTITY_BLOCKS_WIDTH,
 } from '../../constants/board-component.const';
 
 @Component({
@@ -31,6 +31,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private timeInterval: number;
   private lineWithFigure: number;
   private currentFigure: FiguresColors[][];
+  private currentMatrix: FiguresColors[][];
 
   constructor(private gameService: GameService) {}
 
@@ -61,13 +62,20 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .onNextStep()
       .subscribe((nextPosition: FiguresMovement) => {
         if (nextPosition === FiguresMovement.LEFT) {
-          this.figurePosition -= 1;
+          if (this.checkCollisionDetection(-1, this.currentFigure)) {
+            this.figurePosition -= 1;
+          }
         }
         if (nextPosition === FiguresMovement.RIGHT) {
-          this.figurePosition += 1;
+          if (this.checkCollisionDetection(1, this.currentFigure)) {
+            this.figurePosition += 1;
+          }
         }
         if (nextPosition === FiguresMovement.ROTATE) {
-          this.currentFigure = this.rotateFigure(this.currentFigure);
+          const rotateFigure = this.rotateFigure(this.currentFigure);
+          if (this.checkCollisionDetection(0, rotateFigure)) {
+            this.currentFigure = rotateFigure;
+          }
         }
       });
   }
@@ -102,21 +110,43 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   private playGame(): void {
     const newFigure = new FigureModel();
+
     this.timeInterval = window.setInterval(() => {
-      this.drawBoard(
-        newFigure.showFigure(
+      if (this.checkCollisionDetection(0, this.currentFigure)) {
+        this.currentMatrix = newFigure.showFigure(
           this.lineWithFigure,
           this.currentFigure,
           this.boardMatrix,
           this.figurePosition,
-        ),
-      );
-      if (this.lineWithFigure + this.currentFigure.length === QUANTITY_BLOCKS_HEIGHT) {
-        this.setInitialBoardState();
-      } else {
+        );
+        this.drawBoard(this.currentMatrix);
         this.lineWithFigure += 1;
+      } else {
+        this.boardMatrix = this.currentMatrix;
+        this.setInitialBoardState();
       }
     }, DELAY_FIRST_LEVEL);
+  }
+
+  private checkCollisionDetection(step, figure): boolean {
+    let isValid = true;
+    let result: boolean;
+    figure.forEach((line, indexY) => {
+      line.forEach((block, indexX) => {
+        if (block !== FiguresColors.DEFAULT) {
+          const x = this.figurePosition + indexX + step;
+          const y = this.lineWithFigure + indexY;
+          if (x >= 0 && x <= QUANTITY_BLOCKS_WIDTH && y < QUANTITY_BLOCKS_HEIGHT) {
+            result = this.boardMatrix[y][x] === FiguresColors.DEFAULT;
+            isValid = isValid && result;
+          } else {
+            isValid = false;
+          }
+        }
+      });
+    });
+
+    return isValid;
   }
 
   private stopGame(): void {
@@ -126,6 +156,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private resetGame(): void {
     clearInterval(this.timeInterval);
     this.setInitialBoardState();
+    this.boardMatrix = GameBoardComponent.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
     this.playGame();
   }
 }
