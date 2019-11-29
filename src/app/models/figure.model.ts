@@ -12,7 +12,6 @@ export class FigureModel {
     figurePosition: number,
   ): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
-
     figureMatrix.forEach((line, index) => {
       const targetLine = [...boardMatrix[index + height]];
       targetLine.splice(figurePosition, line.length, ...line);
