@@ -12,10 +12,10 @@ export class BoardModel {
   public drawBoard(matrix: FiguresColors[][]): void {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => {
-        if (this.isNextFigure) {
-          return new NextBlockModel(this.ctx, item).fillBoardBlock(indexX, indexY);
-        }
-        return new GameBlockModel(this.ctx, item).fillBoardBlock(indexX, indexY);
+        (this.isNextFigure
+          ? new NextBlockModel(this.ctx, item)
+          : new GameBlockModel(this.ctx, item)
+        ).fillBoardBlock(indexX, indexY);
       });
     });
   }

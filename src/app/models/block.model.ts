@@ -8,5 +8,8 @@ export abstract class BlockModel {
 
   fillBoardBlock(x: number, y: number): void {
     this.ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    this.fillStroke(x, y);
   }
+
+  protected abstract fillStroke(x: number, y: number): void;
 }
