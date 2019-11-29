@@ -128,7 +128,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     }, DELAY_FIRST_LEVEL);
   }
 
-  private checkCollisionDetection(step, figure): boolean {
+  private checkCollisionDetection(step: number, figure: FiguresColors[][]): boolean {
     let isValid = true;
     let result: boolean;
     figure.forEach((line, indexY) => {
