@@ -32,6 +32,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private timeInterval: number;
   private lineWithFigure: number;
   private currentFigure: FiguresColors[][];
+  private currentMatrix: FiguresColors[][];
 
   constructor(private gameService: GameService) {}
 
@@ -61,13 +62,20 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .onNextStep()
       .subscribe((nextPosition: FiguresMovement) => {
         if (nextPosition === FiguresMovement.LEFT) {
-          this.figurePosition -= 1;
+          if (this.checkCollisionDetection(-1, this.currentFigure)) {
+            this.figurePosition -= 1;
+          }
         }
         if (nextPosition === FiguresMovement.RIGHT) {
-          this.figurePosition += 1;
+          if (this.checkCollisionDetection(1, this.currentFigure)) {
+            this.figurePosition += 1;
+          }
         }
         if (nextPosition === FiguresMovement.ROTATE) {
-          this.currentFigure = this.rotateFigure(this.currentFigure);
+          const rotateFigure = this.rotateFigure(this.currentFigure);
+          if (this.checkCollisionDetection(0, rotateFigure)) {
+            this.currentFigure = rotateFigure;
+          }
         }
       });
 
@@ -84,6 +92,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
+    this.subscriptionNext.unsubscribe();
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
@@ -100,21 +109,39 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private playGame(): void {
     const newFigure = new FigureModel();
     const newBoard = new BoardModel(this.ctx, false);
+
     this.timeInterval = window.setInterval(() => {
-      newBoard.drawBoard(
-        newFigure.showFigure(
+      if (this.checkCollisionDetection(0, this.currentFigure)) {
+        this.currentMatrix = newFigure.showFigure(
           this.lineWithFigure,
           this.currentFigure,
           this.boardMatrix,
           this.figurePosition,
-        ),
-      );
-      if (this.lineWithFigure + this.currentFigure.length === QUANTITY_BLOCKS_HEIGHT) {
-        this.gameService.updateFigures();
-      } else {
+        );
+        newBoard.drawBoard(this.currentMatrix);
         this.lineWithFigure += 1;
+      } else {
+        this.boardMatrix = this.currentMatrix;
+        this.gameService.updateFigures();
+        this.setInitialBoardState();
       }
     }, DELAY_FIRST_LEVEL);
+  }
+
+  private checkCollisionDetection(step: number, figure: FiguresColors[][]): boolean {
+    return figure.every((line, indexY) => {
+      return line.every((block, indexX) => {
+        if (block === FiguresColors.DEFAULT) {
+          return true;
+        }
+        const x = this.figurePosition + indexX + step;
+        const y = this.lineWithFigure + indexY;
+        if (x >= 0 && x <= QUANTITY_BLOCKS_WIDTH && y < QUANTITY_BLOCKS_HEIGHT) {
+          return this.boardMatrix[y][x] === FiguresColors.DEFAULT;
+        }
+        return false;
+      });
+    });
   }
 
   private stopGame(): void {
@@ -125,6 +152,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     clearInterval(this.timeInterval);
     this.gameService.updateFigures();
     this.setInitialBoardState();
+    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
     this.playGame();
   }
 }

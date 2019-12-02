@@ -6,17 +6,35 @@ export class FigureModel {
     return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
   }
   public showFigure(
-    height: number,
+    lineHeight: number,
     figureMatrix: FiguresColors[][],
     boardMatrix: FiguresColors[][],
     figurePosition: number,
   ): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
-    figureMatrix.forEach((line, index) => {
-      const targetLine = [...boardMatrix[index + height]];
-      targetLine.splice(figurePosition, line.length, ...line);
-      matrixWithFigure[index + height] = [...targetLine];
+
+    figureMatrix.forEach((line, indexLine) => {
+      let activePosition = 0;
+      let hasActiveBlock = false;
+      const targetLine = [...boardMatrix[indexLine + lineHeight]];
+
+      const activeBlocksLine = line.filter((block, blockPosition) => {
+        if (block !== FiguresColors.DEFAULT && !hasActiveBlock) {
+          activePosition = blockPosition;
+          hasActiveBlock = true;
+        }
+        return block !== FiguresColors.DEFAULT;
+      });
+
+      targetLine.splice(
+        figurePosition + activePosition,
+        activeBlocksLine.length,
+        ...activeBlocksLine,
+      );
+
+      matrixWithFigure[indexLine + lineHeight] = [...targetLine];
     });
+
     return matrixWithFigure;
   }
 }
