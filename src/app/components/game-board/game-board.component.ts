@@ -121,6 +121,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         newBoard.drawBoard(this.currentMatrix);
         this.lineWithFigure += 1;
       } else {
+        this.deleteFilledLines();
         this.boardMatrix = this.currentMatrix;
         this.gameService.updateFigures();
         this.setInitialBoardState();
@@ -142,6 +143,21 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         return false;
       });
     });
+  }
+
+  private deleteFilledLines(): void {
+    const filledLineIndexes = BoardModel.findFilledLine(
+      this.currentFigure,
+      this.currentMatrix,
+      this.lineWithFigure,
+    );
+    if (filledLineIndexes.length > 0) {
+      this.gameService.setNumberFilledLines(filledLineIndexes.length);
+      filledLineIndexes.forEach((number) => {
+        this.currentMatrix.splice(this.lineWithFigure - 1 + number, 1);
+        this.currentMatrix.unshift(new Array(QUANTITY_BLOCKS_WIDTH).fill(FiguresColors.DEFAULT));
+      });
+    }
   }
 
   private stopGame(): void {
