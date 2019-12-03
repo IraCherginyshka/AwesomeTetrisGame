@@ -22,8 +22,18 @@ export class GameControlsComponent {
       case 'ArrowUp':
         this.gameService.setMoveStep(FiguresMovement.ROTATE);
         break;
+      case 'ArrowDown':
+        this.gameService.setMoveStep(FiguresMovement.DOWN);
+        break;
       default:
         break;
+    }
+  }
+
+  @HostListener('window:keyup', ['$event']) keyBoardUp(event: KeyboardEvent): void {
+    event.preventDefault();
+    if (event.code === 'ArrowDown') {
+      this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
   }
 }
