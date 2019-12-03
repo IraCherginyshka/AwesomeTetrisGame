@@ -13,6 +13,7 @@ import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
   CENTRAL_ITEM,
+  ACCELERATION,
 } from '../../constants/board-component.const';
 
 @Component({
@@ -30,6 +31,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionNext: Subscription;
   private figurePosition: number;
   private timeInterval: number;
+  private duration: number;
   private lineWithFigure: number;
   private currentFigure: FiguresColors[][];
   private currentMatrix: FiguresColors[][];
@@ -77,6 +79,17 @@ export class GameBoardComponent implements OnInit, OnDestroy {
             this.currentFigure = rotateFigure;
           }
         }
+        if (nextPosition === FiguresMovement.DOWN) {
+          clearInterval(this.timeInterval);
+          this.duration = DELAY_FIRST_LEVEL / ACCELERATION;
+          this.playGame();
+        }
+
+        if (nextPosition === FiguresMovement.DOWN_OFF) {
+          clearInterval(this.timeInterval);
+          this.duration = DELAY_FIRST_LEVEL;
+          this.playGame();
+        }
       });
 
     this.subscriptionNext = this.gameService
@@ -104,6 +117,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
+    this.duration = DELAY_FIRST_LEVEL;
   }
 
   private playGame(): void {
@@ -126,7 +140,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.gameService.updateFigures();
         this.setInitialBoardState();
       }
-    }, DELAY_FIRST_LEVEL);
+    }, this.duration);
   }
 
   private checkCollisionDetection(step: number, figure: FiguresColors[][]): boolean {
