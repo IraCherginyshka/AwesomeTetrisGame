@@ -8,6 +8,7 @@ import { FiguresColors } from '../enums/figures-colors.enum';
 @Injectable({ providedIn: 'root' })
 export class GameService {
   private isPlaying = false;
+  private isLostGame = false;
   private currentFigure: FiguresColors[][];
   private nextFigure = FigureModel.getRandomFigure();
   private movementSubject = new Subject<FiguresMovement>();
@@ -16,9 +17,19 @@ export class GameService {
     previousFigure: FiguresColors[][];
     randomNextFigure: FiguresColors[][];
   }>();
+  private lostGameSubject = new Subject<boolean>();
+
+  public setLostGame(): void {
+    this.isLostGame = true;
+    this.lostGameSubject.next();
+  }
+
+  public onLostGame(): Observable<boolean> {
+    return this.lostGameSubject.asObservable();
+  }
 
   public setMoveStep(step: FiguresMovement): void {
-    if (this.isPlaying) {
+    if (this.isPlaying && !this.isLostGame) {
       this.movementSubject.next(step);
     }
   }
@@ -29,6 +40,7 @@ export class GameService {
 
   public setGameState(action: GameState): void {
     this.isPlaying = action !== GameState.PAUSE;
+    this.isLostGame = false;
     this.gameStateSubject.next(action);
   }
 

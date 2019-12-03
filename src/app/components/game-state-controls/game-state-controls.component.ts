@@ -11,13 +11,21 @@ import { GameService } from '../../services/game.service';
 })
 export class GameStateControlsComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
+  public isLostGame: boolean;
   private subscriptionState: Subscription;
+  private subscriptionLost: Subscription;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
+    this.subscriptionLost = this.gameService.onLostGame().subscribe((value) => {
+      this.isLostGame = true;
+      this.isPlaying = false;
+    });
+
     this.subscriptionState = this.gameService.getGameState().subscribe((action: GameState) => {
       this.isPlaying = action !== GameState.PAUSE;
+      this.isLostGame = false;
     });
   }
 

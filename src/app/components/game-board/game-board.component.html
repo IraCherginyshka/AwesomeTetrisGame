@@ -1,4 +1,5 @@
 <div>
-  <div *ngIf="!isPlaying" class="overlay">pause</div>
+  <div *ngIf="!isPlaying && !isLostGame" class="overlay">pause</div>
+  <div *ngIf="isLostGame" class="overlay">lost</div>
   <canvas #canvas class="board-canvas"></canvas>
 </div>
