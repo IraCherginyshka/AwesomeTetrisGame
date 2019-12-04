@@ -23,7 +23,7 @@ export class GameControlsComponent implements OnInit, OnDestroy {
       this.isLostGame = false;
     });
 
-    this.subscriptionLost = this.gameService.onLostGame().subscribe((value) => {
+    this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
       this.isLostGame = true;
     });
   }
