@@ -23,6 +23,8 @@ import {
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
+  public isLostGame: boolean;
+  public textStateOverlay: string;
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -46,9 +48,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-
+    this.isLostGame = false;
+    this.isPlaying = true;
+    this.gameService.updateFigures();
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
       this.isPlaying = gameState !== GameState.PAUSE;
+      this.isLostGame = false;
+      this.textStateOverlay = GameState.PAUSE;
       if (gameState === GameState.RESET) {
         this.resetGame();
       }
@@ -98,8 +104,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.currentFigure = previousFigure;
         this.setInitialBoardState();
       });
-
-    this.gameService.updateFigures();
   }
 
   ngOnDestroy(): void {
@@ -121,6 +125,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private playGame(): void {
+    this.isLostGame = false;
     const newFigure = new FigureModel();
     const newBoard = new BoardModel(this.ctx, false);
 
@@ -134,6 +139,18 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         );
         newBoard.drawBoard(this.currentMatrix);
         this.lineWithFigure += 1;
+      } else if (
+        !this.checkCollisionDetection(0, this.currentFigure) &&
+        this.lineWithFigure === 0
+      ) {
+        this.currentMatrix = newFigure.showFigure(
+          this.lineWithFigure,
+          this.currentFigure,
+          this.boardMatrix,
+          this.figurePosition,
+        );
+        newBoard.drawBoard(this.currentMatrix);
+        this.lostGame();
       } else {
         this.deleteFilledLines();
         this.boardMatrix = this.currentMatrix;
@@ -187,5 +204,18 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_HEIGHT,
     );
     this.playGame();
+  }
+
+  private lostGame(): void {
+    this.isLostGame = true;
+    this.isPlaying = false;
+    this.textStateOverlay = GameState.LOST;
+    this.gameService.setLostGame();
+    clearInterval(this.timeInterval);
+    this.setInitialBoardState();
+    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
   }
 }
