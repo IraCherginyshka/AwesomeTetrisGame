@@ -9,6 +9,18 @@ export class BoardModel {
     return new Array(height).fill(new Array(width).fill(FiguresColors.DEFAULT));
   }
 
+  static findFilledLine(
+    figure: FiguresColors[][],
+    board: FiguresColors[][],
+    lineIndex: number,
+  ): number[] {
+    return figure
+      .map((item, index) =>
+        board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT) ? index : -1,
+      )
+      .filter((index) => index !== -1);
+  }
+
   public drawBoard(matrix: FiguresColors[][]): void {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => {
