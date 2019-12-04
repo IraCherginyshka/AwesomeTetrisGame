@@ -10,6 +10,8 @@ import { GameState } from '../../enums/game-state.enum';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent implements OnInit, OnDestroy {
+  public moveStep = FiguresMovement;
+
   private isPlaying: boolean;
   private isLostGame: boolean;
   private subscriptionState: Subscription;
@@ -74,5 +76,9 @@ export class GameControlsComponent implements OnInit, OnDestroy {
     if (event.code === 'ArrowDown') {
       this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
+  }
+
+  public moveFigure(step: FiguresMovement): void {
+    this.gameService.setMoveStep(step);
   }
 }
