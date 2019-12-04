@@ -14,16 +14,11 @@ export class BoardModel {
     board: FiguresColors[][],
     lineIndex: number,
   ): number[] {
-    const indexes: number[] = [];
-    figure.forEach((line, index) => {
-      const isFilledLine = board[lineIndex - 1 + index].every(
-        (block) => block !== FiguresColors.DEFAULT,
-      );
-      if (isFilledLine) {
-        indexes.push(index);
-      }
-    });
-    return indexes;
+    return figure
+      .map((item, index) =>
+        board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT) ? index : -1,
+      )
+      .filter((index) => index !== -1);
   }
 
   public drawBoard(matrix: FiguresColors[][]): void {
