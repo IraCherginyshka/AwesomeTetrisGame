@@ -8,6 +8,7 @@ import { FiguresMovement } from '../../enums/figures-movement.enum';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent {
+  public moveStep = FiguresMovement;
   constructor(private gameService: GameService) {}
 
   @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
@@ -35,5 +36,9 @@ export class GameControlsComponent {
     if (event.code === 'ArrowDown') {
       this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
+  }
+
+  public moveFigure(step: FiguresMovement): void {
+    this.gameService.setMoveStep(step);
   }
 }

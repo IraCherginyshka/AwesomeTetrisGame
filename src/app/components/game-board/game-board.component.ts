@@ -66,17 +66,20 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         if (nextPosition === FiguresMovement.LEFT) {
           if (this.checkCollisionDetection(-1, this.currentFigure)) {
             this.figurePosition -= 1;
+            this.redrawBoard();
           }
         }
         if (nextPosition === FiguresMovement.RIGHT) {
           if (this.checkCollisionDetection(1, this.currentFigure)) {
             this.figurePosition += 1;
+            this.redrawBoard();
           }
         }
         if (nextPosition === FiguresMovement.ROTATE) {
           const rotateFigure = this.rotateFigure(this.currentFigure);
           if (this.checkCollisionDetection(0, rotateFigure)) {
             this.currentFigure = rotateFigure;
+            this.redrawBoard();
           }
         }
         if (nextPosition === FiguresMovement.DOWN) {
@@ -114,6 +117,18 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     return reverseMatrix[0].map((item, index) => reverseMatrix.map((line) => line[index]));
   }
 
+  private redrawBoard(): void {
+    const newFigure = new FigureModel();
+    const newBoard = new BoardModel(this.ctx, false);
+    this.currentMatrix = newFigure.showFigure(
+      this.lineWithFigure,
+      this.currentFigure,
+      this.boardMatrix,
+      this.figurePosition,
+    );
+    newBoard.drawBoard(this.currentMatrix);
+  }
+
   private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
@@ -121,18 +136,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private playGame(): void {
-    const newFigure = new FigureModel();
-    const newBoard = new BoardModel(this.ctx, false);
-
     this.timeInterval = window.setInterval(() => {
       if (this.checkCollisionDetection(0, this.currentFigure)) {
-        this.currentMatrix = newFigure.showFigure(
-          this.lineWithFigure,
-          this.currentFigure,
-          this.boardMatrix,
-          this.figurePosition,
-        );
-        newBoard.drawBoard(this.currentMatrix);
+        this.redrawBoard();
         this.lineWithFigure += 1;
       } else {
         this.deleteFilledLines();
