@@ -1,6 +1,7 @@
 import { FiguresColors } from '../enums/figures-colors.enum';
 import { NextBlockModel } from './next-block.model';
 import { GameBlockModel } from './game-block.model';
+import { QUANTITY_BLOCKS_HEIGHT } from '../constants/board-component.const';
 
 export class BoardModel {
   constructor(private ctx: CanvasRenderingContext2D, private isNextFigure: boolean) {}
@@ -15,9 +16,14 @@ export class BoardModel {
     lineIndex: number,
   ): number[] {
     return figure
-      .map((item, index) =>
-        board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT) ? index : -1,
-      )
+      .map((item, index) => {
+        if (lineIndex - 1 + index < QUANTITY_BLOCKS_HEIGHT) {
+          return board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT)
+            ? index
+            : -1;
+        }
+        return -1;
+      })
       .filter((index) => index !== -1);
   }
 
