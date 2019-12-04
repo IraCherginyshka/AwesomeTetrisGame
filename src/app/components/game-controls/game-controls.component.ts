@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
+import { GameState } from '../../enums/game-state.enum';
 
 @Component({
   selector: 'atg-game-controls',
@@ -24,6 +25,15 @@ export class GameControlsComponent {
         break;
       case 'ArrowDown':
         this.gameService.setMoveStep(FiguresMovement.DOWN);
+        break;
+      case 'KeyP':
+        this.gameService.setGameState(GameState.PAUSE);
+        break;
+      case 'KeyR':
+        this.gameService.setGameState(GameState.RESET);
+        break;
+      case 'Enter':
+        this.gameService.setGameState(GameState.PLAY);
         break;
       default:
         break;
