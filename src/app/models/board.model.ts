@@ -17,12 +17,10 @@ export class BoardModel {
   ): number[] {
     return figure
       .map((item, index) => {
-        if (lineIndex - 1 + index < QUANTITY_BLOCKS_HEIGHT) {
-          return board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT)
-            ? index
-            : -1;
-        }
-        return -1;
+        return lineIndex - 1 + index < QUANTITY_BLOCKS_HEIGHT &&
+          board[lineIndex - 1 + index].every((block) => block !== FiguresColors.DEFAULT)
+          ? index
+          : -1;
       })
       .filter((index) => index !== -1);
   }
