@@ -24,6 +24,7 @@ import {
 export class GameBoardComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   public isLostGame: boolean;
+  public textStateOverlay: string;
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -50,10 +51,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.isLostGame = false;
     this.isPlaying = true;
     this.gameService.updateFigures();
-
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
       this.isPlaying = gameState !== GameState.PAUSE;
       this.isLostGame = false;
+      this.textStateOverlay = 'pause';
       if (gameState === GameState.RESET) {
         this.resetGame();
       }
@@ -192,6 +193,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private lostGame(): void {
     this.isLostGame = true;
     this.isPlaying = false;
+    this.textStateOverlay = 'lost';
     this.gameService.setLostGame();
     clearInterval(this.timeInterval);
     this.setInitialBoardState();
