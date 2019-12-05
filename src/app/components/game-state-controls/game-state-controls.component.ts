@@ -46,9 +46,6 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
         this.resetGame();
         break;
       case this.codeKeys.keyPlay:
-        if (this.isPlaying) {
-          return;
-        }
         this.playGame();
         break;
       default:
@@ -65,6 +62,9 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   }
 
   public playGame(): void {
+    if (this.isPlaying) {
+      return;
+    }
     this.gameService.setGameState(GameState.PLAY);
   }
 }
