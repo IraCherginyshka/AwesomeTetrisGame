@@ -54,15 +54,6 @@ export class GameControlsComponent implements OnInit, OnDestroy {
       case 'ArrowDown':
         this.gameService.setMoveStep(FiguresMovement.DOWN);
         break;
-      case 'KeyP':
-        this.gameService.setGameState(GameState.PAUSE);
-        break;
-      case 'KeyR':
-        this.gameService.setGameState(GameState.RESET);
-        break;
-      case 'Enter':
-        this.gameService.setGameState(GameState.PLAY);
-        break;
       default:
         break;
     }
