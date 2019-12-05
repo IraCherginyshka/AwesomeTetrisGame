@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../enums/game-state.enum';
-
 import { GameService } from '../../services/game.service';
 
 @Component({
@@ -13,8 +12,15 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
+  private codeKeys: object;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService) {
+    this.codeKeys = {
+      keyPause: 'KeyP',
+      keyReset: 'KeyR',
+      keyPlay: 'Enter',
+    };
+  }
 
   ngOnInit(): void {
     this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
@@ -30,6 +36,23 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
     this.subscriptionState.unsubscribe();
   }
 
+  @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
+    event.preventDefault();
+    switch (event.code) {
+      case this.codeKeys.keyPause:
+        this.pauseGame();
+        break;
+      case this.codeKeys.keyReset:
+        this.resetGame();
+        break;
+      case this.codeKeys.keyPlay:
+        this.playGame();
+        break;
+      default:
+        break;
+    }
+  }
+
   public resetGame(): void {
     this.gameService.setGameState(GameState.RESET);
   }
@@ -39,6 +62,9 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   }
 
   public playGame(): void {
+    if (this.isPlaying) {
+      return;
+    }
     this.gameService.setGameState(GameState.PLAY);
   }
 }
