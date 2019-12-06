@@ -20,7 +20,7 @@ export class GameInformationComponent implements OnInit, OnDestroy {
 
   constructor(private gameService: GameService) {}
 
-  public static calculationScore(lines: number, level: number): number {
+  public static calculateScore(lines: number, level: number): number {
     return (
       (lines / 2) *
       (2 * (DEFAULT_LINE_SCORE + DEFAULT_LINE_SCORE * level) + DEFAULT_STEP * (lines - 1))
@@ -35,7 +35,7 @@ export class GameInformationComponent implements OnInit, OnDestroy {
       .subscribe(({ lines, score }) => {
         this.numberLines = lines ? this.numberLines + lines : lines;
         this.currentScore = score
-          ? this.currentScore + GameInformationComponent.calculationScore(lines, this.currentLevel)
+          ? this.currentScore + GameInformationComponent.calculateScore(lines, this.currentLevel)
           : score;
       });
   }
