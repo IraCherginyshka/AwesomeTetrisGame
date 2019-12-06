@@ -17,7 +17,10 @@ export class GameService {
     previousFigure: FiguresColors[][];
     randomNextFigure: FiguresColors[][];
   }>();
-  private numberLinesSubject = new Subject<number>();
+  private numberLinesSubject = new Subject<{
+    lines: number;
+    score: number;
+  }>();
   private lostGameSubject = new Subject<boolean>();
 
   public setLostGame(): void {
@@ -67,11 +70,19 @@ export class GameService {
     return this.nextFigureSubject.asObservable();
   }
 
-  public setNumberFilledLines(quantity: number): void {
-    this.numberLinesSubject.next(quantity);
+  public setNumberFilledLines(lines: number): void {
+    const score = lines * 2;
+    this.numberLinesSubject.next({ lines, score });
   }
 
-  public onUpdateNumberLines(): Observable<number> {
+  public setInitialInformation(): void {
+    this.numberLinesSubject.next({ lines: 0, score: 0 });
+  }
+
+  public onUpdateNumberLines(): Observable<{
+    lines: number;
+    score: number;
+  }> {
     return this.numberLinesSubject.asObservable();
   }
 }

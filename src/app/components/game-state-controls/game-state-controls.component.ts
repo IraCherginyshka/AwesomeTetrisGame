@@ -14,13 +14,7 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   private subscriptionLost: Subscription;
   private codeKeys: object;
 
-  constructor(private gameService: GameService) {
-    this.codeKeys = {
-      keyPause: 'KeyP',
-      keyReset: 'KeyR',
-      keyPlay: 'Enter',
-    };
-  }
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
@@ -39,13 +33,13 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
     event.preventDefault();
     switch (event.code) {
-      case this.codeKeys.keyPause:
+      case 'KeyP':
         this.pauseGame();
         break;
-      case this.codeKeys.keyReset:
+      case 'KeyR':
         this.resetGame();
         break;
-      case this.codeKeys.keyPlay:
+      case 'Enter':
         this.playGame();
         break;
       default:
@@ -55,6 +49,7 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
 
   public resetGame(): void {
     this.gameService.setGameState(GameState.RESET);
+    this.gameService.setInitialInformation();
   }
 
   public pauseGame(): void {
