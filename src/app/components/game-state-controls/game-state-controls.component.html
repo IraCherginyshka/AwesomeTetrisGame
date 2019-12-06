@@ -1,8 +1,16 @@
 <div class="controls">
+  <div *ngIf="isPlaying; else pause">
+    <button class="controls-action pause" (click)="pauseGame()">
+      pause
+    </button>
+  </div>
   <button class="controls-action reset" (click)="resetGame()">
     reset
   </button>
-  <button class="controls-action pause" (click)="pauseGame()">
-    pause
-  </button>
 </div>
+
+<ng-template #pause>
+  <button class="controls-action play" (click)="playGame()">
+    play
+  </button>
+</ng-template>

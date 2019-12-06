@@ -1,0 +1,20 @@
+@import './src/assets/styles/variables';
+
+.next-figure {
+  &__label {
+    padding: $secondary-indent;
+    margin-bottom: $primary-indent / 2;
+    color: $service-color;
+    text-align: center;
+  }
+  &__field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: $center;
+    width: $inform-field-width * 2;
+    height: $inform-field-height * 2;
+    background-color: $background-color;
+    border: $primary-border;
+  }
+}

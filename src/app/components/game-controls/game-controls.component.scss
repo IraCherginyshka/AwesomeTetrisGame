@@ -10,8 +10,8 @@
     width: $controls-button-width;
     height: $controls-button-height;
     outline: none;
-    line-height: $controls-button-height - 0.3rem;
-    margin: $primary-indent / 2;
+    line-height: 3rem;
+    margin: $primary-indent / 3;
     background-color: $background-color;
     border: $hover-border-controls $secondary-color;
     border-radius: 10px;
@@ -28,5 +28,13 @@
   }
   & .horizontal {
     display: flex;
+  }
+  & .icon-arrow {
+    padding-top: 0.5rem;
+    width: 3rem;
+  }
+  & .icon-arrow--secondary {
+    padding-top: 0.25rem;
+    width: 2.5rem;
   }
 }

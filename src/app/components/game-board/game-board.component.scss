@@ -4,3 +4,15 @@
   border: $primary-border;
   background-color: $background-color;
 }
+
+.overlay {
+  position: absolute;
+  width: $board-width + 2px;
+  height: $board-height + 3px;
+  background-color: rgba($primary-color, 0.85);
+  border: $hover-border-controls $default-color;
+  text-align: center;
+  line-height: $board-height;
+  color: $secondary-color;
+  font-size: $h1-font-size;
+}

@@ -14,6 +14,66 @@ The application will show information about the level, score, speed, next block 
 
 Also, the application will allow user to see leaderboard and become part of it by winning the game (for this functionality authorization and back-end will be used in the app).
 
+## Project setup
+
+Before starting working on the project make sure that the following tools are installed:
+
+- Git
+- Latest LTS version of [NodeJS](https://nodejs.org/uk/) & [NPM](https://www.npmjs.com/get-npm)
+
+## Development mode
+
+```
+# Start the doc viewer application so you can see your local changes in the browser on http://localhost:4200/.
+$ npm run start
+
+# Run ESLint.
+$ npm run eslint
+
+# Pre-hooks
+"husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+```
+
+## Project structure
+
+```
+AwesomeTetrisGame/
+├── src/ - directory for code sources
+|  └── app/ - directory for files in which application logic and data are defined
+|  |   └── components/ - directory for components, templates, styles and unit tests
+|  |   └── constants/ - directory for application constants
+|  |   └── enums/ - directory for enums
+|  |   └── models/ - directory for models
+|  |   └── services - directory for services
+|  └── assets/ - directory for static assets
+|  └── environments/ directory contains build configuration options for particular target environments
+└── application-specific configuration files
+```
+
+## General Naming Guidelines
+
+```
+#Components
+@Component({ ... })
+export class AppComponent { }
+
+#file name
+app.component.ts
+```
+
+```
+#Services
+@Injectable({ providedIn: 'root' })
+export class GameService {}
+
+#file name
+game.service.ts
+```
+
 ## Way of work
 
 1. Create the backlog (a list of all the desired features of the application) and board in JIRA:
@@ -25,7 +85,7 @@ Also, the application will allow user to see leaderboard and become part of it b
 2. Start work with Issue:
 
    - change status of issue to “IN PROGRESS”;
-   - create a New branch in project (name: ‘feature/’ or ‘bugfix/’ with ‘ATG-<#>’ );
+   - create a New branch in project (name: `feature/ATG-#` or `bugfix/ATG-#`);
 
 3. When the task is finished, create merge request in github:
 
@@ -33,6 +93,21 @@ Also, the application will allow user to see leaderboard and become part of it b
    - log work;
    - update JIRA with link to request and status of issue “IN REVIEW”;
    - mentor code review;
+
+   ##### Commit and push all recent changes
+
+   - on the project we use a git flow model.
+     Some basic Git commands are:
+
+   ```
+   git status
+   git add
+   git commit -m 'Commit'
+   git pull
+   git push
+   ```
+
+   - [Git flow tutorial](https://leanpub.com/git-flow/read)
 
 4. After merging, status of issue must be changed to “DONE”.
 

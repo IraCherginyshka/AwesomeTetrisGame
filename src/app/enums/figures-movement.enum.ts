@@ -1,4 +1,7 @@
 export enum FiguresMovement {
-  LEFT = -1,
-  RIGHT = 1,
+  LEFT = 'left',
+  RIGHT = 'right',
+  ROTATE = 'rotate',
+  DOWN = 'down',
+  DOWN_OFF = 'down_off',
 }

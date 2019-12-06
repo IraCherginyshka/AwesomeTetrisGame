@@ -1,29 +1,43 @@
 import { FiguresColors } from '../enums/figures-colors.enum';
 import { FiguresMatrixConst } from '../constants/figures-matrix.const';
+import { QUANTITY_BLOCKS_HEIGHT } from '../constants/board-component.const';
 
 export class FigureModel {
-  public figureMatrix: FiguresColors[][];
-
-  constructor() {
-    this.figureMatrix = FigureModel.getRandomFigure();
+  public static getRandomFigure(): FiguresColors[][] {
+    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
   }
-
   public showFigure(
-    height: number,
+    lineHeight: number,
+    figureMatrix: FiguresColors[][],
     boardMatrix: FiguresColors[][],
     figurePosition: number,
   ): FiguresColors[][] {
     const matrixWithFigure = [...boardMatrix];
 
-    this.figureMatrix.forEach((line, index) => {
-      const targetLine = [...boardMatrix[index + height]];
-      targetLine.splice(figurePosition, line.length, ...line);
-      matrixWithFigure[index + height] = [...targetLine];
-    });
-    return matrixWithFigure;
-  }
+    figureMatrix.forEach((line, indexLine) => {
+      let activePosition = 0;
+      let hasActiveBlock = false;
+      if (indexLine + lineHeight < QUANTITY_BLOCKS_HEIGHT) {
+        const targetLine = [...boardMatrix[indexLine + lineHeight]];
 
-  private static getRandomFigure(): FiguresColors[][] {
-    return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
+        const activeBlocksLine = line.filter((block, blockPosition) => {
+          if (block !== FiguresColors.DEFAULT && !hasActiveBlock) {
+            activePosition = blockPosition;
+            hasActiveBlock = true;
+          }
+          return block !== FiguresColors.DEFAULT;
+        });
+
+        targetLine.splice(
+          figurePosition + activePosition,
+          activeBlocksLine.length,
+          ...activeBlocksLine,
+        );
+
+        matrixWithFigure[indexLine + lineHeight] = [...targetLine];
+      }
+    });
+
+    return matrixWithFigure;
   }
 }

@@ -2,10 +2,10 @@ import { FiguresColors } from '../enums/figures-colors.enum';
 
 export const FiguresMatrixConst = [
   [
-    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.FIRST, FiguresColors.DEFAULT],
   ],
   [[FiguresColors.SECOND, FiguresColors.SECOND], [FiguresColors.SECOND, FiguresColors.SECOND]],
   [
@@ -19,15 +19,16 @@ export const FiguresMatrixConst = [
   [
     [FiguresColors.FIFTH, FiguresColors.FIFTH, FiguresColors.FIFTH],
     [FiguresColors.DEFAULT, FiguresColors.FIFTH, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.DEFAULT, FiguresColors.DEFAULT],
   ],
   [
-    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.SIXTH, FiguresColors.SIXTH],
+    [FiguresColors.SIXTH, FiguresColors.DEFAULT],
+    [FiguresColors.SIXTH, FiguresColors.DEFAULT],
+    [FiguresColors.SIXTH, FiguresColors.SIXTH],
   ],
   [
-    [FiguresColors.DEFAULT, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
-    [FiguresColors.DEFAULT, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
-    [FiguresColors.SEVENTH, FiguresColors.SEVENTH, FiguresColors.DEFAULT],
+    [FiguresColors.DEFAULT, FiguresColors.SEVENTH],
+    [FiguresColors.DEFAULT, FiguresColors.SEVENTH],
+    [FiguresColors.SEVENTH, FiguresColors.SEVENTH],
   ],
 ];
