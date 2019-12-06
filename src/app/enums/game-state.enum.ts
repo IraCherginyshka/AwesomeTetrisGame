@@ -2,5 +2,5 @@ export enum GameState {
   PLAY = 'play',
   PAUSE = 'pause',
   RESET = 'reset',
-  LOST = 'lost',
+  LOST = 'game over',
 }
