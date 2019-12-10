@@ -9,11 +9,12 @@ import { GameState } from '../../enums/game-state.enum';
 import {
   QUANTITY_BLOCKS_WIDTH,
   QUANTITY_BLOCKS_HEIGHT,
-  DELAY_FIRST_LEVEL,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
   CENTRAL_ITEM,
   ACCELERATION,
+  DELAY_DEFAULT,
+  DELAY_LEVEL_STEP,
 } from '../../constants/board-component.const';
 
 @Component({
@@ -28,15 +29,17 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
-  private subscriptionState: Subscription;
-  private subscriptionMove: Subscription;
-  private subscriptionNext: Subscription;
+  private currentFigure: FiguresColors[][];
+  private currentMatrix: FiguresColors[][];
   private figurePosition: number;
   private timeInterval: number;
   private duration: number;
   private lineWithFigure: number;
-  private currentFigure: FiguresColors[][];
-  private currentMatrix: FiguresColors[][];
+  private currentLevel: number;
+  private subscriptionState: Subscription;
+  private subscriptionMove: Subscription;
+  private subscriptionNext: Subscription;
+  private subscriptionLevel: Subscription;
 
   constructor(private gameService: GameService) {}
 
@@ -51,10 +54,16 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.isLostGame = false;
     this.isPlaying = true;
     this.gameService.updateFigures();
+    this.duration = DELAY_DEFAULT;
+    this.currentLevel = 1;
+
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
-      this.isPlaying = gameState !== GameState.PAUSE;
-      this.isLostGame = false;
       this.textStateOverlay = GameState.PAUSE;
+      this.isPlaying = gameState !== GameState.PAUSE;
+      if (this.isLostGame) {
+        this.gameService.setInitialInformation();
+      }
+      this.isLostGame = false;
       if (gameState === GameState.RESET) {
         this.resetGame();
       }
@@ -90,13 +99,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         }
         if (nextPosition === FiguresMovement.DOWN) {
           clearInterval(this.timeInterval);
-          this.duration = DELAY_FIRST_LEVEL / ACCELERATION;
+          this.duration = DELAY_DEFAULT / ACCELERATION;
           this.playGame();
         }
 
         if (nextPosition === FiguresMovement.DOWN_OFF) {
           clearInterval(this.timeInterval);
-          this.duration = DELAY_FIRST_LEVEL;
+          this.duration = DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel;
           this.playGame();
         }
       });
@@ -108,6 +117,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.setInitialBoardState();
       });
 
+    this.subscriptionLevel = this.gameService.onUpdateGameInformation().subscribe(({ level }) => {
+      if (this.currentLevel !== level) {
+        clearInterval(this.timeInterval);
+        this.currentLevel = level;
+        this.duration = DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel;
+        this.playGame();
+      }
+    });
+
     this.gameService.updateFigures();
   }
 
@@ -115,6 +133,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
+    this.subscriptionLevel.unsubscribe();
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
@@ -126,19 +145,21 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private redrawBoard(): void {
     const newFigure = new FigureModel();
     const newBoard = new BoardModel(this.ctx, false);
+
     this.currentMatrix = newFigure.showFigure(
       this.lineWithFigure,
       this.currentFigure,
       this.boardMatrix,
       this.figurePosition,
     );
+
     newBoard.drawBoard(this.currentMatrix);
   }
 
   private setInitialBoardState(): void {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
-    this.duration = DELAY_FIRST_LEVEL;
+    this.duration = DELAY_DEFAULT;
   }
 
   private playGame(): void {
@@ -156,6 +177,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.deleteFilledLines();
         this.boardMatrix = this.currentMatrix;
         this.gameService.updateFigures();
+        this.redrawBoard();
         this.setInitialBoardState();
       }
     }, this.duration);
@@ -197,23 +219,27 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private resetGame(): void {
-    clearInterval(this.timeInterval);
-    this.gameService.updateFigures();
-    this.setInitialBoardState();
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
+    this.gameService.updateFigures();
+    this.redrawBoard();
+    clearInterval(this.timeInterval);
+    this.setInitialBoardState();
     this.playGame();
   }
 
   private lostGame(): void {
     this.isLostGame = true;
     this.isPlaying = false;
-    this.textStateOverlay = GameState.LOST;
     this.gameService.setLostGame();
-    clearInterval(this.timeInterval);
+    this.gameService.updateFigures();
     this.setInitialBoardState();
+    clearInterval(this.timeInterval);
+
+    this.textStateOverlay = GameState.LOST;
+
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
