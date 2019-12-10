@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FiguresMovement } from '../enums/figures-movement.enum';
 import { GameState } from '../enums/game-state.enum';
 import { FigureModel } from '../models/figure.model';
@@ -9,6 +9,7 @@ import {
   DEFAULT_STEP,
   GAME_STEP_LEVEL,
 } from '../constants/game-information.const';
+import { GameStatsObject } from '../interfaces/gameStats.interface';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
@@ -25,11 +26,11 @@ export class GameService {
     previousFigure: FiguresColors[][];
     randomNextFigure: FiguresColors[][];
   }>();
-  private numberLinesSubject = new Subject<{
-    lines: number;
-    score: number;
-    level: number;
-  }>();
+  private numberLinesSubject = new BehaviorSubject({
+    lines: 0,
+    score: 0,
+    level: 1,
+  });
   private lostGameSubject = new Subject<boolean>();
 
   public static calculateScore(lines: number, level: number): number {
@@ -114,11 +115,7 @@ export class GameService {
     this.numberLinesSubject.next({ lines, score, level });
   }
 
-  public onUpdateGameInformation(): Observable<{
-    lines: number;
-    score: number;
-    level: number;
-  }> {
+  public onUpdateGameInformation(): Observable<GameStatsObject> {
     return this.numberLinesSubject.asObservable();
   }
 }

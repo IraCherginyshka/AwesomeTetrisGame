@@ -1,14 +1,14 @@
 <div class="information">
   <div class="information-block">
     <p class="information-label">level</p>
-    <div class="information-field">{{ (observableLines$ | async)?.level || initialLevel }}</div>
+    <div class="information-field">{{ (gameStats$ | async).level }}</div>
   </div>
   <div class="information-block">
     <p class="information-label">score</p>
-    <div class="information-field">{{ (observableLines$ | async)?.score || initialScore }}</div>
+    <div class="information-field">{{ (gameStats$ | async).score }}</div>
   </div>
   <div class="information-block">
     <p class="information-label">lines</p>
-    <div class="information-field">{{ (observableLines$ | async)?.lines || initialLines }}</div>
+    <div class="information-field">{{ (gameStats$ | async).lines }}</div>
   </div>
 </div>

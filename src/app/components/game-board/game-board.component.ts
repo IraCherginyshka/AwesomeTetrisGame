@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
@@ -117,14 +118,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.setInitialBoardState();
       });
 
-    this.subscriptionLevel = this.gameService.onUpdateGameInformation().subscribe(({ level }) => {
-      if (this.currentLevel !== level) {
+    this.subscriptionLevel = this.gameService
+      .onUpdateGameInformation()
+      .pipe(filter((gameStats) => this.currentLevel !== gameStats.level))
+      .subscribe(({ level }) => {
         clearInterval(this.timeInterval);
         this.currentLevel = level;
         this.duration = DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel;
         this.playGame();
-      }
-    });
+      });
 
     this.gameService.updateFigures();
   }
