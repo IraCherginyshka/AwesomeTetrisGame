@@ -22,6 +22,7 @@ $primary-font: Impact, sans-serif;
 $default-font-size: 1.33rem;
 $h1-font-size: 5rem;
 $label-font-size: 2rem;
+$text-form-font-size: 0.8rem;
 $secondary-text-font-size: 1.5rem;
 
 //Sizes
@@ -29,9 +30,10 @@ $center: 0 auto;
 $max-width: 1100px;
 $primary-indent: 2rem;
 $secondary-indent: 0 2rem;
-$min-height-main: 88.5vh;
+$min-height-main: 82.5vh;
 $max-width-icon: 7rem;
 $width-logo: 14.2rem;
+$width-form: 35rem;
 $height-bar-links: 3rem;
 $width-links: 7rem;
 $width-information: 50rem;
@@ -45,5 +47,6 @@ $board-height: $figure-size * $figure-quantity-height;
 
 //General
 $primary-border: 1.5px solid $default-color;
+$border-radius: 1rem;
 $hover-border: 1px solid $secondary-color;
 $hover-border-controls: 3px solid;

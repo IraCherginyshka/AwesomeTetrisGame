@@ -1,0 +1,83 @@
+@import 'src/assets/styles/variables';
+
+.login {
+  &__form {
+    width: $width-form;
+    border: $primary-border;
+    padding: $primary-indent;
+    background-color: $background-color;
+    text-align: right;
+    border-radius: $border-radius;
+  }
+
+  &__group {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+    flex-wrap: wrap;
+    &--gender {
+      flex-direction: column;
+    }
+    &--radio {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      & label {
+        width: 7rem;
+        text-align: left;
+      }
+    }
+  }
+
+  &__text {
+    text-transform: lowercase;
+    color: $service-color;
+    font-size: $text-form-font-size;
+    &--warning {
+      font-family: sans-serif;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: $secondary-color;
+    }
+  }
+
+  &__input {
+    height: 3rem;
+    background-color: $service-color;
+    padding: 0.5rem;
+    &:focus {
+      outline: none;
+    }
+    &.ng-invalid.ng-touched {
+      border: $hover-border;
+    }
+    &[type='date'] {
+      appearance: none;
+      &::-webkit-clear-button {
+        display: none;
+      }
+      &::-webkit-inner-spin-button {
+        display: none;
+      }
+      &::-webkit-calendar-picker-indicator {
+        color: $secondary-color;
+      }
+    }
+  }
+
+  &__button {
+    margin-top: 1rem;
+    &:hover:enabled {
+      border-color: $secondary-color;
+      box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+      cursor: pointer;
+    }
+    &:disabled {
+      cursor: no-drop;
+      color: $service-color;
+    }
+  }
+}
