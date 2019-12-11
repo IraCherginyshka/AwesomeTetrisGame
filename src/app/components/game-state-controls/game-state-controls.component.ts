@@ -12,7 +12,6 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
-  private codeKeys: object;
 
   constructor(private gameService: GameService) {}
 
@@ -48,8 +47,8 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
   }
 
   public resetGame(): void {
-    this.gameService.setGameState(GameState.RESET);
     this.gameService.setInitialInformation();
+    this.gameService.setGameState(GameState.RESET);
   }
 
   public pauseGame(): void {
