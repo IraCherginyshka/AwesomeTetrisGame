@@ -11,14 +11,12 @@ import { Subscription } from 'rxjs';
 export class GameLoginFormComponent implements OnInit {
   public logInForm: FormGroup;
   public signUpForm: FormGroup;
-  public genders: string[];
   public isSignUpForm: boolean;
+  public readonly genders = ['male', 'female'];
 
   private querySubscription: Subscription;
 
-  constructor(private route: ActivatedRoute) {
-    this.genders = ['male', 'female'];
-  }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.logInForm = new FormGroup({
