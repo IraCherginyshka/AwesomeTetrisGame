@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,12 +15,13 @@ import { GameControlOptionComponent } from './components/game-control-option/gam
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
 import { GameNextFigureComponent } from './components/game-next-figure/game-next-figure.component';
+import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
 
 const appRouter: Routes = [
   { path: 'option', component: GameControlOptionComponent },
   { path: 'leaderboard', component: GameLeaderboardComponent },
   { path: 'game', component: GameMainComponent },
-  { path: '', redirectTo: '/game', pathMatch: 'full' },
+  { path: 'login', component: GameLoginFormComponent },
   { path: '**', redirectTo: '/game', pathMatch: 'full' },
 ];
 
@@ -36,8 +38,9 @@ const appRouter: Routes = [
     GameLeaderboardComponent,
     GameLoaderComponent,
     GameNextFigureComponent,
+    GameLoginFormComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
+  imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
   providers: [],
   bootstrap: [AppComponent],
 })
