@@ -37,8 +37,7 @@ export class GameLoginFormComponent implements OnInit {
         ]),
         confirmPassword: new FormControl(null, [
           Validators.required,
-          this.forbiddenConfirmPassword,
-          // this.forbiddenConfirmPassword.bind(this),
+          this.forbiddenConfirmPassword.bind(this),
         ]),
       }),
       playerInformation: new FormGroup({
