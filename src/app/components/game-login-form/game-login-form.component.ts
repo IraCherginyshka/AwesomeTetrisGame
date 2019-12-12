@@ -16,9 +16,7 @@ export class GameLoginFormComponent implements OnInit {
 
   private querySubscription: Subscription;
 
-  constructor(private route: ActivatedRoute) {
-    this.forbiddenConfirmPassword = this.forbiddenConfirmPassword.bind(this);
-  }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.logInForm = new FormGroup({
@@ -49,7 +47,6 @@ export class GameLoginFormComponent implements OnInit {
         country: new FormControl('Ukraine'),
       }),
     });
-    // add val
 
     this.querySubscription = this.route.queryParams.subscribe((queryParam: Params) => {
       this.isSignUpForm = queryParam.form;
