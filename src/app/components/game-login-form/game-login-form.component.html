@@ -111,8 +111,7 @@
               *ngIf="
                 signUpForm.get('userInformation.confirmPassword').invalid &&
                 signUpForm.get('userInformation.confirmPassword').touched &&
-                signUpForm.get('userInformation.confirmPassword').value !==
-                  signUpForm.get('userInformation.passwordSignUp').value
+                signUpForm.get('userInformation.confirmPassword').errors['confPassIsForbidden']
               "
               >Please enter the same password
             </span>

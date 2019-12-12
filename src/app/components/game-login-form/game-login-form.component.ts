@@ -35,7 +35,10 @@ export class GameLoginFormComponent implements OnInit {
           Validators.required,
           Validators.pattern('(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}'),
         ]),
-        confirmPassword: new FormControl(null, [Validators.required]),
+        confirmPassword: new FormControl(null, [
+          Validators.required,
+          this.forbiddenConfirmPassword.bind(this),
+        ]),
       }),
       playerInformation: new FormGroup({
         gender: new FormControl('male'),
@@ -51,5 +54,15 @@ export class GameLoginFormComponent implements OnInit {
 
   onSubmit(event: Event): void {
     event.preventDefault();
+  }
+
+  forbiddenConfirmPassword(control: FormControl): { [s: string]: boolean } {
+    if (
+      this.signUpForm &&
+      control.value !== this.signUpForm.get('userInformation.passwordSignUp').value
+    ) {
+      return { confPassIsForbidden: true };
+    }
+    return null;
   }
 }
