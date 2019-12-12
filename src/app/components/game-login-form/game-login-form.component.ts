@@ -16,7 +16,9 @@ export class GameLoginFormComponent implements OnInit {
 
   private querySubscription: Subscription;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {
+    this.forbiddenConfirmPassword = this.forbiddenConfirmPassword.bind(this);
+  }
 
   ngOnInit(): void {
     this.logInForm = new FormGroup({
@@ -35,7 +37,11 @@ export class GameLoginFormComponent implements OnInit {
           Validators.required,
           Validators.pattern('(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}'),
         ]),
-        confirmPassword: new FormControl(null, [Validators.required]),
+        confirmPassword: new FormControl(null, [
+          Validators.required,
+          this.forbiddenConfirmPassword,
+          // this.forbiddenConfirmPassword.bind(this),
+        ]),
       }),
       playerInformation: new FormGroup({
         gender: new FormControl('male'),
@@ -43,6 +49,7 @@ export class GameLoginFormComponent implements OnInit {
         country: new FormControl('Ukraine'),
       }),
     });
+    // add val
 
     this.querySubscription = this.route.queryParams.subscribe((queryParam: Params) => {
       this.isSignUpForm = queryParam.form;
@@ -51,5 +58,15 @@ export class GameLoginFormComponent implements OnInit {
 
   onSubmit(event: Event): void {
     event.preventDefault();
+  }
+
+  forbiddenConfirmPassword(control: FormControl): { [s: string]: boolean } {
+    if (
+      this.signUpForm &&
+      control.value !== this.signUpForm.get('userInformation.passwordSignUp').value
+    ) {
+      return { confPassIsForbidden: true };
+    }
+    return null;
   }
 }
