@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './services/authconfig.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +18,7 @@ import { GameLeaderboardComponent } from './components/game-leaderboard/game-lea
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
 import { GameNextFigureComponent } from './components/game-next-figure/game-next-figure.component';
 import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
+import { PlayerProfileComponent } from './components/player-profile/player-profile.component';
 
 const appRouter: Routes = [
   { path: 'option', component: GameControlOptionComponent },
@@ -39,9 +42,22 @@ const appRouter: Routes = [
     GameLoaderComponent,
     GameNextFigureComponent,
     GameLoginFormComponent,
+    PlayerProfileComponent,
   ],
-  imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
-  providers: [],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    RouterModule.forRoot(appRouter),
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

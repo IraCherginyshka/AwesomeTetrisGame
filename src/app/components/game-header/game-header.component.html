@@ -1,5 +1,6 @@
 <div class="header">
   <div class="logo">tetris</div>
+  <atg-player-profile *ngIf="userIsAuthenticated; else login"></atg-player-profile>
   <div class="wrap-links">
     <nav class="bar-links container">
       <a class="header-link" [routerLink]="['/login']">login</a>
@@ -9,3 +10,7 @@
     </nav>
   </div>
 </div>
+
+<ng-template #login>
+  <a class="header-link--button game-button header__logout" [routerLink]="['/login']">login</a>
+</ng-template>

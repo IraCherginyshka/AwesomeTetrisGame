@@ -2,7 +2,7 @@
 
 .header {
   text-align: center;
-  padding-top: $primary-indent;
+  padding: 2rem 0;
 
   & .logo {
     width: $width-logo;
@@ -30,11 +30,26 @@
     align-items: center;
     height: $height-bar-links;
   }
+  &__logout {
+    position: absolute;
+    top: 0.3rem;
+    right: 3rem;
+  }
 
   &-link {
     flex-basis: $width-links;
     color: $default-color;
     text-decoration: none;
+
+    &--button {
+      text-align: center;
+      text-decoration: none;
+      &:hover {
+        border-color: $primary-color;
+        box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+        cursor: pointer;
+      }
+    }
 
     &:first-child {
       text-align: left;
