@@ -1,0 +1,12 @@
+<div class="player">
+  <div class="player-inf">
+    <p>{{ currentUser?.username }}</p>
+    <span>{{ currentUser?.country }}</span>
+    <span>{{ currentUser?.gender }}</span>
+    <img class="icon" src="../../../assets/images/Spiderwoman.ico" />
+  </div>
+
+  <button class="game-button" (click)="onLogout()">
+    Logout
+  </button>
+</div>

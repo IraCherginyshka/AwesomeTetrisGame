@@ -26,6 +26,7 @@ module.exports = {
     'global-require': 0,
     'linebreak-style': 0,
     'no-plusplus': 0,
+    'no-underscore-dangle': 0,
     'object-curly-newline': [
       'error',
       {

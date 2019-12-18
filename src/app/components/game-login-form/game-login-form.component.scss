@@ -48,6 +48,7 @@
     height: 3rem;
     background-color: $service-color;
     padding: 0.5rem;
+    border-radius: $border-radius/2;
     &:focus {
       outline: none;
     }

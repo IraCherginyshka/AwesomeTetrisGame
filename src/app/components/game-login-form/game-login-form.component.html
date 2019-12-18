@@ -3,7 +3,7 @@
     <form
       class="login__form"
       [formGroup]="logInForm"
-      (ngSubmit)="onSubmit($event)"
+      (ngSubmit)="onLogin()"
       *ngIf="!isSignUpForm; else registrationForm"
     >
       <div class="login__group">
@@ -48,12 +48,14 @@
       <br />
       <span class="login__text">Don't have an account? </span>
       <a [routerLink]="" [queryParams]="{ form: 'registration' }"
-        ><button class="game-button login__button" type="button">Sign up</button></a
+        ><button class="game-button login__button" type="button">
+          Sign up
+        </button></a
       >
     </form>
 
     <ng-template #registrationForm>
-      <form class="login__form" [formGroup]="signUpForm" (ngSubmit)="onSubmit($event)">
+      <form class="login__form" [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
         <div formGroupName="userInformation">
           <div class="login__group">
             <label for="usernameSignUp" class="login__label">Name*</label>
@@ -61,15 +63,15 @@
               class="login__input"
               type="text"
               id="usernameSignUp"
-              name="usernameSignUp"
-              formControlName="usernameSignUp"
+              name="username"
+              formControlName="username"
               placeholder="Create a unique name"
             />
             <span
               class="login__text login__text--warning"
               *ngIf="
-                signUpForm.get('userInformation.usernameSignUp').invalid &&
-                signUpForm.get('userInformation.usernameSignUp').touched
+                signUpForm.get('userInformation.username').invalid &&
+                signUpForm.get('userInformation.username').touched
               "
               >Please enter the valid name
             </span>
@@ -81,15 +83,15 @@
               class="login__input"
               type="password"
               id="passwordSignUp"
-              name="passwordSignUp"
-              formControlName="passwordSignUp"
+              name="password"
+              formControlName="password"
               placeholder="Create a password"
             />
             <span
               class="login__text login__text--warning"
               *ngIf="
-                signUpForm.get('userInformation.passwordSignUp').invalid &&
-                signUpForm.get('userInformation.passwordSignUp').touched
+                signUpForm.get('userInformation.password').invalid &&
+                signUpForm.get('userInformation.password').touched
               "
               >Password must contain at least one number and one uppercase and lowercase letter, and
               at least 8 or more characters
@@ -111,7 +113,8 @@
               *ngIf="
                 signUpForm.get('userInformation.confirmPassword').invalid &&
                 signUpForm.get('userInformation.confirmPassword').touched &&
-                signUpForm.get('userInformation.confirmPassword').errors['confPassIsForbidden']
+                signUpForm.get('userInformation.confirmPassword').value !==
+                  signUpForm.get('userInformation.password').value
               "
               >Please enter the same password
             </span>
