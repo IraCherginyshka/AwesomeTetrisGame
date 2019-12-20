@@ -92,7 +92,7 @@ export class GameLoginFormComponent implements OnInit {
         if (res) {
           this.toastrService.warning('You have successfully Signed Up! Please, LogIn');
           this.signUpForm.reset();
-          this.router.navigate(['/login']).then();
+          this.router.navigate(['/login']);
         }
       },
       () => {
