@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-require('./db');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const User = require('./models/user.model');

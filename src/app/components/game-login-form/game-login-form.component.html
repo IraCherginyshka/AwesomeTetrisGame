@@ -104,17 +104,18 @@
               class="login__input"
               type="password"
               id="confirmPassword"
-              name="password"
+              name="confirmPassword"
               formControlName="confirmPassword"
               placeholder="Confirm a password"
             />
             <span
               class="login__text login__text--warning"
               *ngIf="
-                signUpForm.get('userInformation.confirmPassword').invalid &&
-                signUpForm.get('userInformation.confirmPassword').touched &&
-                signUpForm.get('userInformation.confirmPassword').value !==
-                  signUpForm.get('userInformation.password').value
+                (signUpForm.get('userInformation.confirmPassword').invalid &&
+                  signUpForm.get('userInformation.confirmPassword').touched) ||
+                (signUpForm.get('userInformation.confirmPassword').touched &&
+                  signUpForm.get('userInformation.confirmPassword').value !==
+                    signUpForm.get('userInformation.password').value)
               "
               >Please enter the same password
             </span>
