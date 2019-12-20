@@ -1,3 +1,4 @@
+require('../db');
 const mongoose = require('mongoose');
 const uniqueName = require('mongoose-unique-validator');
 

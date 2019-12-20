@@ -15,7 +15,6 @@ export class UserService {
   private authListener = new BehaviorSubject<PlayerData>(
     JSON.parse(localStorage.getItem('access_user')),
   );
-  private currentUser = {};
 
   constructor(private http: HttpClient, public router: Router) {}
 
@@ -31,24 +30,16 @@ export class UserService {
     return this.http.post(`${this.endpoint}/sign_up`, newUser);
   }
 
-  loginUser(userInform: { username: string; password: string }): void {
+  loginUser(userInform: {
+    username: string;
+    password: string;
+  }): Observable<{ token: string; user: PlayerData }> {
     const md5 = new Md5();
     const userData = {
       username: userInform.username,
       password: md5.appendStr(userInform.password).end(),
     };
-
-    this.http
-      .post<{ token: string; user: PlayerData }>(`${this.endpoint}/login`, userData)
-      .subscribe(({ token, user }) => {
-        localStorage.setItem('access_token', token);
-        localStorage.setItem('access_user', JSON.stringify(user));
-        this.token = token;
-        if (token) {
-          this.currentUser = user;
-          this.authListener.next(user);
-        }
-      });
+    return this.http.post<{ token: string; user: PlayerData }>(`${this.endpoint}/login`, userData);
   }
 
   logoutUser(): void {
@@ -56,6 +47,10 @@ export class UserService {
     localStorage.removeItem('access_user');
     this.token = null;
     this.authListener.next(null);
+  }
+
+  setUser(user: PlayerData): void {
+    this.authListener.next(user);
   }
 
   getToken(): string {

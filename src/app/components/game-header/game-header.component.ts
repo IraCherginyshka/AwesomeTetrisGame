@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
 
@@ -9,16 +10,27 @@ import { PlayerData } from '../../interfaces/playerData.interface';
   styleUrls: ['./game-header.component.scss'],
 })
 export class GameHeaderComponent implements OnInit, OnDestroy {
-  public userIsAuthenticated = false;
+  @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
+  public userIsAuthenticated = !!localStorage.getItem('access_user');
   private authSubscription: Subscription;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private toastrService: ToastrService) {}
 
   ngOnInit(): void {
+    this.toastrService.overlayContainer = this.toastContainer;
+    if (!this.userIsAuthenticated) {
+      setTimeout(() => this.toastrService.info('Please login to save your score to leaderboard'));
+    }
+
     this.authSubscription = this.userService
       .getAuthListener()
       .subscribe((user: PlayerData | null) => {
-        this.userIsAuthenticated = !!user;
+        if (user) {
+          this.toastrService.success('Welcome to AwesomeTetrisGame!');
+          this.userIsAuthenticated = true;
+        } else {
+          this.userIsAuthenticated = false;
+        }
       });
   }
 

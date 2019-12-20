@@ -3,10 +3,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './services/authconfig.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ToastContainerModule, ToastrModule } from 'ngx-toastr';
+import { AuthInterceptor } from './services/authconfig.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { GameHeaderComponent } from './components/game-header/game-header.component';
 import { GameMainComponent } from './components/game-main/game-main.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
@@ -50,6 +53,13 @@ const appRouter: Routes = [
     ReactiveFormsModule,
     AppRoutingModule,
     RouterModule.forRoot(appRouter),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
+    ToastContainerModule,
   ],
   providers: [
     {

@@ -8,6 +8,7 @@
     background-color: $background-color;
     text-align: right;
     border-radius: $border-radius;
+    font-size: 1.3rem;
   }
 
   &__group {
@@ -15,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 0;
+    padding: 1.7rem 0;
     flex-wrap: wrap;
     &--gender {
       flex-direction: column;
