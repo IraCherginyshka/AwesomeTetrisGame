@@ -1,3 +1,35 @@
-<div class="container main center">
-  <p>leaderboard</p>
+<div class="container main">
+  <div class="leaderboard leaderboard__header">
+    <div class="leaderboard__item">
+      <div class="leaderboard__field--index">№</div>
+      <div class="leaderboard__field leaderboard__player-name">name</div>
+      <div class="leaderboard__field">score</div>
+      <div class="leaderboard__field">level</div>
+      <div class="leaderboard__field">lines</div>
+    </div>
+  </div>
+  <div class="leaderboard" *ngFor="let result of gameResults; let i = index">
+    <div class="leaderboard__item">
+      <div class="leaderboard__field--index">{{ i + 1 }}</div>
+      <div class="leaderboard__field leaderboard__player-name">{{ result.username }}</div>
+      <div class="leaderboard__field">{{ result.score }}</div>
+      <div class="leaderboard__field">{{ result.level }}</div>
+      <div class="leaderboard__field">{{ result.lines }}</div>
+    </div>
+  </div>
+  <div class="leaderboard__current-player">
+    <div class="point"></div>
+    <div class="point"></div>
+    <div class="point"></div>
+    <p>Your best score:</p>
+    <div class="leaderboard">
+      <div class="leaderboard__item">
+        <div class="leaderboard_index">33</div>
+        <div class="leaderboard__field leaderboard__player-name">Current Player</div>
+        <div class="leaderboard__field">300</div>
+        <div class="leaderboard__field">3</div>
+        <div class="leaderboard__field">5</div>
+      </div>
+    </div>
+  </div>
 </div>
