@@ -1,0 +1,56 @@
+@import 'src/assets/styles/variables';
+
+.leaderboard {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid $default-color;
+  border-radius: $border-radius;
+  width: 100%;
+  transition: border-color 0.3s ease-out;
+
+  &:hover {
+    border: $hover-border;
+  }
+
+  &__header {
+    border: none;
+    color: $primary-color;
+    &:hover {
+      border: none;
+    }
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: $border-radius;
+    background-color: $background-color;
+    list-style: none;
+  }
+
+  &__field {
+    flex-basis: 24%;
+    text-align: center;
+    &--index {
+      flex-basis: 4%;
+    }
+  }
+
+  &__player-name {
+    text-align: left;
+  }
+
+  &__current-player {
+    text-align: center;
+  }
+}
+
+.point {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 2rem;
+  border: 2px solid $service-color;
+}
