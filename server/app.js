@@ -92,9 +92,7 @@ app.post('/add_result', checkToken, (req, res) => {
 app.get('/result', (req, res) => {
   Result.find({})
     .sort({ score: -1 })
-    .then((sortResult) => {
-      res.send(sortResult);
-    });
+    .then((sortResult) => res.send(sortResult));
 });
 
 app.listen(3000, () => console.log(`Example app listening on port ${3000}!`));
