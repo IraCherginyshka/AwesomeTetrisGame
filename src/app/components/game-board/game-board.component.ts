@@ -1,4 +1,5 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GameService } from '../../services/game.service';
@@ -42,7 +43,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionNext: Subscription;
   private subscriptionLevel: Subscription;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private toastrService: ToastrService) {}
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
@@ -235,7 +236,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private lostGame(): void {
     this.isLostGame = true;
     this.isPlaying = false;
-    this.gameService.setLostGame();
+    this.gameService.setLostGame().subscribe(() => {
+      this.toastrService.warning('You have successfully added your result to Leaderboard');
+    });
     this.gameService.updateFigures();
     this.setInitialBoardState();
     clearInterval(this.timeInterval);

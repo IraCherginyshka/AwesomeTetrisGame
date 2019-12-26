@@ -68,11 +68,12 @@ export class GameLoginFormComponent implements OnInit {
       ({ token, user }) => {
         localStorage.setItem('access_token', token);
         localStorage.setItem('access_user', JSON.stringify(user));
+        localStorage.setItem('user_name', user.username);
         this.token = token;
         if (token) {
           this.currentUser = user;
           this.userService.setUser(user);
-          this.router.navigate(['/game']).then();
+          this.router.navigate(['/game']);
         }
       },
       () => {
@@ -91,7 +92,6 @@ export class GameLoginFormComponent implements OnInit {
       (res) => {
         if (res) {
           this.toastrService.warning('You have successfully Signed Up! Please, LogIn');
-          this.signUpForm.reset();
           this.router.navigate(['/login']);
         }
       },

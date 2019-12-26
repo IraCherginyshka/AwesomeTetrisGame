@@ -42,11 +42,13 @@ export class UserService {
     return this.http.post<{ token: string; user: PlayerData }>(`${this.endpoint}/login`, userData);
   }
 
-  logoutUser(): void {
+  logoutUser(): Observable<object> {
     localStorage.removeItem('access_token');
     localStorage.removeItem('access_user');
+    localStorage.removeItem('user_name');
     this.token = null;
     this.authListener.next(null);
+    return this.http.get(`${this.endpoint}/logout`);
   }
 
   setUser(user: PlayerData): void {
@@ -55,6 +57,10 @@ export class UserService {
 
   getToken(): string {
     return localStorage.getItem('access_token');
+  }
+
+  getUserName(): string {
+    return localStorage.getItem('user_name');
   }
 
   getAuthListener(): Observable<{}> {

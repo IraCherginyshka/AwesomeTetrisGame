@@ -7,9 +7,14 @@
   border-radius: $border-radius;
   width: 100%;
   transition: border-color 0.3s ease-out;
+  text-transform: none;
 
   &:hover {
     border: $hover-border;
+  }
+
+  & .active {
+    background-color: $secondary-color;
   }
 
   &__header {

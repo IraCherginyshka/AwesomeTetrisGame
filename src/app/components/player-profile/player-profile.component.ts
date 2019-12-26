@@ -28,7 +28,7 @@ export class PlayerProfileComponent implements OnInit {
 
   onLogout(): void {
     this.toastrService.warning('You have logged out!');
-    this.userService.logoutUser();
+    this.userService.logoutUser().subscribe();
     this.showCurrentUser();
   }
 }
