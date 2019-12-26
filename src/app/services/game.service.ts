@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FiguresMovement } from '../enums/figures-movement.enum';
 import { GameState } from '../enums/game-state.enum';
@@ -10,9 +13,11 @@ import {
   GAME_STEP_LEVEL,
 } from '../constants/game-information.const';
 import { GameStatsObject } from '../interfaces/gameStats.interface';
+import { GameResult } from '../models/game-result.model';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
+  private endpoint = 'http://localhost:3000';
   private isPlaying = false;
   private isLostGame = false;
   private currentFigure: FiguresColors[][];
@@ -33,6 +38,8 @@ export class GameService {
   });
   private lostGameSubject = new Subject<boolean>();
 
+  constructor(private http: HttpClient, public router: Router) {}
+
   public static calculateScore(lines: number, level: number): number {
     return (
       (lines / 2) *
@@ -40,9 +47,23 @@ export class GameService {
     );
   }
 
-  public setLostGame(): void {
+  public setLostGame(): Observable<object> {
     this.isLostGame = true;
+    const gameResult: GameResult = {
+      username: localStorage.getItem('user_name'),
+      lines: this.currentNumberLines,
+      score: this.currentScore,
+      level: this.currentLevel,
+    };
+
     this.lostGameSubject.next();
+    return this.http.post(`${this.endpoint}/add_result`, gameResult);
+  }
+
+  getPlayerGameResult(): Observable<GameResult[]> {
+    return this.http
+      .get(`${this.endpoint}/result`)
+      .pipe(map((data: GameResult[]) => data.map((el) => new GameResult(el))));
   }
 
   public onLostGame(): Observable<boolean> {

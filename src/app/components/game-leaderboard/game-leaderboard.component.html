@@ -9,7 +9,7 @@
     </ul>
   </header>
   <ul class="leaderboard" *ngFor="let result of gameResults; let i = index">
-    <li class="leaderboard__list">
+    <li class="leaderboard__list" [ngClass]="{ active: currentPlayerName === result.username }">
       <span class="leaderboard__field--index">{{ i + 1 }}</span>
       <span class="leaderboard__field leaderboard__player-name">{{ result.username }}</span>
       <span class="leaderboard__field">{{ result.score }}</span>
@@ -17,18 +17,20 @@
       <span class="leaderboard__field">{{ result.lines }}</span>
     </li>
   </ul>
-  <div class="leaderboard__current-player">
+  <div class="leaderboard__current-player" *ngIf="isCurrentPlayerNotInTop">
     <div class="point"></div>
     <div class="point"></div>
     <div class="point"></div>
     <p>Your best score:</p>
     <ul class="leaderboard">
       <li class="leaderboard__list">
-        <span class="leaderboard_index">33</span>
-        <span class="leaderboard__field leaderboard__player-name">Current Player</span>
-        <span class="leaderboard__field">300</span>
-        <span class="leaderboard__field">3</span>
-        <span class="leaderboard__field">5</span>
+        <span class="leaderboard_index">{{ currentPlayerPlace }}</span>
+        <span class="leaderboard__field leaderboard__player-name">{{
+          currentPlayerNotInTop.username
+        }}</span>
+        <span class="leaderboard__field">{{ currentPlayerNotInTop.score }}</span>
+        <span class="leaderboard__field">{{ currentPlayerNotInTop.level }}</span>
+        <span class="leaderboard__field">{{ currentPlayerNotInTop.lines }}</span>
       </li>
     </ul>
   </div>

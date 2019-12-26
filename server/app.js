@@ -3,20 +3,24 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const User = require('./models/user.model');
+const Result = require('./models/gameResult.model');
 
 const app = express();
+
+const userData = {};
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Name',
   );
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Content-Type', 'application/json');
   next();
 });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/../dist')));
@@ -27,7 +31,14 @@ const errorHandler = (res) => {
   });
 };
 
-app.route('/sign_up').post((req, res) => {
+const checkToken = (req, res, next) => {
+  if (req.header('Authorization').split(' ')[1] === userData[req.header('Name')]) {
+    return next();
+  }
+  return errorHandler(res);
+};
+
+app.post('/sign_up', (req, res) => {
   const user = new User(req.body);
   user
     .save()
@@ -39,7 +50,7 @@ app.route('/sign_up').post((req, res) => {
     .catch(() => errorHandler(res));
 });
 
-app.route('/login').post((req, res) => {
+app.post('/login', (req, res) => {
   let fetchedUser;
   User.findOne({ username: req.body.username })
     .then((user) => {
@@ -49,6 +60,7 @@ app.route('/login').post((req, res) => {
       fetchedUser = user;
       if (user.password === req.body.password) {
         const token = jwt.sign({ userName: fetchedUser.userName }, 'secret_loooooong_key');
+        userData[user.username] = token;
         return res.status(200).json({
           token,
           user,
@@ -57,8 +69,32 @@ app.route('/login').post((req, res) => {
       return errorHandler(res);
     })
     .catch(() => {
-      errorHandler(res);
+      return errorHandler(res);
     });
 });
+
+app.get('/logout', (req) => {
+  userData[req.header('Name')] = undefined;
+});
+
+app.post('/add_result', checkToken, (req, res) => {
+  const result = new Result(req.body);
+  result
+    .save()
+    .then(() => {
+      res.status(201).json({
+        massage: 'Result added',
+      });
+    })
+    .catch(() => errorHandler(res));
+});
+
+app.get('/result', (req, res) => {
+  Result.find({})
+    .sort({ score: -1 })
+    .then((sortResult) => res.send(sortResult));
+});
+
+app.listen(3000, () => console.log(`Example app listening on port ${3000}!`));
 
 module.exports = app;

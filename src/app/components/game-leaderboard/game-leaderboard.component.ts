@@ -1,71 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GameResult } from '../../models/game-result.model';
+import { GameService } from '../../services/game.service';
+import { UserService } from '../../services/user.service';
+import { LEADERBOARD_MAX_WIDTH } from '../../constants/game-information.const';
 
 @Component({
   selector: 'atg-game-leaderboard',
   templateUrl: './game-leaderboard.component.html',
   styleUrls: ['./game-leaderboard.component.scss'],
 })
-export class GameLeaderboardComponent {
-  public gameResults = [
-    {
-      username: 'Player1',
-      level: 333555,
-      score: 77733333,
-      lines: 500,
-    },
-    {
-      username: 'Player2',
-      level: 555333,
-      score: 77733333,
-      lines: 500,
-    },
-    {
-      username: 'Player3',
-      level: 333,
-      score: 33333000,
-      lines: 500,
-    },
-    {
-      username: 'Player4',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player5',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player6',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player7',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player8',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player9',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-    {
-      username: 'Player10',
-      level: 336573,
-      score: 35763333,
-      lines: 500,
-    },
-  ];
+export class GameLeaderboardComponent implements OnInit {
+  public gameResults: GameResult[];
+  public currentPlayerName: string | null;
+  public isCurrentPlayerNotInTop: boolean;
+  public currentPlayerNotInTop: GameResult;
+  public currentPlayerPlace: number;
+
+  constructor(private gameService: GameService, private userService: UserService) {
+    this.currentPlayerName = this.userService.getUserName();
+  }
+
+  ngOnInit(): void {
+    this.gameService.getPlayerGameResult().subscribe((results) => {
+      this.gameResults = results.slice(0, LEADERBOARD_MAX_WIDTH);
+      this.currentPlayerPlace = results.findIndex(
+        (player) => player.username === this.currentPlayerName,
+      );
+      this.isCurrentPlayerNotInTop = this.currentPlayerPlace > LEADERBOARD_MAX_WIDTH;
+      if (this.isCurrentPlayerNotInTop) {
+        this.currentPlayerNotInTop = results[this.currentPlayerPlace];
+      }
+    });
+
+    this.userService.getAuthListener().subscribe((user) => {
+      if (!user) {
+        this.isCurrentPlayerNotInTop = false;
+        this.currentPlayerName = null;
+      }
+    });
+  }
 }
