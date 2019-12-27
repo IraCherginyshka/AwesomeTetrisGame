@@ -94,7 +94,8 @@ app.get('/result', (req, res) => {
     .sort({ score: -1 })
     .then((sortResult) => res.send(sortResult));
 });
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000, () => console.log(`Example app listening on port ${3000}!`));
+app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
 
 module.exports = app;
