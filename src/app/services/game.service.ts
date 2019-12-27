@@ -14,10 +14,11 @@ import {
 } from '../constants/game-information.const';
 import { GameStatsObject } from '../interfaces/gameStats.interface';
 import { GameResult } from '../models/game-result.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
-  private endpoint = 'http://localhost:3000';
+  private endpoint = environment.url;
   private isPlaying = false;
   private isLostGame = false;
   private currentFigure: FiguresColors[][];

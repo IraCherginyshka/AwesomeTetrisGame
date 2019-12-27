@@ -5,12 +5,13 @@ import { Md5 } from 'ts-md5/dist/md5';
 import { HttpClient } from '@angular/common/http';
 import { UserData } from '../interfaces/userData.interface';
 import { PlayerData } from '../interfaces/playerData.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private endpoint = 'http://localhost:3000';
+  private endpoint = environment.url;
   private token: string;
   private authListener = new BehaviorSubject<PlayerData>(
     JSON.parse(localStorage.getItem('access_user')),
