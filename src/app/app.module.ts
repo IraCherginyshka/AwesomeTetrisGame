@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,14 +22,6 @@ import { GameNextFigureComponent } from './components/game-next-figure/game-next
 import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
 import { PlayerProfileComponent } from './components/player-profile/player-profile.component';
 
-const appRouter: Routes = [
-  { path: 'option', component: GameControlOptionComponent },
-  { path: 'leaderboard', component: GameLeaderboardComponent },
-  { path: 'game', component: GameMainComponent },
-  { path: 'login', component: GameLoginFormComponent },
-  { path: '**', redirectTo: '/game', pathMatch: 'full' },
-];
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +43,6 @@ const appRouter: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    RouterModule.forRoot(appRouter),
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 5000,

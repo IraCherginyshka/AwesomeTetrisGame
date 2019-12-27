@@ -1,7 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { GameControlOptionComponent } from './components/game-control-option/game-control-option.component';
+import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
+import { GameMainComponent } from './components/game-main/game-main.component';
+import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'option', component: GameControlOptionComponent },
+  { path: 'leaderboard', component: GameLeaderboardComponent },
+  { path: 'game', component: GameMainComponent },
+  { path: 'login', component: GameLoginFormComponent },
+  { path: '**', redirectTo: '/game', pathMatch: 'full' },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
