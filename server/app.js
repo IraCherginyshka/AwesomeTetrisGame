@@ -90,6 +90,7 @@ app.post('/add_result', checkToken, (req, res) => {
 });
 
 app.get('/result', (req, res) => {
+  console.log('result');
   Result.find({})
     .sort({ score: -1 })
     .then((sortResult) => res.send(sortResult));
