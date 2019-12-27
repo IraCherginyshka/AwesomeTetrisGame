@@ -17,13 +17,12 @@ app.use((req, res, next) => {
   );
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Content-Type', 'application/json');
   next();
 });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '/../dist')));
+app.use(express.static(path.join(__dirname, '/../dist/AwesomeTetrisGame')));
 
 const errorHandler = (res) => {
   return res.status(404).json({
