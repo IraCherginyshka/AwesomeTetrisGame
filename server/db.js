@@ -2,7 +2,7 @@ const DB_URL = process.env.DB_URL || 'localhost';
 const mongoose = require('mongoose');
 
 mongoose
-  .connect(`mongodb://${DB_URL}:27017/TetrisDB`, {
+  .connect(`mongodb://user:user@${DB_URL}:27017/TetrisDB`, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

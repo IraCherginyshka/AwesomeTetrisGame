@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '/../dist/AwesomeTetrisGame')));
+app.use(express.static(path.join(__dirname, './dist/AwesomeTetrisGame')));
 
 const errorHandler = (res) => {
   return res.status(404).json({
