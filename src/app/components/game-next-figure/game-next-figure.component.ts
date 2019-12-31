@@ -14,7 +14,9 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   @ViewChild('nextCanvas', { static: true }) private nextCanvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private nextFigure: FiguresColors[][];
+  private isLostGame = false;
   private subscriptionNext: Subscription;
+  private subscriptionLost: Subscription;
 
   constructor(private gameService: GameService) {}
 
@@ -25,11 +27,25 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
       .subscribe(({ randomNextFigure }) => {
         this.setInitialState(randomNextFigure);
       });
-    this.gameService.updateFigures();
+
+    this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
+      this.isLostGame = true;
+    });
+
+    if (!localStorage.getItem('game_stats')) {
+      this.gameService.updateFigures();
+    }
+
+    if (localStorage.getItem('next_figure')) {
+      this.setInitialState(JSON.parse(localStorage.getItem('next_figure')));
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptionNext.unsubscribe();
+    if (!this.isLostGame) {
+      localStorage.setItem('next_figure', JSON.stringify(this.nextFigure));
+    }
   }
 
   private setInitialState(nextFigure: FiguresColors[][]): void {

@@ -17,6 +17,7 @@ import {
   ACCELERATION,
   DELAY_DEFAULT,
   DELAY_LEVEL_STEP,
+  MAX_SPEED,
 } from '../../constants/board-component.const';
 
 @Component({
@@ -49,15 +50,36 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
-      QUANTITY_BLOCKS_WIDTH,
-      QUANTITY_BLOCKS_HEIGHT,
-    );
+
+    if (localStorage.getItem('game_stats')) {
+      const {
+        boardMatrix,
+        currentFigure,
+        currentMatrix,
+        figurePosition,
+        duration,
+        lineWithFigure,
+      } = JSON.parse(localStorage.getItem('game_stats'));
+      this.isPlaying = false;
+      this.boardMatrix = boardMatrix;
+      this.currentFigure = currentFigure;
+      this.currentMatrix = currentMatrix;
+      this.figurePosition = figurePosition;
+      this.duration = duration;
+      this.lineWithFigure = lineWithFigure;
+      this.textStateOverlay = GameState.PAUSE;
+      this.redrawBoard();
+    } else {
+      this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
+        QUANTITY_BLOCKS_WIDTH,
+        QUANTITY_BLOCKS_HEIGHT,
+      );
+      this.duration = DELAY_DEFAULT;
+      this.currentLevel = 1;
+      this.gameService.updateFigures();
+    }
     this.isLostGame = false;
-    this.isPlaying = true;
-    this.gameService.updateFigures();
-    this.duration = DELAY_DEFAULT;
-    this.currentLevel = 1;
+    this.isPlaying = undefined;
 
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
       this.textStateOverlay = GameState.PAUSE;
@@ -101,13 +123,16 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         }
         if (nextPosition === FiguresMovement.DOWN) {
           clearInterval(this.timeInterval);
-          this.duration = DELAY_DEFAULT / ACCELERATION;
+          this.duration = ACCELERATION;
           this.playGame();
         }
 
         if (nextPosition === FiguresMovement.DOWN_OFF) {
           clearInterval(this.timeInterval);
-          this.duration = DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel;
+          this.duration =
+            DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
+              ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
+              : MAX_SPEED;
           this.playGame();
         }
       });
@@ -125,14 +150,36 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .subscribe(({ level }) => {
         clearInterval(this.timeInterval);
         this.currentLevel = level;
-        this.duration = DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel;
-        this.playGame();
+        this.duration =
+          DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
+            ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
+            : MAX_SPEED;
+        if (this.isPlaying) {
+          this.playGame();
+        }
       });
-
-    this.gameService.updateFigures();
   }
 
   ngOnDestroy(): void {
+    if (this.isLostGame) {
+      this.setInitialBoardState();
+      this.gameService.setInitialInformation();
+    }
+
+    if (this.isPlaying !== undefined && !this.isLostGame) {
+      localStorage.setItem(
+        'game_stats',
+        JSON.stringify({
+          boardMatrix: this.boardMatrix,
+          currentFigure: this.currentFigure,
+          currentMatrix: this.currentMatrix,
+          figurePosition: this.figurePosition,
+          duration: this.duration,
+          lineWithFigure: this.lineWithFigure,
+        }),
+      );
+    }
+    this.stopGame();
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
@@ -226,7 +273,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
+    localStorage.removeItem('game_stats');
+    localStorage.removeItem('next_figure');
     this.gameService.updateFigures();
+    this.gameService.updateFigures();
+
     this.redrawBoard();
     clearInterval(this.timeInterval);
     this.setInitialBoardState();
@@ -241,10 +292,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     });
     this.gameService.updateFigures();
     this.setInitialBoardState();
+    localStorage.removeItem('game_stats');
+    localStorage.removeItem('next_figure');
     clearInterval(this.timeInterval);
-
     this.textStateOverlay = GameState.LOST;
-
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
