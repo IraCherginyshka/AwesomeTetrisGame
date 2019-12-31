@@ -29,6 +29,7 @@
     "@angular/platform-browser-dynamic": "~8.2.13",
     "@angular/router": "~8.2.13",
     "eslint-config-prettier": "^6.5.0",
+    "moment": "^2.24.0",
     "ngx-toastr": "^11.2.1",
     "rxjs": "^6.5.3",
     "ts-md5": "^1.2.7",
