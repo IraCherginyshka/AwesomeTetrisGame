@@ -22,7 +22,8 @@ export class GameService {
   private isPlaying = false;
   private isLostGame = false;
   private currentFigure: FiguresColors[][];
-  private nextFigure = FigureModel.getRandomFigure();
+  private nextFigure =
+    JSON.parse(localStorage.getItem('next_figure')) || FigureModel.getRandomFigure();
   private currentLevel = 1;
   private currentNumberLines = 0;
   private currentScore = 0;
