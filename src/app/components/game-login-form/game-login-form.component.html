@@ -149,9 +149,10 @@
               class="login__text login__text--warning"
               *ngIf="
                 signUpForm.get('playerInformation.dateOfBirth').invalid &&
-                signUpForm.get('playerInformation.dateOfBirth').touched
+                signUpForm.get('playerInformation.dateOfBirth').touched &&
+                signUpForm.get('playerInformation.dateOfBirth').errors['dateOfBirthIsForbidden']
               "
-              >Please enter your birth date
+              >Please enter your birth date (6+)
             </span>
           </div>
 

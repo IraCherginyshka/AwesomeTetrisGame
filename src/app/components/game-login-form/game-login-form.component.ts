@@ -1,10 +1,13 @@
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import * as moment from 'moment';
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
+import { MIN_AGE } from '../../constants/game-information.const';
 
 @Component({
   selector: 'atg-game-login-form',
@@ -50,14 +53,24 @@ export class GameLoginFormComponent implements OnInit {
       }),
       playerInformation: new FormGroup({
         gender: new FormControl('male'),
-        dateOfBirth: new FormControl(null, Validators.required),
-        country: new FormControl('Ukraine'),
+        dateOfBirth: new FormControl('2000-01-01', [
+          Validators.required,
+          this.forbiddenDateOfBirth,
+        ]),
+        country: new FormControl('Ukraine', [Validators.minLength(3), Validators.maxLength(20)]),
       }),
     });
 
     this.querySubscription = this.route.queryParams.subscribe((queryParam: Params) => {
       this.isSignUpForm = queryParam.form;
     });
+  }
+
+  forbiddenDateOfBirth(control: FormControl): { [s: string]: boolean } {
+    if (moment().diff(control.value, 'years') < MIN_AGE) {
+      return { dateOfBirthIsForbidden: true };
+    }
+    return null;
   }
 
   onLogin(): void {
