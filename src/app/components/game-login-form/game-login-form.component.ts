@@ -53,10 +53,7 @@ export class GameLoginFormComponent implements OnInit {
       }),
       playerInformation: new FormGroup({
         gender: new FormControl('male'),
-        dateOfBirth: new FormControl('2000-01-01', [
-          Validators.required,
-          this.forbiddenDateOfBirth,
-        ]),
+        dateOfBirth: new FormControl('2000-01-01', [Validators.required, this.validateDateOfBirth]),
         country: new FormControl('Ukraine', [Validators.minLength(3), Validators.maxLength(20)]),
       }),
     });
@@ -66,7 +63,7 @@ export class GameLoginFormComponent implements OnInit {
     });
   }
 
-  forbiddenDateOfBirth(control: FormControl): { [s: string]: boolean } {
+  validateDateOfBirth(control: FormControl): { [s: string]: boolean } {
     if (moment().diff(control.value, 'years') < MIN_AGE) {
       return { dateOfBirthIsForbidden: true };
     }
