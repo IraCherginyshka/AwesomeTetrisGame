@@ -31973,13 +31973,13 @@ function _createClass(e, t, n) {
         Gh = (function(e) {
           return (
             (e.DEFAULT = '#2b3a42'),
-            (e.FIRST = '#fd0404'),
-            (e.SECOND = '#0d21d5'),
-            (e.THIRD = '#19af09'),
-            (e.FOURTH = '#f8ed20'),
-            (e.FIFTH = '#13e4e7'),
-            (e.SIXTH = '#ff7300'),
-            (e.SEVENTH = '#d131c4'),
+            (e.FIRST = '#ff0000'),
+            (e.SECOND = '#ffff00'),
+            (e.THIRD = '#00ff00'),
+            (e.FOURTH = '#00ffff'),
+            (e.FIFTH = '#ff4500'),
+            (e.SIXTH = '#0000ff'),
+            (e.SEVENTH = '#ff00ff'),
             e
           );
         })({}),
@@ -39000,7 +39000,7 @@ function _createClass(e, t, n) {
                       }),
                       playerInformation: new km({
                         gender: new gm('male'),
-                        dateOfBirth: new gm('2000-01-01', [Jf.required, this.forbiddenDateOfBirth]),
+                        dateOfBirth: new gm('2000-01-01', [Jf.required, this.validateDateOfBirth]),
                         country: new gm('Ukraine', [Jf.minLength(3), Jf.maxLength(20)]),
                       }),
                     })),
@@ -39010,7 +39010,7 @@ function _createClass(e, t, n) {
                 },
               },
               {
-                key: 'forbiddenDateOfBirth',
+                key: 'validateDateOfBirth',
                 value: function(e) {
                   return Am().diff(e.value, 'years') < 6 ? { dateOfBirthIsForbidden: !0 } : null;
                 },
@@ -39786,7 +39786,10 @@ function _createClass(e, t, n) {
               null,
               null,
             )),
-            (e()(), ts(-1, null, ['Please enter your birth date (6+) '])),
+            (e()(),
+            ts(-1, null, [
+              'Please enter your birth date (you should be over 6 years old to play this game) ',
+            ])),
           ],
           null,
           null,
