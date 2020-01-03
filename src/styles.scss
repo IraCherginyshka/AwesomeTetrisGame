@@ -51,3 +51,21 @@ button {
   color: $default-color;
   transition: 0.3s ease-out;
 }
+
+.ngx-toastr {
+  background-color: #030303;
+  pointer-events: auto;
+  text-transform: uppercase;
+}
+.toast-success {
+  background-color: rgba($figure-color-fourth, 0.7) !important;
+}
+.toast-error {
+  background-color: rgba($figure-color-second, 0.7) !important;
+}
+.toast-info {
+  background-color: rgba($figure-color-seventh, 0.7) !important;
+}
+.toast-warning {
+  background-color: rgba($figure-color-sixth, 0.7) !important;
+}
