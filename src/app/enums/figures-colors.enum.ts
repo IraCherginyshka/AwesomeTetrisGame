@@ -1,10 +1,10 @@
 export enum FiguresColors {
   DEFAULT = '#2b3a42',
-  FIRST = '#fd0404',
-  SECOND = '#0d21d5',
-  THIRD = '#19af09',
-  FOURTH = '#f8ed20',
-  FIFTH = '#13e4e7',
-  SIXTH = '#ff7300',
-  SEVENTH = '#d131c4',
+  FIRST = '#ff0000',
+  SECOND = '#ffff00',
+  THIRD = '#00ff00',
+  FOURTH = '#00ffff',
+  FIFTH = '#ff4500',
+  SIXTH = '#0000ff',
+  SEVENTH = '#ff00ff',
 }
