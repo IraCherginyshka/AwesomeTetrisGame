@@ -5,6 +5,7 @@
 - Project name: Awesome Tetris Game
 - Project key: ATG
 - Project Lead: Oleksandr Starov (https://github.com/oleksandrstarov)
+- Project Link: http://awesome-tetris-game-git-tetris.apps.us-west-1.starter.openshift-online.com
 
 ## Overview
 
@@ -38,10 +39,26 @@ $ npm run eslint
   },
 ```
 
+##Build
+
+Checkout release branch => Run ng build to build the project.
+
+The build artifacts will be stored in the dist/ directory.
+
+This script involves the --prod flag for a production build and command for copy `dist/` directory to the `server/` directory
+
+OpenShift platform was chosen to deploy the project.
+It subscribes to changes in the `release` branch and after 5-6 minutes automatically adds all changes to the site using hooks.
+
 ## Project structure
 
 ```
 AwesomeTetrisGame/
+├── server/ - directory for Node configuration
+|  └── dist/ - the build folder which contains all files and folders which can be hosted in server
+|  └── models/ - directory for models
+|  └── MEAN-specific configuration files
+|
 ├── src/ - directory for code sources
 |  └── app/ - directory for files in which application logic and data are defined
 |  |   └── components/ - directory for components, templates, styles and unit tests
