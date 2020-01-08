@@ -188,8 +188,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
-    const reverseMatrix = [...figureMatrix];
-    reverseMatrix.reverse();
+    const reverseMatrix = [...figureMatrix].reverse();
     return reverseMatrix[0].map((item, index) => reverseMatrix.map((line) => line[index]));
   }
 
