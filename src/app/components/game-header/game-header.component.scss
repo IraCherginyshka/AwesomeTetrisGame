@@ -21,6 +21,10 @@
     &:hover {
       border-color: $primary-color;
       box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+
+      & .active-link {
+        color: $primary-color;
+      }
     }
   }
 
@@ -58,4 +62,8 @@
       text-align: right;
     }
   }
+}
+
+.active-link {
+  color: $secondary-color;
 }
