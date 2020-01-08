@@ -213,8 +213,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private playGame(): void {
-    const noCollision = this.checkCollisionDetection(0, this.currentFigure);
     this.timeInterval = window.setInterval(() => {
+      const noCollision = this.checkCollisionDetection(0, this.currentFigure);
       if (noCollision) {
         this.takeMoveDown();
       } else if (!noCollision && !this.lineWithFigure) {
