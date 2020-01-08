@@ -38,8 +38,7 @@ const checkToken = (req, res, next) => {
 };
 
 app.post('/sign_up', (req, res) => {
-  const user = new User(req.body);
-  user
+  new User(req.body)
     .save()
     .then(() => {
       res.status(201).json({
@@ -77,8 +76,7 @@ app.get('/logout', (req) => {
 });
 
 app.post('/add_result', checkToken, (req, res) => {
-  const result = new Result(req.body);
-  result
+  new Result(req.body)
     .save()
     .then(() => {
       res.status(201).json({
