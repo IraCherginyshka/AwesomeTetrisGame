@@ -3,6 +3,9 @@ import { Subscription } from 'rxjs';
 import { GameService } from '../../services/game.service';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
+import { ControlsEnum } from '../../enums/controls.enum';
+import { DefaultSettings } from '../../enums/default-settings.enum';
+import { ControlsStateObject } from '../../interfaces/controlsState.interface';
 
 @Component({
   selector: 'atg-game-controls',
@@ -16,6 +19,7 @@ export class GameControlsComponent implements OnInit, OnDestroy {
   private isLostGame: boolean;
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
+  private controls: ControlsStateObject;
 
   constructor(private gameService: GameService) {}
 
@@ -28,6 +32,17 @@ export class GameControlsComponent implements OnInit, OnDestroy {
     this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
       this.isLostGame = true;
     });
+
+    if (localStorage.getItem('controls')) {
+      this.controls = JSON.parse(localStorage.getItem('controls'));
+    } else {
+      this.controls = {
+        [ControlsEnum.ROTATE]: DefaultSettings.ROTATE,
+        [ControlsEnum.LEFT]: DefaultSettings.LEFT,
+        [ControlsEnum.DROP]: DefaultSettings.DROP,
+        [ControlsEnum.RIGHT]: DefaultSettings.RIGHT,
+      };
+    }
   }
 
   ngOnDestroy(): void {
@@ -39,19 +54,18 @@ export class GameControlsComponent implements OnInit, OnDestroy {
     if (!this.isPlaying || this.isLostGame) {
       return;
     }
-
     event.preventDefault();
-    switch (event.code) {
-      case 'ArrowRight':
+    switch (event.key) {
+      case this.controls[ControlsEnum.RIGHT]:
         this.gameService.setMoveStep(FiguresMovement.RIGHT);
         break;
-      case 'ArrowLeft':
+      case this.controls[ControlsEnum.LEFT]:
         this.gameService.setMoveStep(FiguresMovement.LEFT);
         break;
-      case 'ArrowUp':
+      case this.controls[ControlsEnum.ROTATE]:
         this.gameService.setMoveStep(FiguresMovement.ROTATE);
         break;
-      case 'ArrowDown':
+      case this.controls[ControlsEnum.DROP]:
         this.gameService.setMoveStep(FiguresMovement.DOWN);
         break;
       default:
@@ -64,7 +78,7 @@ export class GameControlsComponent implements OnInit, OnDestroy {
       return;
     }
     event.preventDefault();
-    if (event.code === 'ArrowDown') {
+    if (event.key === this.controls[ControlsEnum.DROP]) {
       this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
   }
