@@ -8,7 +8,7 @@
     background-color: $background-color;
     text-align: right;
     border-radius: $border-radius;
-    font-size: 1.3rem;
+    font-size: $default-font-size;
   }
 
   &__group {
@@ -46,7 +46,7 @@
   }
 
   &__input {
-    height: 3rem;
+    height: $height-bar-links;
     background-color: $service-color;
     padding: 0.5rem;
     border-radius: $border-radius/2;
