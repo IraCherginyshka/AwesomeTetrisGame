@@ -29,10 +29,8 @@ export class GameHeaderComponent implements OnInit, OnDestroy {
       .subscribe((user: PlayerData | null) => {
         if (user) {
           this.toastrService.success('Welcome to AwesomeTetrisGame!');
-          this.userIsAuthenticated = true;
-        } else {
-          this.userIsAuthenticated = false;
         }
+        this.userIsAuthenticated = !!user;
       });
   }
 
