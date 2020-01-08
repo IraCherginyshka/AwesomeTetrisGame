@@ -24,6 +24,7 @@ export class GameLoginFormComponent implements OnInit {
   private querySubscription: Subscription;
   private token: string;
   private currentUser: PlayerData;
+
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,

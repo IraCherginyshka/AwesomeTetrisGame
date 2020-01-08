@@ -13,6 +13,7 @@ import { PlayerData } from '../../interfaces/playerData.interface';
 export class GameHeaderComponent implements OnInit, OnDestroy {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   public userIsAuthenticated = !!localStorage.getItem('access_user');
+
   private authSubscription: Subscription;
 
   constructor(private userService: UserService, private toastrService: ToastrService) {}

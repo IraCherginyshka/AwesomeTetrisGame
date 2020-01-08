@@ -30,6 +30,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   public isLostGame: boolean;
   public textStateOverlay: string;
+
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -127,7 +128,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           this.duration = ACCELERATION;
           this.playGame();
         }
-
         if (nextPosition === FiguresMovement.DOWN_OFF) {
           this.stopGame();
           this.duration =
