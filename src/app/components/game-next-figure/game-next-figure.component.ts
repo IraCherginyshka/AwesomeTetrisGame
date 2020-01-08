@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
 import { BoardModel } from '../../models/board.model';
 import { GameService } from '../../services/game.service';
 import { BLOCK_SIZE } from '../../constants/board-component.const';

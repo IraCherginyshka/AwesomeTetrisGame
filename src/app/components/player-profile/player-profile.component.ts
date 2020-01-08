@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
 import { PlayerData } from '../../interfaces/playerData.interface';
 import { UserService } from '../../services/user.service';
 

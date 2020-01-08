@@ -1,10 +1,10 @@
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
 import { MIN_AGE } from '../../constants/game-information.const';

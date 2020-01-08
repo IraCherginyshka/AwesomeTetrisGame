@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
 

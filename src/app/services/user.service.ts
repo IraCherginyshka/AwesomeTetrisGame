@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Md5 } from 'ts-md5/dist/md5';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
 import { UserData } from '../interfaces/userData.interface';
 import { PlayerData } from '../interfaces/playerData.interface';
 import { environment } from '../../environments/environment';

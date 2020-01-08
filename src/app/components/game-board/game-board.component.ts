@@ -1,7 +1,8 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
