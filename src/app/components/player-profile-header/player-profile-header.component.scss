@@ -1,0 +1,29 @@
+@import 'src/assets/styles/variables';
+
+.player {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & .icon {
+    max-width: $max-width-icon;
+    margin: 0 1rem;
+  }
+
+  &-inf {
+    font-size: 2rem;
+    text-align: right;
+    text-transform: none;
+  }
+
+  & .game-button {
+    &:hover {
+      border-color: $primary-color;
+      box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+      cursor: pointer;
+    }
+  }
+}

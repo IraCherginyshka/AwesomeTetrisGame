@@ -57,6 +57,7 @@ export class GameLoginFormComponent implements OnInit {
         gender: new FormControl('male'),
         dateOfBirth: new FormControl('2000-01-01', [Validators.required, this.validateDateOfBirth]),
         country: new FormControl('Ukraine', [Validators.minLength(3), Validators.maxLength(20)]),
+        avatar: new FormControl('America.ico'),
       }),
     });
 
@@ -78,7 +79,6 @@ export class GameLoginFormComponent implements OnInit {
     }
     this.userService.loginUser(this.logInForm.value).subscribe(
       ({ token, user }) => {
-        console.log(user);
         localStorage.setItem(LocalStorage.ACCESS_TOKEN, token);
         localStorage.setItem(LocalStorage.ACCESS_USER, JSON.stringify(user));
         localStorage.setItem(LocalStorage.USER_NAME, user.username);

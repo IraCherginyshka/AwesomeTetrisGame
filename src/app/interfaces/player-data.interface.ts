@@ -4,4 +4,5 @@ export interface PlayerData {
   gender: string;
   dateOfBirth: string;
   country: string;
+  avatar: string;
 }

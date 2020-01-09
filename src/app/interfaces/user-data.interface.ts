@@ -7,5 +7,6 @@ export interface UserData {
     gender: string;
     dateOfBirth: string;
     country: string;
+    avatar: string;
   };
 }

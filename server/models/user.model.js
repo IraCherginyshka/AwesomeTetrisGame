@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   dateOfBirth: { type: String, required: true },
   country: { type: String, required: true },
+  avatar: { type: String, required: true },
 });
 
 userSchema.plugin(uniqueName, { message: 'Name already in use' });
