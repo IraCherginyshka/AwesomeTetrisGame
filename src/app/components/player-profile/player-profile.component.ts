@@ -1,7 +1,7 @@
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { PlayerData } from '../../interfaces/playerData.interface';
+import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserService } from '../../services/user.service';
 import { LocalStorage } from '../../enums/local-storage.enum';
 

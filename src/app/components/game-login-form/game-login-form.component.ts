@@ -6,7 +6,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
-import { PlayerData } from '../../interfaces/playerData.interface';
+import { PlayerData } from '../../interfaces/player-data.interface';
 import { MIN_AGE } from '../../constants/game-information.const';
 import { LocalStorage } from '../../enums/local-storage.enum';
 
@@ -78,6 +78,7 @@ export class GameLoginFormComponent implements OnInit {
     }
     this.userService.loginUser(this.logInForm.value).subscribe(
       ({ token, user }) => {
+        console.log(user);
         localStorage.setItem(LocalStorage.ACCESS_TOKEN, token);
         localStorage.setItem(LocalStorage.ACCESS_USER, JSON.stringify(user));
         localStorage.setItem(LocalStorage.USER_NAME, user.username);

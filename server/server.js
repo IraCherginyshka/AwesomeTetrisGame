@@ -2,8 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const User = require('./models/user.model');
-const Result = require('./models/gameResult.model');
+const db = require('./db');
 
 const app = express();
 
@@ -38,8 +37,7 @@ const checkToken = (req, res, next) => {
 };
 
 app.post('/sign_up', (req, res) => {
-  new User(req.body)
-    .save()
+  db.signUpUser(req.body)
     .then(() => {
       res.status(201).json({
         massage: 'User created',
@@ -50,7 +48,7 @@ app.post('/sign_up', (req, res) => {
 
 app.post('/login', (req, res) => {
   let fetchedUser;
-  User.findOne({ username: req.body.username })
+  db.loginUser(req.body.username)
     .then((user) => {
       if (!user) {
         return errorHandler(res);
@@ -61,7 +59,7 @@ app.post('/login', (req, res) => {
         userData[user.username] = token;
         return res.status(200).json({
           token,
-          user,
+          user: { ...user.toObject(), password: undefined },
         });
       }
       return errorHandler(res);
@@ -76,8 +74,7 @@ app.get('/logout', (req) => {
 });
 
 app.post('/add_result', checkToken, (req, res) => {
-  new Result(req.body)
-    .save()
+  db.addResult(req.body)
     .then(() => {
       res.status(201).json({
         massage: 'Result added',
@@ -87,9 +84,9 @@ app.post('/add_result', checkToken, (req, res) => {
 });
 
 app.get('/result', (req, res) => {
-  Result.find({})
-    .sort({ score: -1 })
-    .then((sortResult) => res.send(sortResult));
+  db.getSortResults()
+    .then((sortResult) => res.send(sortResult))
+    .catch(() => errorHandler(res));
 });
 
 app.get('*', (req, res) => {

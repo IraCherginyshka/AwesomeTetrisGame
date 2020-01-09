@@ -13,7 +13,7 @@ import {
   DEFAULT_STEP,
   GAME_STEP_LEVEL,
 } from '../constants/game-information.const';
-import { GameStatsObject } from '../interfaces/gameStats.interface';
+import { GameStatsObject } from '../interfaces/game-stats.interface';
 import { GameResult } from '../models/game-result.model';
 import { environment } from '../../environments/environment';
 import { LocalStorage } from '../enums/local-storage.enum';

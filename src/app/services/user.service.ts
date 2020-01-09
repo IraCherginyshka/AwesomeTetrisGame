@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { UserData } from '../interfaces/userData.interface';
-import { PlayerData } from '../interfaces/playerData.interface';
+import { UserData } from '../interfaces/user-data.interface';
+import { PlayerData } from '../interfaces/player-data.interface';
 import { environment } from '../../environments/environment';
 import { LocalStorage } from '../enums/local-storage.enum';
 
