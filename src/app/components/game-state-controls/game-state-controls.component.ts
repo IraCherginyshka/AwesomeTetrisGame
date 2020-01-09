@@ -1,5 +1,6 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+
 import { GameState } from '../../enums/game-state.enum';
 import { GameService } from '../../services/game.service';
 
@@ -10,6 +11,7 @@ import { GameService } from '../../services/game.service';
 })
 export class GameStateControlsComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
+
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
 

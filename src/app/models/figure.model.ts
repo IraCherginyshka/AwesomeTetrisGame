@@ -6,6 +6,7 @@ export class FigureModel {
   public static getRandomFigure(): FiguresColors[][] {
     return FiguresMatrixConst[Math.floor(Math.random() * FiguresMatrixConst.length)];
   }
+
   public showFigure(
     lineHeight: number,
     figureMatrix: FiguresColors[][],

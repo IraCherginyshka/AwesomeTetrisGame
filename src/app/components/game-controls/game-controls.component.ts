@@ -1,5 +1,6 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+
 import { GameService } from '../../services/game.service';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';

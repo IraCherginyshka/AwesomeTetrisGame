@@ -14,7 +14,7 @@
     margin: $primary-indent / 3;
     background-color: $background-color;
     border: $hover-border-controls $secondary-color;
-    border-radius: 10px;
+    border-radius: $border-radius;
     text-align: center;
     font-size: inherit;
     text-transform: inherit;
