@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
 import { UserService } from '../../services/user.service';
-import { PlayerData } from '../../interfaces/playerData.interface';
+import { PlayerData } from '../../interfaces/player-data.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-header',
@@ -11,7 +13,8 @@ import { PlayerData } from '../../interfaces/playerData.interface';
 })
 export class GameHeaderComponent implements OnInit, OnDestroy {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-  public userIsAuthenticated = !!localStorage.getItem('access_user');
+  public userIsAuthenticated = !!localStorage.getItem(LocalStorage.ACCESS_USER);
+
   private authSubscription: Subscription;
 
   constructor(private userService: UserService, private toastrService: ToastrService) {}
@@ -27,10 +30,8 @@ export class GameHeaderComponent implements OnInit, OnDestroy {
       .subscribe((user: PlayerData | null) => {
         if (user) {
           this.toastrService.success('Welcome to AwesomeTetrisGame!');
-          this.userIsAuthenticated = true;
-        } else {
-          this.userIsAuthenticated = false;
         }
+        this.userIsAuthenticated = !!user;
       });
   }
 

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
+
 import { GameService } from '../../services/game.service';
-import { GameStatsObject } from '../../interfaces/gameStats.interface';
+import { GameStatsObject } from '../../interfaces/game-stats.interface';
 
 @Component({
   selector: 'atg-game-information',

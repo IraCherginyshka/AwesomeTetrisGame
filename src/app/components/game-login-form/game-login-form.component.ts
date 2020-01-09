@@ -1,13 +1,14 @@
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import { UserService } from '../../services/user.service';
-import { PlayerData } from '../../interfaces/playerData.interface';
+import { PlayerData } from '../../interfaces/player-data.interface';
 import { MIN_AGE } from '../../constants/game-information.const';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-login-form',
@@ -24,6 +25,7 @@ export class GameLoginFormComponent implements OnInit {
   private querySubscription: Subscription;
   private token: string;
   private currentUser: PlayerData;
+
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
@@ -76,9 +78,10 @@ export class GameLoginFormComponent implements OnInit {
     }
     this.userService.loginUser(this.logInForm.value).subscribe(
       ({ token, user }) => {
-        localStorage.setItem('access_token', token);
-        localStorage.setItem('access_user', JSON.stringify(user));
-        localStorage.setItem('user_name', user.username);
+        console.log(user);
+        localStorage.setItem(LocalStorage.ACCESS_TOKEN, token);
+        localStorage.setItem(LocalStorage.ACCESS_USER, JSON.stringify(user));
+        localStorage.setItem(LocalStorage.USER_NAME, user.username);
         this.token = token;
         if (token) {
           this.currentUser = user;

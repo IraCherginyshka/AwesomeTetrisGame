@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Md5 } from 'ts-md5/dist/md5';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { UserData } from '../interfaces/userData.interface';
-import { PlayerData } from '../interfaces/playerData.interface';
+
+import { UserData } from '../interfaces/user-data.interface';
+import { PlayerData } from '../interfaces/player-data.interface';
 import { environment } from '../../environments/environment';
+import { LocalStorage } from '../enums/local-storage.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,7 @@ export class UserService {
   private endpoint = environment.url;
   private token: string;
   private authListener = new BehaviorSubject<PlayerData>(
-    JSON.parse(localStorage.getItem('access_user')),
+    JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER)),
   );
 
   constructor(private http: HttpClient, public router: Router) {}
@@ -44,9 +46,9 @@ export class UserService {
   }
 
   logoutUser(): Observable<object> {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('access_user');
-    localStorage.removeItem('user_name');
+    localStorage.removeItem(LocalStorage.ACCESS_TOKEN);
+    localStorage.removeItem(LocalStorage.ACCESS_USER);
+    localStorage.removeItem(LocalStorage.USER_NAME);
     this.token = null;
     this.authListener.next(null);
     return this.http.get(`${this.endpoint}/logout`);
@@ -57,11 +59,11 @@ export class UserService {
   }
 
   getToken(): string {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem(LocalStorage.ACCESS_TOKEN);
   }
 
   getUserName(): string {
-    return localStorage.getItem('user_name');
+    return localStorage.getItem(LocalStorage.USER_NAME);
   }
 
   getAuthListener(): Observable<{}> {

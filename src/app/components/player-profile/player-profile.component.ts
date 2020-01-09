@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { PlayerData } from '../../interfaces/playerData.interface';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserService } from '../../services/user.service';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-player-profile',
@@ -20,7 +22,7 @@ export class PlayerProfileComponent implements OnInit {
   }
 
   showCurrentUser(): void {
-    this.currentUser = JSON.parse(localStorage.getItem('access_user'));
+    this.currentUser = JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER));
     if (this.currentUser) {
       this.iconSrc = this.currentUser.gender === 'male' ? 'Mask.ico' : 'Spiderwoman.ico';
     }

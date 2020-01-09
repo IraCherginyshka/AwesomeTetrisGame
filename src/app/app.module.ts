@@ -1,14 +1,13 @@
+import { ToastContainerModule, ToastrModule } from 'ngx-toastr';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ToastContainerModule, ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './services/authconfig.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { GameHeaderComponent } from './components/game-header/game-header.component';
 import { GameMainComponent } from './components/game-main/game-main.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';

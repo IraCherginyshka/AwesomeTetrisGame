@@ -9,7 +9,7 @@
   position: absolute;
   width: $board-width + 2px;
   height: $board-height + 3px;
-  background-color: rgba($primary-color, 0.85);
+  background-color: rgba($primary-color, $alpha);
   border: $hover-border-controls $default-color;
   text-align: center;
   line-height: $board-height;

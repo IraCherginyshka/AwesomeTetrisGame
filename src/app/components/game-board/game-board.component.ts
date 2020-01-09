@@ -1,7 +1,8 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
@@ -19,6 +20,7 @@ import {
   DELAY_LEVEL_STEP,
   MAX_SPEED,
 } from '../../constants/board-component.const';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-board',
@@ -29,6 +31,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   public isLostGame: boolean;
   public textStateOverlay: string;
+
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private boardMatrix: FiguresColors[][];
@@ -51,7 +54,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
-    if (localStorage.getItem('game_stats')) {
+    if (localStorage.getItem(LocalStorage.GAME_STATS)) {
       const {
         boardMatrix,
         currentFigure,
@@ -59,7 +62,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         figurePosition,
         duration,
         lineWithFigure,
-      } = JSON.parse(localStorage.getItem('game_stats'));
+      } = JSON.parse(localStorage.getItem(LocalStorage.GAME_STATS));
       this.isPlaying = false;
       this.boardMatrix = boardMatrix;
       this.currentFigure = currentFigure;
@@ -122,13 +125,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           }
         }
         if (nextPosition === FiguresMovement.DOWN) {
-          clearInterval(this.timeInterval);
+          this.stopGame();
           this.duration = ACCELERATION;
           this.playGame();
         }
-
         if (nextPosition === FiguresMovement.DOWN_OFF) {
-          clearInterval(this.timeInterval);
+          this.stopGame();
           this.duration =
             DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
               ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
@@ -148,7 +150,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .onUpdateGameInformation()
       .pipe(filter((gameStats) => this.currentLevel !== gameStats.level))
       .subscribe(({ level }) => {
-        clearInterval(this.timeInterval);
+        this.stopGame();
         this.currentLevel = level;
         this.duration =
           DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
@@ -168,7 +170,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
     if (this.isPlaying !== undefined && !this.isLostGame) {
       localStorage.setItem(
-        'game_stats',
+        LocalStorage.GAME_STATS,
         JSON.stringify({
           boardMatrix: this.boardMatrix,
           currentFigure: this.currentFigure,
@@ -187,8 +189,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
-    const reverseMatrix = [...figureMatrix];
-    reverseMatrix.reverse();
+    const reverseMatrix = [...figureMatrix].reverse();
     return reverseMatrix[0].map((item, index) => reverseMatrix.map((line) => line[index]));
   }
 
@@ -214,21 +215,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   private playGame(): void {
     this.timeInterval = window.setInterval(() => {
-      if (this.checkCollisionDetection(0, this.currentFigure)) {
-        this.redrawBoard();
-        this.lineWithFigure += 1;
-      } else if (
-        !this.checkCollisionDetection(0, this.currentFigure) &&
-        this.lineWithFigure === 0
-      ) {
-        this.redrawBoard();
+      const noCollision = this.checkCollisionDetection(0, this.currentFigure);
+      if (noCollision) {
+        this.takeMoveDown();
+      } else if (!noCollision && !this.lineWithFigure) {
         this.lostGame();
       } else {
         this.deleteFilledLines();
-        this.boardMatrix = this.currentMatrix;
-        this.gameService.updateFigures();
-        this.redrawBoard();
-        this.setInitialBoardState();
       }
     }, this.duration);
   }
@@ -262,6 +255,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.currentMatrix.unshift(new Array(QUANTITY_BLOCKS_WIDTH).fill(FiguresColors.DEFAULT));
       });
     }
+    this.boardMatrix = this.currentMatrix;
+    this.gameService.updateFigures();
+    this.redrawBoard();
+    this.setInitialBoardState();
+  }
+
+  private takeMoveDown(): void {
+    this.redrawBoard();
+    this.lineWithFigure += 1;
   }
 
   private stopGame(): void {
@@ -273,18 +275,18 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-    localStorage.removeItem('game_stats');
-    localStorage.removeItem('next_figure');
+    localStorage.removeItem(LocalStorage.GAME_STATS);
+    localStorage.removeItem(LocalStorage.NEXT_FIGURE);
     this.gameService.updateFigures();
     this.gameService.updateFigures();
-
     this.redrawBoard();
-    clearInterval(this.timeInterval);
+    this.stopGame();
     this.setInitialBoardState();
     this.playGame();
   }
 
   private lostGame(): void {
+    this.redrawBoard();
     this.isLostGame = true;
     this.isPlaying = false;
     this.gameService.setLostGame().subscribe(() => {
@@ -292,9 +294,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     });
     this.gameService.updateFigures();
     this.setInitialBoardState();
-    localStorage.removeItem('game_stats');
-    localStorage.removeItem('next_figure');
-    clearInterval(this.timeInterval);
+    localStorage.removeItem(LocalStorage.GAME_STATS);
+    localStorage.removeItem(LocalStorage.NEXT_FIGURE);
+    this.stopGame();
     this.textStateOverlay = GameState.LOST;
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,

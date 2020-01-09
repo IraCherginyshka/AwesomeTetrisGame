@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { GameControlOptionComponent } from './components/game-control-option/game-control-option.component';
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameMainComponent } from './components/game-main/game-main.component';
