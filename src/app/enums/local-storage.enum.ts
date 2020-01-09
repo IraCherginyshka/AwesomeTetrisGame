@@ -4,4 +4,5 @@ export enum LocalStorage {
   ACCESS_USER = 'access_user',
   ACCESS_TOKEN = 'access_token',
   USER_NAME = 'user_name',
+  CONTROLS = 'controls',
 }
