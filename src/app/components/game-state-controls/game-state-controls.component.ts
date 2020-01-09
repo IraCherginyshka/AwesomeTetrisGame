@@ -1,11 +1,12 @@
 import { Subscription } from 'rxjs';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 
-import { GameState } from '../../enums/game-state.enum';
 import { GameService } from '../../services/game.service';
+import { GameState } from '../../enums/game-state.enum';
 import { ControlsEnum } from '../../enums/controls.enum';
 import { DefaultSettings } from '../../enums/default-settings.enum';
-import { ControlsStateObject } from '../../interfaces/controlsState.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
+import { ControlsStateObject } from '../../interfaces/controls-state.interface';
 
 @Component({
   selector: 'atg-game-state-controls',
@@ -17,7 +18,7 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
 
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
-  private controls: ControlsStateObject;
+  private controls: Partial<ControlsStateObject>;
 
   constructor(private gameService: GameService) {}
 
@@ -30,8 +31,10 @@ export class GameStateControlsComponent implements OnInit, OnDestroy {
       this.isPlaying = action !== GameState.PAUSE;
     });
 
-    if (localStorage.getItem('controls')) {
-      this.controls = JSON.parse(localStorage.getItem('controls'));
+    const savedControls = JSON.parse(localStorage.getItem(LocalStorage.CONTROLS));
+
+    if (savedControls) {
+      this.controls = savedControls;
     } else {
       this.controls = {
         [ControlsEnum.RESET]: DefaultSettings.RESET,

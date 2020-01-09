@@ -2,11 +2,12 @@ import { Subscription } from 'rxjs';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 
 import { GameService } from '../../services/game.service';
+import { ControlsStateObject } from '../../interfaces/controls-state.interface';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
 import { ControlsEnum } from '../../enums/controls.enum';
 import { DefaultSettings } from '../../enums/default-settings.enum';
-import { ControlsStateObject } from '../../interfaces/controlsState.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-controls',
@@ -20,7 +21,7 @@ export class GameControlsComponent implements OnInit, OnDestroy {
   private isLostGame: boolean;
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
-  private controls: ControlsStateObject;
+  private controls: Partial<ControlsStateObject>;
 
   constructor(private gameService: GameService) {}
 
@@ -34,8 +35,10 @@ export class GameControlsComponent implements OnInit, OnDestroy {
       this.isLostGame = true;
     });
 
-    if (localStorage.getItem('controls')) {
-      this.controls = JSON.parse(localStorage.getItem('controls'));
+    const savedControls = JSON.parse(localStorage.getItem(LocalStorage.CONTROLS));
+
+    if (savedControls) {
+      this.controls = savedControls;
     } else {
       this.controls = {
         [ControlsEnum.ROTATE]: DefaultSettings.ROTATE,

@@ -1,7 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+
 import { DefaultSettings } from '../../enums/default-settings.enum';
 import { ControlsEnum } from '../../enums/controls.enum';
-import { ControlsStateObject } from '../../interfaces/controlsState.interface';
+import { ControlsStateObject } from '../../interfaces/controls-state.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-control-option',
@@ -16,8 +18,8 @@ export class GameControlOptionComponent implements OnInit {
   private activeField: string;
 
   ngOnInit(): void {
-    if (localStorage.getItem('controls')) {
-      const savedControls = JSON.parse(localStorage.getItem('controls'));
+    const savedControls = JSON.parse(localStorage.getItem(LocalStorage.CONTROLS));
+    if (savedControls) {
       this.controls = {
         [ControlsEnum.RESET]: savedControls.reset,
         [ControlsEnum.PAUSE]: savedControls.pause,
@@ -56,6 +58,6 @@ export class GameControlOptionComponent implements OnInit {
   }
 
   setAllControls(): void {
-    localStorage.setItem('controls', JSON.stringify(this.controls));
+    localStorage.setItem(LocalStorage.CONTROLS, JSON.stringify(this.controls));
   }
 }
