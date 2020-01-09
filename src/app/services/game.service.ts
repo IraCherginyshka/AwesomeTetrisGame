@@ -16,6 +16,7 @@ import {
 import { GameStatsObject } from '../interfaces/gameStats.interface';
 import { GameResult } from '../models/game-result.model';
 import { environment } from '../../environments/environment';
+import { LocalStorage } from '../enums/local-storage.enum';
 
 @Injectable({ providedIn: 'root' })
 export class GameService {
@@ -24,7 +25,7 @@ export class GameService {
   private isLostGame = false;
   private currentFigure: FiguresColors[][];
   private nextFigure =
-    JSON.parse(localStorage.getItem('next_figure')) || FigureModel.getRandomFigure();
+    JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE)) || FigureModel.getRandomFigure();
   private currentLevel = 1;
   private currentNumberLines = 0;
   private currentScore = 0;
@@ -53,7 +54,7 @@ export class GameService {
   public setLostGame(): Observable<object> {
     this.isLostGame = true;
     const gameResult: GameResult = {
-      username: localStorage.getItem('user_name'),
+      username: localStorage.getItem(LocalStorage.USER_NAME),
       lines: this.currentNumberLines,
       score: this.currentScore,
       level: this.currentLevel,

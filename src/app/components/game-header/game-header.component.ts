@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-header',
@@ -12,7 +13,7 @@ import { PlayerData } from '../../interfaces/playerData.interface';
 })
 export class GameHeaderComponent implements OnInit, OnDestroy {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-  public userIsAuthenticated = !!localStorage.getItem('access_user');
+  public userIsAuthenticated = !!localStorage.getItem(LocalStorage.ACCESS_USER);
 
   private authSubscription: Subscription;
 

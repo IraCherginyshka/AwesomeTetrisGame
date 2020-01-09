@@ -20,6 +20,7 @@ import {
   DELAY_LEVEL_STEP,
   MAX_SPEED,
 } from '../../constants/board-component.const';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-board',
@@ -53,7 +54,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
-    if (localStorage.getItem('game_stats')) {
+    if (localStorage.getItem(LocalStorage.GAME_STATS)) {
       const {
         boardMatrix,
         currentFigure,
@@ -61,7 +62,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         figurePosition,
         duration,
         lineWithFigure,
-      } = JSON.parse(localStorage.getItem('game_stats'));
+      } = JSON.parse(localStorage.getItem(LocalStorage.GAME_STATS));
       this.isPlaying = false;
       this.boardMatrix = boardMatrix;
       this.currentFigure = currentFigure;
@@ -169,7 +170,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
     if (this.isPlaying !== undefined && !this.isLostGame) {
       localStorage.setItem(
-        'game_stats',
+        LocalStorage.GAME_STATS,
         JSON.stringify({
           boardMatrix: this.boardMatrix,
           currentFigure: this.currentFigure,
@@ -274,8 +275,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-    localStorage.removeItem('game_stats');
-    localStorage.removeItem('next_figure');
+    localStorage.removeItem(LocalStorage.GAME_STATS);
+    localStorage.removeItem(LocalStorage.NEXT_FIGURE);
     this.gameService.updateFigures();
     this.gameService.updateFigures();
     this.redrawBoard();
@@ -293,8 +294,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     });
     this.gameService.updateFigures();
     this.setInitialBoardState();
-    localStorage.removeItem('game_stats');
-    localStorage.removeItem('next_figure');
+    localStorage.removeItem(LocalStorage.GAME_STATS);
+    localStorage.removeItem(LocalStorage.NEXT_FIGURE);
     this.stopGame();
     this.textStateOverlay = GameState.LOST;
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(

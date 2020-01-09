@@ -8,6 +8,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/playerData.interface';
 import { MIN_AGE } from '../../constants/game-information.const';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-login-form',
@@ -77,9 +78,9 @@ export class GameLoginFormComponent implements OnInit {
     }
     this.userService.loginUser(this.logInForm.value).subscribe(
       ({ token, user }) => {
-        localStorage.setItem('access_token', token);
-        localStorage.setItem('access_user', JSON.stringify(user));
-        localStorage.setItem('user_name', user.username);
+        localStorage.setItem(LocalStorage.ACCESS_TOKEN, token);
+        localStorage.setItem(LocalStorage.ACCESS_USER, JSON.stringify(user));
+        localStorage.setItem(LocalStorage.USER_NAME, user.username);
         this.token = token;
         if (token) {
           this.currentUser = user;
