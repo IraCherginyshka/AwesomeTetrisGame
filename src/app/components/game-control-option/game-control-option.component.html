@@ -27,7 +27,9 @@
           <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
         </div>
       </div>
-      <button class="game-button game-button--option">use default controls</button>
+      <button class="game-button game-button--option" (click)="backToDefaultControls()">
+        use default controls
+      </button>
     </section>
 
     <section class="option__rules option__rules--custom">
@@ -99,7 +101,7 @@
           <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
         </div>
       </div>
-      <button class="game-button game-button--option" type="button" (click)="setAllControls()">
+      <button class="game-button game-button--option" type="button" (click)="saveControls()">
         set my controls
       </button>
     </section>

@@ -49,7 +49,7 @@
     color: $service-color;
     font-size: 1rem;
     &--move {
-      margin: 0 2rem 0 3rem;
+      margin: 0 3rem;
     }
     &--rotate {
       display: block;
@@ -62,11 +62,6 @@
       border: 2px solid $service-color;
       border-radius: $border-radius;
       padding: 3rem;
-    }
-
-    &-move {
-      position: relative;
-      text-align: center;
     }
   }
 }

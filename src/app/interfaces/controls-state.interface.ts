@@ -8,4 +8,5 @@ export interface ControlsStateObject {
   left: string | DefaultSettings;
   drop: string | DefaultSettings;
   right: string | DefaultSettings;
+  [x: string]: string | DefaultSettings;
 }

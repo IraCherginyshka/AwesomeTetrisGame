@@ -11,4 +11,14 @@
     <p class="information-label">lines</p>
     <div class="information-field">{{ (gameStats$ | async).lines }}</div>
   </div>
+  <div class="information-block--controls">
+    <p class="information-label">
+      {{ isCustomControls ? 'use custom controls' : 'use default controls' }}
+    </p>
+    <a class="header-link" routerLink="/option" routerLinkActive="active-link">
+      <button class="game-button">
+        change
+      </button>
+    </a>
+  </div>
 </div>
