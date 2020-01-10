@@ -96,6 +96,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
       if (gameState === GameState.PAUSE) {
         this.stopGame();
+        this.saveGameStats();
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
@@ -169,23 +170,27 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isPlaying !== undefined && !this.isLostGame) {
-      localStorage.setItem(
-        LocalStorage.GAME_STATS,
-        JSON.stringify({
-          boardMatrix: this.boardMatrix,
-          currentFigure: this.currentFigure,
-          currentMatrix: this.currentMatrix,
-          figurePosition: this.figurePosition,
-          duration: this.duration,
-          lineWithFigure: this.lineWithFigure,
-        }),
-      );
+      this.saveGameStats();
     }
     this.stopGame();
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
     this.subscriptionLevel.unsubscribe();
+  }
+
+  private saveGameStats(): void {
+    localStorage.setItem(
+      LocalStorage.GAME_STATS,
+      JSON.stringify({
+        boardMatrix: this.boardMatrix,
+        currentFigure: this.currentFigure,
+        currentMatrix: this.currentMatrix,
+        figurePosition: this.figurePosition,
+        duration: this.duration,
+        lineWithFigure: this.lineWithFigure - 1 >= 0 ? this.lineWithFigure - 1 : 0,
+      }),
+    );
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
