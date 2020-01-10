@@ -35,10 +35,14 @@ export class PlayerProfileComponent implements OnInit {
     this.gameService
       .getPlayerGameResult()
       .pipe(
-        map((results) => results.filter((result) => result.username === this.currentUser.username)),
+        map((results) =>
+          results
+            .filter((result) => result.username === this.currentUser.username)
+            .slice(0, LEADERBOARD_MAX_WIDTH),
+        ),
       )
       .subscribe((results) => {
-        this.currentUserResults = results.slice(0, LEADERBOARD_MAX_WIDTH);
+        this.currentUserResults = results;
       });
 
     this.userAge = moment().diff(this.currentUser.dateOfBirth, 'years');
