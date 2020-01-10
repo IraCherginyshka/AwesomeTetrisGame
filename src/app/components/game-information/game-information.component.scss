@@ -3,6 +3,11 @@
 .information {
   &-block {
     margin-bottom: $primary-indent;
+
+    &--controls {
+      margin-top: 4.5rem;
+      text-align: center;
+    }
   }
 
   &-label {
@@ -21,5 +26,12 @@
     line-height: $inform-field-height;
     font-size: $default-font-size;
     text-align: center;
+  }
+}
+.game-button {
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
+    cursor: pointer;
   }
 }

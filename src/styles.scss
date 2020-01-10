@@ -29,6 +29,7 @@ button {
 .main {
   padding: $primary-indent 0 5rem 0;
   min-height: $min-height-main;
+  user-select: none;
 }
 
 .center {
