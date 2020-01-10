@@ -1,9 +1,15 @@
 <div class="header">
   <div class="logo">tetris</div>
-  <atg-player-profile *ngIf="userIsAuthenticated; else login"></atg-player-profile>
+  <atg-player-profile-header *ngIf="userIsAuthenticated; else login"></atg-player-profile-header>
   <div class="wrap-links">
     <nav class="bar-links container">
-      <a class="header-link" routerLink="/login" routerLinkActive="active-link">login</a>
+      <a
+        class="header-link"
+        *ngIf="!userIsAuthenticated; else profile"
+        routerLink="/login"
+        routerLinkActive="active-link"
+        >login</a
+      >
       <a class="header-link" routerLink="/game" routerLinkActive="active-link">game</a>
       <a class="header-link" routerLink="/option" routerLinkActive="active-link">option</a>
       <a class="header-link" routerLink="/leaderboard" routerLinkActive="active-link">
@@ -15,4 +21,7 @@
 
 <ng-template #login class="modal">
   <a class="header-link--button game-button header__logout" [routerLink]="['/login']">login</a>
+</ng-template>
+<ng-template #profile class="modal">
+  <a class="header-link" routerLink="/profile" routerLinkActive="active-link">my profile</a>
 </ng-template>

@@ -125,7 +125,6 @@
         <div formGroupName="playerInformation">
           <div class="login__group--gender">
             <div class="login__group--radio" *ngFor="let gender of genders">
-              <label [for]="gender">{{ gender }}</label>
               <input
                 class="login__input"
                 type="radio"
@@ -133,6 +132,7 @@
                 [value]="gender"
                 formControlName="gender"
               />
+              <label [for]="gender">{{ gender }}</label>
             </div>
           </div>
 
@@ -174,6 +174,106 @@
               "
               >Please enter your country
             </span>
+          </div>
+
+          <div class="login__group login__group--avatar">
+            <input
+              id="america"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="America.ico"
+            />
+            <label for="america" class="login__label">
+              <img class="icon" src="./../../../assets/images/America.ico" alt="icon" />
+            </label>
+
+            <input
+              id="captain"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Captain-America.ico"
+            />
+            <label for="captain" class="login__label">
+              <img class="icon" src="./../../../assets/images/Captain-America.ico" alt="icon" />
+            </label>
+
+            <input
+              id="ironman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Ironman.ico"
+            />
+            <label for="ironman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Ironman.ico" alt="icon" />
+            </label>
+
+            <input
+              id="flying"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Ironman-Flying.ico"
+            />
+            <label class="login__label">
+              <img
+                id="flying"
+                class="icon"
+                src="./../../../assets/images/Ironman-Flying.ico"
+                alt="icon"
+              />
+            </label>
+
+            <input
+              id="joker"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Joker.ico"
+            />
+            <label for="joker" class="login__label">
+              <img class="icon" src="./../../../assets/images/Joker.ico" alt="icon" />
+            </label>
+
+            <input id="mask" type="radio" name="avatar" formControlName="avatar" value="Mask.ico" />
+            <label for="mask" class="login__label">
+              <img class="icon" src="./../../../assets/images/Mask.ico" alt="icon" />
+            </label>
+
+            <input
+              id="spiderman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderman.ico"
+            />
+            <label for="spiderman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderman.ico" alt="icon" />
+            </label>
+
+            <input
+              id="black"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderman-Black.ico"
+            />
+            <label for="black" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderman-Black.ico" alt="icon" />
+            </label>
+
+            <input
+              id="spiderwoman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderwoman.ico"
+            />
+            <label for="spiderwoman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderwoman.ico" alt="icon" />
+            </label>
           </div>
         </div>
 

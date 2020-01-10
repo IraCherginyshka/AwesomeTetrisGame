@@ -20,6 +20,7 @@ import { GameLoaderComponent } from './components/game-loader/game-loader.compon
 import { GameNextFigureComponent } from './components/game-next-figure/game-next-figure.component';
 import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
 import { PlayerProfileComponent } from './components/player-profile/player-profile.component';
+import { PlayerProfileHeaderComponent } from './components/player-profile-header/player-profile-header.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PlayerProfileComponent } from './components/player-profile/player-profi
     GameNextFigureComponent,
     GameLoginFormComponent,
     PlayerProfileComponent,
+    PlayerProfileHeaderComponent,
   ],
   imports: [
     BrowserModule,

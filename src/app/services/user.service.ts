@@ -29,6 +29,7 @@ export class UserService {
       gender: user.playerInformation.gender,
       dateOfBirth: user.playerInformation.dateOfBirth,
       country: user.playerInformation.country,
+      avatar: user.playerInformation.avatar,
     };
     return this.http.post(`${this.endpoint}/sign_up`, newUser);
   }

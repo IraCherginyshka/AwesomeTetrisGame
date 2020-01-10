@@ -23,12 +23,47 @@
     }
     &--radio {
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      flex-direction: column;
+      text-align: center;
+
       & label {
-        width: 7rem;
-        text-align: left;
+        padding: 1rem;
+        margin: 0.1rem;
+        border: $primary-border;
+        border-radius: $border-radius;
+        transition: border-color 0.3s ease-out;
+
+        &:hover {
+          border: 1.5px solid $secondary-color;
+        }
       }
+    }
+
+    &--avatar {
+      justify-content: center;
+
+      & label {
+        padding: 1rem;
+        margin: 0.1rem;
+        border: $primary-border;
+        border-radius: $border-radius;
+        transition: border-color 0.3s ease-out;
+
+        &:hover {
+          border: 1.5px solid $secondary-color;
+        }
+      }
+    }
+  }
+
+  & [type='radio'] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + label {
+      border: 1.5px solid $secondary-color;
     }
   }
 
@@ -81,5 +116,10 @@
       cursor: no-drop;
       color: $service-color;
     }
+  }
+
+  & .icon {
+    max-width: $max-width-icon;
+    margin: 0 1rem;
   }
 }

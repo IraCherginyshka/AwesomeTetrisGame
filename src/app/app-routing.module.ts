@@ -5,12 +5,14 @@ import { GameControlOptionComponent } from './components/game-control-option/gam
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameMainComponent } from './components/game-main/game-main.component';
 import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
+import { PlayerProfileComponent } from './components/player-profile/player-profile.component';
 
 const routes: Routes = [
   { path: 'option', component: GameControlOptionComponent },
   { path: 'leaderboard', component: GameLeaderboardComponent },
   { path: 'game', component: GameMainComponent },
   { path: 'login', component: GameLoginFormComponent },
+  { path: 'profile', component: PlayerProfileComponent },
   { path: '**', redirectTo: '/game', pathMatch: 'full' },
 ];
 
