@@ -74,12 +74,12 @@ export class GameControlOptionComponent implements OnInit {
     this.isSetMode = true;
     this.activeField = control;
   }
-
   public saveControls(): void {
-    if (JSON.stringify(this.controls) !== JSON.stringify(this.defaultControls)) {
+    if (!this.isEqualControls()) {
       localStorage.setItem(LocalStorage.CONTROLS, JSON.stringify(this.controls));
       this.toastrService.success('You set custom controls');
     } else {
+      localStorage.removeItem(LocalStorage.CONTROLS);
       this.toastrService.error('You set default controls', '', {
         timeOut: 3000,
       });
@@ -99,5 +99,11 @@ export class GameControlOptionComponent implements OnInit {
     };
 
     this.toastrService.success('You set default controls');
+  }
+
+  private isEqualControls(): boolean {
+    return Object.keys(this.controls).every(
+      (key) => `${this.controls[key]}` === `${this.defaultControls[key]}`,
+    );
   }
 }
