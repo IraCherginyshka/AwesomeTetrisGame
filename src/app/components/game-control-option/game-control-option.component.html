@@ -1,3 +1,109 @@
-<div class="container main center">
-  <p>Option</p>
+<div class="container main ">
+  <div class="option">
+    <section class="option__rules">
+      <p class="option__title">how to play</p>
+      <div class="option__keyboard-wrap">
+        <div class="option__key">{{ defaultSettings.RESET }}</div>
+        <span class="option__label">{{ controlsEnum.RESET }}</span>
+
+        <div class="option__key">{{ defaultSettings.PAUSE }}</div>
+        <span class="option__label">{{ controlsEnum.PAUSE }}</span>
+
+        <div class="option__key--enter">
+          <span class="option__label">{{ controlsEnum.PLAY }}</span>
+          <div class="option__key">{{ defaultSettings.PLAY }}</div>
+        </div>
+
+        <div class="option__keyboard-move">
+          <p class="option__label">{{ controlsEnum.ROTATE }}</p>
+          <div class="option__key">&#8593;</div>
+          <br />
+          <div class="option__key">&#8592;</div>
+          <div class="option__key">&#8595;</div>
+          <div class="option__key">&#8594;</div>
+          <br />
+          <span class="option__label option__label--move">move {{ controlsEnum.LEFT }}</span>
+          <span class="option__label option__label--move">{{ controlsEnum.DROP }}</span>
+          <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
+        </div>
+      </div>
+      <button class="game-button game-button--option" (click)="backToDefaultControls()">
+        use default controls
+      </button>
+    </section>
+
+    <section class="option__rules option__rules--custom">
+      <p class="option__title">you can customize keyboard controls in this section</p>
+      <div class="option__keyboard-wrap">
+        <div
+          [ngClass]="{ 'option__key--active': activeField === controlsEnum.RESET }"
+          (click)="setControl(controlsEnum.RESET)"
+          class="option__key"
+        >
+          {{ controls[controlsEnum.RESET] }}
+        </div>
+        <span class="option__label">{{ controlsEnum.RESET }}</span>
+
+        <div
+          [ngClass]="{ 'option__key--active': activeField === controlsEnum.PAUSE }"
+          (click)="setControl(controlsEnum.PAUSE)"
+          class="option__key"
+        >
+          {{ controls[controlsEnum.PAUSE] }}
+        </div>
+        <span class="option__label">{{ controlsEnum.PAUSE }}</span>
+
+        <div class="option__key--enter">
+          <span class="option__label">{{ controlsEnum.PLAY }}</span>
+          <div
+            [ngClass]="{ 'option__key--active': activeField === controlsEnum.PLAY }"
+            (click)="setControl(controlsEnum.PLAY)"
+            class="option__key"
+          >
+            {{ controls[controlsEnum.PLAY] }}
+          </div>
+        </div>
+
+        <div class="option__keyboard-move">
+          <p class="option__label">{{ controlsEnum.ROTATE }}</p>
+          <div
+            [ngClass]="{ 'option__key--active': activeField === controlsEnum.ROTATE }"
+            (click)="setControl(controlsEnum.ROTATE)"
+            class="option__key"
+          >
+            {{ controls[controlsEnum.ROTATE] }}
+          </div>
+          <br />
+          <div
+            [ngClass]="{ 'option__key--active': activeField === controlsEnum.LEFT }"
+            (click)="setControl(controlsEnum.LEFT)"
+            class="option__key"
+          >
+            {{ controls[controlsEnum.LEFT] }}
+          </div>
+          <div
+            [ngClass]="{ 'option__key--active': activeField === controlsEnum.DROP }"
+            (click)="setControl(controlsEnum.DROP)"
+            class="option__key"
+          >
+            {{ controls[controlsEnum.DROP] }}
+          </div>
+          <div
+            [ngClass]="{ 'option__key--active': activeField === controlsEnum.RIGHT }"
+            (click)="setControl(controlsEnum.RIGHT)"
+            class="option__key"
+          >
+            {{ controls[controlsEnum.RIGHT] }}
+          </div>
+          <br />
+          <span class="option__label option__label--move">move {{ controlsEnum.LEFT }}</span>
+          <span class="option__label option__label--move">{{ controlsEnum.DROP }}</span>
+          <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
+        </div>
+      </div>
+      <button class="game-button game-button--option" type="button" (click)="saveControls()">
+        set my controls
+      </button>
+    </section>
+  </div>
 </div>

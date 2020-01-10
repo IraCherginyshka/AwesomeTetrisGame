@@ -21,11 +21,13 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier', 'eslint-plugin-html', 'html'],
   rules: {
+    'import/extensions': 0,
     'no-unused-vars': 2,
     'prettier/prettier': 'error',
     'global-require': 0,
     'linebreak-style': 0,
     'no-plusplus': 0,
+    'no-underscore-dangle': 0,
     'object-curly-newline': [
       'error',
       {

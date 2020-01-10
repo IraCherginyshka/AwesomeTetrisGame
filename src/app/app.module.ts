@@ -1,7 +1,11 @@
+import { ToastContainerModule, ToastrModule } from 'ngx-toastr';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { AuthInterceptor } from './services/authconfig.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameHeaderComponent } from './components/game-header/game-header.component';
@@ -14,14 +18,9 @@ import { GameControlOptionComponent } from './components/game-control-option/gam
 import { GameLeaderboardComponent } from './components/game-leaderboard/game-leaderboard.component';
 import { GameLoaderComponent } from './components/game-loader/game-loader.component';
 import { GameNextFigureComponent } from './components/game-next-figure/game-next-figure.component';
-
-const appRouter: Routes = [
-  { path: 'option', component: GameControlOptionComponent },
-  { path: 'leaderboard', component: GameLeaderboardComponent },
-  { path: 'game', component: GameMainComponent },
-  { path: '', redirectTo: '/game', pathMatch: 'full' },
-  { path: '**', redirectTo: '/game', pathMatch: 'full' },
-];
+import { GameLoginFormComponent } from './components/game-login-form/game-login-form.component';
+import { PlayerProfileComponent } from './components/player-profile/player-profile.component';
+import { PlayerProfileHeaderComponent } from './components/player-profile-header/player-profile-header.component';
 
 @NgModule({
   declarations: [
@@ -36,9 +35,30 @@ const appRouter: Routes = [
     GameLeaderboardComponent,
     GameLoaderComponent,
     GameNextFigureComponent,
+    GameLoginFormComponent,
+    PlayerProfileComponent,
+    PlayerProfileHeaderComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, RouterModule.forRoot(appRouter)],
-  providers: [],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
+    ToastContainerModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

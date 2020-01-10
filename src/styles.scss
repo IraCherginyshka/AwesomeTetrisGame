@@ -27,13 +27,46 @@ button {
 }
 
 .main {
-  padding-top: $primary-indent;
+  padding: $primary-indent 0 5rem 0;
   min-height: $min-height-main;
+  user-select: none;
 }
 
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5rem;
+}
+
+.game-button {
+  background: none;
+  outline: none;
+  border: $hover-border-controls;
+  border-radius: $border-radius;
+  width: $controls-button-width;
+  line-height: $controls-button-height;
+  margin: 1rem;
+  font-size: inherit;
+  text-transform: inherit;
+  font-family: inherit;
+  color: $default-color;
+  transition: 0.3s ease-out;
+}
+
+.ngx-toastr {
+  background-color: #030303;
+  pointer-events: auto;
+  text-transform: uppercase;
+}
+.toast-success {
+  background-color: rgba($figure-color-fourth, 0.7) !important;
+}
+.toast-error {
+  background-color: rgba($figure-color-second, 0.7) !important;
+}
+.toast-info {
+  background-color: rgba($figure-color-seventh, 0.7) !important;
+}
+.toast-warning {
+  background-color: rgba($figure-color-sixth, 0.7) !important;
 }

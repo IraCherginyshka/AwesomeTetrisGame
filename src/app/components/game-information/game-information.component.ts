@@ -1,46 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
+
 import { GameService } from '../../services/game.service';
-import {
-  DEFAULT_LINE_SCORE,
-  DEFAULT_STEP,
-  GAME_LEVEL,
-} from '../../constants/game-information.const';
+import { GameStatsObject } from '../../interfaces/game-stats.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-information',
   templateUrl: './game-information.component.html',
   styleUrls: ['./game-information.component.scss'],
 })
-export class GameInformationComponent implements OnInit, OnDestroy {
-  public numberLines: number;
-  public currentScore: number;
-  public currentLevel: number;
-  private subscriptionLines: Subscription;
+export class GameInformationComponent {
+  public gameStats$: Observable<GameStatsObject>;
+  public isCustomControls = !!localStorage.getItem(LocalStorage.CONTROLS);
 
-  constructor(private gameService: GameService) {}
-
-  public static calculateScore(lines: number, level: number): number {
-    return (
-      (lines / 2) *
-      (2 * (DEFAULT_LINE_SCORE + DEFAULT_LINE_SCORE * level) + DEFAULT_STEP * (lines - 1))
-    );
-  }
-  ngOnInit(): void {
-    this.numberLines = 0;
-    this.currentScore = 0;
-    this.currentLevel = GAME_LEVEL;
-    this.subscriptionLines = this.gameService
-      .onUpdateNumberLines()
-      .subscribe(({ lines, score }) => {
-        this.numberLines = lines ? this.numberLines + lines : lines;
-        this.currentScore = score
-          ? this.currentScore + GameInformationComponent.calculateScore(lines, this.currentLevel)
-          : score;
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionLines.unsubscribe();
+  constructor(private gameService: GameService) {
+    this.gameStats$ = this.gameService.onUpdateGameInformation();
   }
 }

@@ -1,14 +1,24 @@
 <div class="information">
   <div class="information-block">
     <p class="information-label">level</p>
-    <div class="information-field">{{ currentLevel }}</div>
+    <div class="information-field">{{ (gameStats$ | async).level }}</div>
   </div>
   <div class="information-block">
     <p class="information-label">score</p>
-    <div class="information-field">{{ currentScore }}</div>
+    <div class="information-field">{{ (gameStats$ | async).score }}</div>
   </div>
   <div class="information-block">
     <p class="information-label">lines</p>
-    <div class="information-field">{{ numberLines }}</div>
+    <div class="information-field">{{ (gameStats$ | async).lines }}</div>
+  </div>
+  <div class="information-block--controls">
+    <p class="information-label">
+      {{ isCustomControls ? 'use custom controls' : 'use default controls' }}
+    </p>
+    <a class="header-link" routerLink="/option" routerLinkActive="active-link">
+      <button class="game-button">
+        change
+      </button>
+    </a>
   </div>
 </div>

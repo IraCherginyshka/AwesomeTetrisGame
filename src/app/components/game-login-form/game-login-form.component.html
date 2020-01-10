@@ -1,0 +1,291 @@
+<div class="container main center login">
+  <div>
+    <form
+      class="login__form"
+      [formGroup]="logInForm"
+      (ngSubmit)="onLogin()"
+      *ngIf="!isSignUpForm; else registrationForm"
+    >
+      <div class="login__group">
+        <label for="username" class="login__label">Name*</label>
+        <input
+          class="login__input"
+          type="text"
+          id="username"
+          name="username"
+          formControlName="username"
+        />
+        <span
+          class="login__text login__text--warning"
+          *ngIf="logInForm.get('username').invalid && logInForm.get('username').touched"
+          >Please enter the valid name
+        </span>
+      </div>
+
+      <div class="login__group">
+        <label for="password" class="login__label">Password*</label>
+        <input
+          class="login__input"
+          type="password"
+          id="password"
+          name="password"
+          formControlName="password"
+        />
+        <span
+          class="login__text login__text--warning"
+          *ngIf="logInForm.get('password').invalid && logInForm.get('password').touched"
+          >Please enter the valid password
+        </span>
+      </div>
+      <button
+        class="game-button login__button"
+        type="submit"
+        [disabled]="!logInForm.valid"
+        [title]="!logInForm.valid ? 'Please complete all required fields' : 'Log In'"
+      >
+        Log In
+      </button>
+      <br />
+      <span class="login__text">Don't have an account? </span>
+      <a [routerLink]="" [queryParams]="{ form: 'registration' }"
+        ><button class="game-button login__button" type="button">
+          Sign up
+        </button></a
+      >
+    </form>
+
+    <ng-template #registrationForm>
+      <form class="login__form" [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
+        <div formGroupName="userInformation">
+          <div class="login__group">
+            <label for="usernameSignUp" class="login__label">Name*</label>
+            <input
+              class="login__input"
+              type="text"
+              id="usernameSignUp"
+              name="username"
+              formControlName="username"
+              placeholder="Create a unique name"
+            />
+            <span
+              class="login__text login__text--warning"
+              *ngIf="
+                signUpForm.get('userInformation.username').invalid &&
+                signUpForm.get('userInformation.username').touched
+              "
+              >Please enter the valid name
+            </span>
+          </div>
+
+          <div class="login__group">
+            <label for="passwordSignUp" class="login__label">Password*</label>
+            <input
+              class="login__input"
+              type="password"
+              id="passwordSignUp"
+              name="password"
+              formControlName="password"
+              placeholder="Create a password"
+            />
+            <span
+              class="login__text login__text--warning"
+              *ngIf="
+                signUpForm.get('userInformation.password').invalid &&
+                signUpForm.get('userInformation.password').touched
+              "
+              >Password must contain at least one number and one uppercase and lowercase letter, and
+              at least 8 or more characters
+            </span>
+          </div>
+
+          <div class="login__group">
+            <label for="confirmPassword" class="login__label">Confirm Password*</label>
+            <input
+              class="login__input"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              formControlName="confirmPassword"
+              placeholder="Confirm a password"
+            />
+            <span
+              class="login__text login__text--warning"
+              *ngIf="
+                (signUpForm.get('userInformation.confirmPassword').invalid &&
+                  signUpForm.get('userInformation.confirmPassword').touched) ||
+                (signUpForm.get('userInformation.confirmPassword').touched &&
+                  signUpForm.get('userInformation.confirmPassword').value !==
+                    signUpForm.get('userInformation.password').value)
+              "
+              >Please enter the same password
+            </span>
+          </div>
+        </div>
+
+        <div formGroupName="playerInformation">
+          <div class="login__group--gender">
+            <div class="login__group--radio" *ngFor="let gender of genders">
+              <input
+                class="login__input"
+                type="radio"
+                [id]="gender"
+                [value]="gender"
+                formControlName="gender"
+              />
+              <label [for]="gender">{{ gender }}</label>
+            </div>
+          </div>
+
+          <div class="login__group">
+            <label for="dateOfBirth" class="login__label">Date of birth*</label>
+            <input
+              class="login__input"
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              formControlName="dateOfBirth"
+            />
+            <span
+              class="login__text login__text--warning"
+              *ngIf="
+                signUpForm.get('playerInformation.dateOfBirth').invalid &&
+                signUpForm.get('playerInformation.dateOfBirth').touched &&
+                signUpForm.get('playerInformation.dateOfBirth').errors['dateOfBirthIsForbidden']
+              "
+              >Please enter your birth date (you should be over 6 years old to play this game)
+            </span>
+          </div>
+
+          <div class="login__group">
+            <label for="country" class="login__label">country</label>
+            <input
+              class="login__input"
+              type="text"
+              id="country"
+              name="country"
+              formControlName="country"
+              placeholder="Enter your country"
+            />
+            <span
+              class="login__text login__text--warning"
+              *ngIf="
+                signUpForm.get('playerInformation.country').invalid &&
+                signUpForm.get('playerInformation.country').touched
+              "
+              >Please enter your country
+            </span>
+          </div>
+
+          <div class="login__group login__group--avatar">
+            <input
+              id="america"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="America.ico"
+            />
+            <label for="america" class="login__label">
+              <img class="icon" src="./../../../assets/images/America.ico" alt="icon" />
+            </label>
+
+            <input
+              id="captain"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Captain-America.ico"
+            />
+            <label for="captain" class="login__label">
+              <img class="icon" src="./../../../assets/images/Captain-America.ico" alt="icon" />
+            </label>
+
+            <input
+              id="ironman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Ironman.ico"
+            />
+            <label for="ironman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Ironman.ico" alt="icon" />
+            </label>
+
+            <input
+              id="flying"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Ironman-Flying.ico"
+            />
+            <label class="login__label">
+              <img
+                id="flying"
+                class="icon"
+                src="./../../../assets/images/Ironman-Flying.ico"
+                alt="icon"
+              />
+            </label>
+
+            <input
+              id="joker"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Joker.ico"
+            />
+            <label for="joker" class="login__label">
+              <img class="icon" src="./../../../assets/images/Joker.ico" alt="icon" />
+            </label>
+
+            <input id="mask" type="radio" name="avatar" formControlName="avatar" value="Mask.ico" />
+            <label for="mask" class="login__label">
+              <img class="icon" src="./../../../assets/images/Mask.ico" alt="icon" />
+            </label>
+
+            <input
+              id="spiderman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderman.ico"
+            />
+            <label for="spiderman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderman.ico" alt="icon" />
+            </label>
+
+            <input
+              id="black"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderman-Black.ico"
+            />
+            <label for="black" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderman-Black.ico" alt="icon" />
+            </label>
+
+            <input
+              id="spiderwoman"
+              type="radio"
+              name="avatar"
+              formControlName="avatar"
+              value="Spiderwoman.ico"
+            />
+            <label for="spiderwoman" class="login__label">
+              <img class="icon" src="./../../../assets/images/Spiderwoman.ico" alt="icon" />
+            </label>
+          </div>
+        </div>
+
+        <button
+          class="game-button login__button"
+          type="submit"
+          [disabled]="!signUpForm.valid"
+          [title]="!signUpForm.valid ? 'Please complete all required fields' : 'Create an account'"
+        >
+          Sign Up
+        </button>
+      </form>
+    </ng-template>
+  </div>
+</div>

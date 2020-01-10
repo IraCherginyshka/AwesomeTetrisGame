@@ -1,9 +1,11 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
 import { BoardModel } from '../../models/board.model';
 import { GameService } from '../../services/game.service';
 import { BLOCK_SIZE } from '../../constants/board-component.const';
 import { FiguresColors } from '../../enums/figures-colors.enum';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-next-figure',
@@ -14,7 +16,9 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   @ViewChild('nextCanvas', { static: true }) private nextCanvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
   private nextFigure: FiguresColors[][];
+  private isLostGame = false;
   private subscriptionNext: Subscription;
+  private subscriptionLost: Subscription;
 
   constructor(private gameService: GameService) {}
 
@@ -25,11 +29,25 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
       .subscribe(({ randomNextFigure }) => {
         this.setInitialState(randomNextFigure);
       });
-    this.gameService.updateFigures();
+
+    this.subscriptionLost = this.gameService.onLostGame().subscribe(() => {
+      this.isLostGame = true;
+    });
+
+    if (!localStorage.getItem(LocalStorage.GAME_STATS)) {
+      this.gameService.updateFigures();
+    }
+
+    if (localStorage.getItem(LocalStorage.NEXT_FIGURE)) {
+      this.setInitialState(JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE)));
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptionNext.unsubscribe();
+    if (!this.isLostGame) {
+      localStorage.setItem(LocalStorage.NEXT_FIGURE, JSON.stringify(this.nextFigure));
+    }
   }
 
   private setInitialState(nextFigure: FiguresColors[][]): void {
