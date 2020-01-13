@@ -16,9 +16,9 @@ export class GameControlOptionComponent implements OnInit {
   public controls: ControlsStateObject;
   public readonly controlsEnum = ControlsEnum;
   public readonly defaultSettings = DefaultSettings;
+  public activeField: string;
 
   private isSetMode = false;
-  private activeField: string;
   private defaultControls: ControlsStateObject;
 
   constructor(private toastrService: ToastrService) {}
