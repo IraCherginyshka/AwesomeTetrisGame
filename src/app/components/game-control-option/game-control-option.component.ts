@@ -74,6 +74,7 @@ export class GameControlOptionComponent implements OnInit {
     this.isSetMode = true;
     this.activeField = control;
   }
+
   public saveControls(): void {
     if (!this.isEqualControls()) {
       localStorage.setItem(LocalStorage.CONTROLS, JSON.stringify(this.controls));
@@ -101,7 +102,7 @@ export class GameControlOptionComponent implements OnInit {
     this.toastrService.success('You set default controls');
   }
 
-  private isEqualControls(): boolean {
+  public isEqualControls(): boolean {
     return Object.keys(this.controls).every(
       (key) => `${this.controls[key]}` === `${this.defaultControls[key]}`,
     );
