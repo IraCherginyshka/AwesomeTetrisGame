@@ -22,7 +22,7 @@ jobs:
     - name: npm install, build
       run: |
         npm ci
-        npm run build-release
+        npm run build
     - name: copy-files
       run:  cp -r ./dist ./server
 
