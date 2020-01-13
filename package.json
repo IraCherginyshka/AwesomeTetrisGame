@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod && copyfiles \"./dist/**/*\"  \"./server/\" ",
+    "build": "ng build --prod",
     "test": "ng test",
     "eslint": "eslint --ext .html,.js,.ts, ./src"
   },
