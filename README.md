@@ -39,16 +39,19 @@ $ npm run eslint
   },
 ```
 
-##Build
+## Build
 
-Checkout release branch => Run ng build to build the project.
+`Push` all changes in branch `master`;
 
-The build artifacts will be stored in the dist/ directory.
-
-This script involves the --prod flag for a production build and command for copy `dist/` directory to the `server/` directory
+`auto` steps: 
+* checkout on `pr-pages` branch
+* run "ng build --prod",
+* copy `dist/` directory to the `server/` directory
+* delete all unnecessary files and directories
 
 OpenShift platform was chosen to deploy the project.
-It subscribes to changes in the `release` branch and after 5-6 minutes automatically adds all changes to the site using hooks.
+
+It subscribes to changes in the `pr-pages` branch and after 5-6 minutes automatically adds all changes to the site using hooks.
 
 ## Project structure
 
