@@ -43,11 +43,12 @@ $ npm run eslint
 
 `Push` all changes in branch `master`;
 
-`auto` steps: 
-* checkout on `pr-pages` branch
-* run "ng build --prod",
-* copy `dist/` directory to the `server/` directory
-* delete all unnecessary files and directories
+`auto` steps:
+
+- checkout on `pr-pages` branch
+- run "ng build --prod",
+- copy `dist/` directory to the `server/` directory
+- delete all unnecessary files and directories
 
 OpenShift platform was chosen to deploy the project.
 
