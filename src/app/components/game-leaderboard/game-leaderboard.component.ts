@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 
 import { GameResult } from '../../models/game-result.model';
@@ -24,20 +25,24 @@ export class GameLeaderboardComponent implements OnInit {
   ngOnInit(): void {
     this.gameService.getPlayerGameResult().subscribe((results) => {
       this.gameResults = results.slice(0, LEADERBOARD_MAX_WIDTH);
-      this.currentPlayerPlace = results.findIndex(
-        (player) => player.username === this.currentPlayerName,
-      );
-      this.isCurrentPlayerNotInTop = this.currentPlayerPlace > LEADERBOARD_MAX_WIDTH;
-      if (this.isCurrentPlayerNotInTop) {
-        this.currentPlayerNotInTop = results[this.currentPlayerPlace];
+
+      if (this.currentPlayerName) {
+        this.currentPlayerPlace = results.findIndex(
+          (player) => player.username === this.currentPlayerName,
+        );
+        this.isCurrentPlayerNotInTop = this.currentPlayerPlace > LEADERBOARD_MAX_WIDTH;
+        if (this.isCurrentPlayerNotInTop) {
+          this.currentPlayerNotInTop = results[this.currentPlayerPlace];
+        }
       }
     });
 
-    this.userService.getAuthListener().subscribe((user) => {
-      if (!user) {
+    this.userService
+      .getAuthListener()
+      .pipe(filter((user) => !user))
+      .subscribe(() => {
         this.isCurrentPlayerNotInTop = false;
         this.currentPlayerName = null;
-      }
-    });
+      });
   }
 }
