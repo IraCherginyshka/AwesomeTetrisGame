@@ -47,14 +47,18 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionNext: Subscription;
   private subscriptionLevel: Subscription;
 
-  constructor(private gameService: GameService, private toastrService: ToastrService) {}
+  constructor(private gameService: GameService, private toastrService: ToastrService) {
+    this.currentFigure = FigureModel.getRandomFigure();
+  }
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
-    if (localStorage.getItem(LocalStorage.GAME_STATS)) {
+    const saveGameStats = localStorage.getItem(LocalStorage.GAME_STATS);
+
+    if (saveGameStats) {
       const {
         boardMatrix,
         currentFigure,
@@ -62,7 +66,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         figurePosition,
         duration,
         lineWithFigure,
-      } = JSON.parse(localStorage.getItem(LocalStorage.GAME_STATS));
+      } = JSON.parse(saveGameStats);
       this.isPlaying = false;
       this.boardMatrix = boardMatrix;
       this.currentFigure = currentFigure;
@@ -201,14 +205,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private redrawBoard(): void {
     const newFigure = new FigureModel();
     const newBoard = new BoardModel(this.ctx, false);
-
     this.currentMatrix = newFigure.showFigure(
       this.lineWithFigure,
       this.currentFigure,
       this.boardMatrix,
       this.figurePosition,
     );
-
     newBoard.drawBoard(this.currentMatrix);
   }
 

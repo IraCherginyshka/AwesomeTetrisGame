@@ -54,6 +54,7 @@ describe('GameLeaderboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GameLeaderboardComponent);
     component = fixture.componentInstance;
+    localStorage.clear();
     fixture.detectChanges();
   });
 

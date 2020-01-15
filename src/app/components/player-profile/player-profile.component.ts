@@ -45,7 +45,9 @@ export class PlayerProfileComponent implements OnInit {
         this.currentUserResults = results;
       });
 
-    this.userAge = moment().diff(this.currentUser.dateOfBirth, 'years');
+    if (this.currentUser) {
+      this.userAge = moment().diff(this.currentUser.dateOfBirth, 'years');
+    }
   }
 
   onLogout(): void {

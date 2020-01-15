@@ -1,12 +1,30 @@
+import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
+import { GameHeaderComponent } from './components/game-header/game-header.component';
+import { PlayerProfileHeaderComponent } from './components/player-profile-header/player-profile-header.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AppComponent],
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+      ],
+      declarations: [
+        AppComponent,
+        GameHeaderComponent,
+        PlayerProfileHeaderComponent,
+        ToastContainerDirective,
+      ],
+      providers: [RouterModule],
     }).compileComponents();
   }));
 
@@ -20,14 +38,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('AwesomeTetrisGame');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain(
-      'AwesomeTetrisGameapp is running!',
-    );
   });
 });
