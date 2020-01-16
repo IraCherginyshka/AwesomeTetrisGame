@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserService } from '../../services/user.service';
-import { LocalStorage } from '../../enums/local-storage.enum';
 import { GameService } from '../../services/game.service';
 import { GameResult } from '../../models/game-result.model';
 import { LEADERBOARD_MAX_WIDTH } from '../../constants/game-information.const';
@@ -30,7 +29,7 @@ export class PlayerProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER));
+    this.currentUser = JSON.parse(this.userService.getCurrentUser());
 
     this.gameService
       .getPlayerGameResult()

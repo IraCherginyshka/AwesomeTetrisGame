@@ -25,6 +25,16 @@ describe('GameHeaderComponent', () => {
             getAuthListener(): Observable<{}> {
               return of({});
             },
+            getCurrentUser(): string {
+              return JSON.stringify({
+                username: 'TestName',
+                password: 'password',
+                gender: 'test',
+                dateOfBirth: '2000-01-01',
+                country: 'test country',
+                avatar: 'testURL',
+              });
+            },
           },
         }),
       ],

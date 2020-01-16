@@ -21,12 +21,37 @@ describe('PlayerProfileComponent', () => {
       providers: [
         MockProvider({
           provider: UserService,
+          overwrite: {
+            getCurrentUser(): string {
+              return JSON.stringify({
+                username: 'TestName',
+                password: 'password',
+                gender: 'test',
+                dateOfBirth: '2000-01-01',
+                country: 'test country',
+                avatar: 'testURL',
+              });
+            },
+          },
         }),
         MockProvider({
           provider: GameService,
           overwrite: {
             getPlayerGameResult(): Observable<GameResult[]> {
-              return of([]);
+              return of([
+                { username: 'Test', lines: 3, score: 7, level: 1 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'Test2', lines: 32, score: 72, level: 16 },
+                { username: 'TestName', lines: 32, score: 72, level: 17 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'Test2', lines: 32, score: 72, level: 10 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'TestName', lines: 32, score: 72, level: 13 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'Test2', lines: 32, score: 72, level: 12 },
+                { username: 'TestName', lines: 32, score: 72, level: 20 },
+              ]);
             },
           },
         }),
@@ -51,17 +76,23 @@ describe('PlayerProfileComponent', () => {
       username: 'TestName',
       password: 'password',
       gender: 'test',
-      dateOfBirth: 'testDate',
+      dateOfBirth: '2000-01-01',
       country: 'test country',
       avatar: 'testURL',
     };
 
-    spyOn(localStorage, 'getItem').and.callFake(() => {
-      return JSON.stringify(user);
-    });
+    component.ngOnInit();
+    expect(component.currentUser).toEqual(user);
+  });
+
+  it('should filter results by current user name', () => {
+    const filterArray = [
+      { username: 'TestName', lines: 32, score: 72, level: 17 },
+      { username: 'TestName', lines: 32, score: 72, level: 13 },
+      { username: 'TestName', lines: 32, score: 72, level: 20 },
+    ];
 
     component.ngOnInit();
-    expect(localStorage.getItem).toHaveBeenCalled();
-    expect(component.currentUser).toEqual(user);
+    expect(component.currentUserResults).toEqual(filterArray);
   });
 });
