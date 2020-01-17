@@ -1,6 +1,6 @@
-import { MockProvider } from 'ngx-mock-provider';
-import { ToastrService } from 'ngx-toastr';
+import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GameControlOptionComponent } from './game-control-option.component';
 import { ControlsEnum } from '../../enums/controls.enum';
@@ -12,12 +12,9 @@ describe('GameControlOptionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GameControlOptionComponent],
-      providers: [
-        MockProvider({
-          provider: ToastrService,
-        }),
-      ],
+      imports: [BrowserAnimationsModule, ToastrModule.forRoot()],
+      declarations: [GameControlOptionComponent, ToastContainerDirective],
+      providers: [],
     }).compileComponents();
   }));
 
@@ -65,5 +62,44 @@ describe('GameControlOptionComponent', () => {
     component.ngOnInit();
     expect(window.localStorage.getItem).toHaveBeenCalled();
     expect(component.controls).toEqual(customControls);
+  });
+
+  it('should call the saveControls function by clicking on button', () => {
+    spyOn(component, 'saveControls').and.callThrough();
+
+    const button = fixture.debugElement.nativeElement.querySelector('#custom');
+    button.click();
+
+    expect(component.saveControls).toHaveBeenCalled();
+  });
+
+  it('should call the saveControls function by clicking on button Default and set default value to controls', () => {
+    spyOn(component, 'backToDefaultControls').and.callThrough();
+
+    const defaultControls = {
+      [ControlsEnum.RESET]: DefaultSettings.RESET,
+      [ControlsEnum.PAUSE]: DefaultSettings.PAUSE,
+      [ControlsEnum.PLAY]: DefaultSettings.PLAY,
+      [ControlsEnum.ROTATE]: DefaultSettings.ROTATE,
+      [ControlsEnum.LEFT]: DefaultSettings.LEFT,
+      [ControlsEnum.DROP]: DefaultSettings.DROP,
+      [ControlsEnum.RIGHT]: DefaultSettings.RIGHT,
+    };
+
+    const button = fixture.debugElement.nativeElement.querySelector('#default');
+    button.click();
+
+    expect(component.backToDefaultControls).toHaveBeenCalled();
+    expect(component.controls).toEqual(defaultControls);
+  });
+
+  it('should call the setControl function by clicking on block and set controls type to activeField', () => {
+    spyOn(component, 'setControl').and.callThrough();
+
+    const block = fixture.debugElement.nativeElement.querySelector('#play');
+    block.click();
+
+    expect(component.setControl).toHaveBeenCalled();
+    expect(component.activeField).toBe('play');
   });
 });
