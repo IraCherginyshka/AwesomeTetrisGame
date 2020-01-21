@@ -1,26 +1,27 @@
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
+import { UserService } from '../../services/user.service';
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
+import { LocalStorage } from '../../enums/local-storage.enum';
 import {
-  QUANTITY_BLOCKS_WIDTH,
-  QUANTITY_BLOCKS_HEIGHT,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  CENTRAL_ITEM,
   ACCELERATION,
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  CENTRAL_ITEM,
   DELAY_DEFAULT,
   DELAY_LEVEL_STEP,
   MAX_SPEED,
+  QUANTITY_BLOCKS_HEIGHT,
+  QUANTITY_BLOCKS_WIDTH,
 } from '../../constants/board-component.const';
-import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-board',
@@ -46,8 +47,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionMove: Subscription;
   private subscriptionNext: Subscription;
   private subscriptionLevel: Subscription;
+  private subscriptionLogout: Subscription;
 
-  constructor(private gameService: GameService, private toastrService: ToastrService) {}
+  constructor(
+    private gameService: GameService,
+    private toastrService: ToastrService,
+    private userService: UserService,
+  ) {}
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
@@ -73,13 +79,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       this.textStateOverlay = GameState.PAUSE;
       this.redrawBoard();
     } else {
-      this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
-        QUANTITY_BLOCKS_WIDTH,
-        QUANTITY_BLOCKS_HEIGHT,
-      );
-      this.duration = DELAY_DEFAULT;
-      this.currentLevel = 1;
-      this.gameService.updateFigures();
+      this.setInitialComponentState();
     }
     this.isLostGame = false;
     this.isPlaying = undefined;
@@ -100,6 +100,16 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
+      }
+    });
+
+    this.subscriptionLogout = this.userService.getAuthListener().subscribe((user) => {
+      if (!user) {
+        this.stopGame();
+        this.setInitialComponentState();
+        this.redrawBoard();
+        this.gameService.setGameState(GameState.PAUSE);
+        this.gameService.setInitialInformation();
       }
     });
 
@@ -216,6 +226,16 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
     this.duration = DELAY_DEFAULT;
+  }
+
+  private setInitialComponentState(): void {
+    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
+    this.duration = DELAY_DEFAULT;
+    this.currentLevel = 1;
+    this.gameService.updateFigures();
   }
 
   private playGame(): void {

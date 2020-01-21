@@ -28,6 +28,5 @@ export class PlayerProfileHeaderComponent implements OnInit {
   onLogout(): void {
     this.toastrService.warning('You have logged out!');
     this.userService.logoutUser().subscribe();
-    this.router.navigate(['/login']);
   }
 }
