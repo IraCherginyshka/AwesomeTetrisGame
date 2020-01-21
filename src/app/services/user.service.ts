@@ -15,7 +15,7 @@ import { LocalStorage } from '../enums/local-storage.enum';
 export class UserService {
   private endpoint = environment.url;
   private token: string;
-  private authListener = new BehaviorSubject<PlayerData>(
+  private authListener = new BehaviorSubject<PlayerData | string>(
     JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER)),
   );
 
@@ -51,7 +51,7 @@ export class UserService {
     localStorage.removeItem(LocalStorage.ACCESS_USER);
     localStorage.removeItem(LocalStorage.USER_NAME);
     this.token = null;
-    this.authListener.next(null);
+    this.authListener.next('logout');
     return this.http.get(`${this.endpoint}/logout`);
   }
 

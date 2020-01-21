@@ -1,7 +1,7 @@
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { UserService } from '../../services/user.service';
 import { GameService } from '../../services/game.service';
@@ -11,6 +11,7 @@ import { FiguresColors } from '../../enums/figures-colors.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
+import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import {
   ACCELERATION,
   CANVAS_HEIGHT,
@@ -43,6 +44,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
+  private gameInformation: GameStatsObject;
   private subscriptionState: Subscription;
   private subscriptionMove: Subscription;
   private subscriptionNext: Subscription;
@@ -54,6 +56,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     private toastrService: ToastrService,
     private userService: UserService,
   ) {}
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
+    event.preventDefault();
+    this.detectDestruction();
+  }
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
@@ -96,22 +103,23 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
       if (gameState === GameState.PAUSE) {
         this.stopGame();
-        this.saveGameStats();
+        this.saveGameStatsAndInformation();
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
       }
     });
 
-    this.subscriptionLogout = this.userService.getAuthListener().subscribe((user) => {
-      if (!user) {
+    this.subscriptionLogout = this.userService
+      .getAuthListener()
+      .pipe(filter((logout) => logout === 'logout'))
+      .subscribe(() => {
         this.stopGame();
         this.setInitialComponentState();
         this.redrawBoard();
         this.gameService.setGameState(GameState.PAUSE);
         this.gameService.setInitialInformation();
-      }
-    });
+      });
 
     this.subscriptionMove = this.gameService
       .onNextStep()
@@ -157,12 +165,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.setInitialBoardState();
       });
 
-    this.subscriptionLevel = this.gameService
-      .onUpdateGameInformation()
-      .pipe(filter((gameStats) => this.currentLevel !== gameStats.level))
-      .subscribe(({ level }) => {
+    this.subscriptionLevel = this.gameService.onUpdateGameInformation().subscribe((gameStats) => {
+      if (this.currentLevel !== gameStats.level) {
         this.stopGame();
-        this.currentLevel = level;
+        this.currentLevel = gameStats.level;
         this.duration =
           DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
             ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
@@ -170,26 +176,33 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         if (this.isPlaying) {
           this.playGame();
         }
-      });
+      }
+      this.gameInformation = gameStats;
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.isLostGame) {
-      this.setInitialBoardState();
-      this.gameService.setInitialInformation();
-    }
-
-    if (this.isPlaying !== undefined && !this.isLostGame) {
-      this.saveGameStats();
-    }
-    this.stopGame();
+    this.detectDestruction();
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
     this.subscriptionLevel.unsubscribe();
   }
 
-  private saveGameStats(): void {
+  private detectDestruction(): void {
+    if (this.isLostGame) {
+      this.setInitialBoardState();
+      this.gameService.setInitialInformation();
+    }
+
+    if (this.isPlaying !== undefined && !this.isLostGame) {
+      this.saveGameStatsAndInformation();
+      this.gameService.setSavedInformation(this.gameInformation);
+    }
+    this.stopGame();
+  }
+
+  private saveGameStatsAndInformation(): void {
     localStorage.setItem(
       LocalStorage.GAME_STATS,
       JSON.stringify({
@@ -201,6 +214,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         lineWithFigure: this.lineWithFigure - 1 >= 0 ? this.lineWithFigure - 1 : 0,
       }),
     );
+    localStorage.setItem(LocalStorage.GAME_INFORMATION, JSON.stringify(this.gameInformation));
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
@@ -302,6 +316,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     );
     localStorage.removeItem(LocalStorage.GAME_STATS);
     localStorage.removeItem(LocalStorage.NEXT_FIGURE);
+    localStorage.removeItem(LocalStorage.GAME_INFORMATION);
     this.gameService.updateFigures();
     this.gameService.updateFigures();
     this.redrawBoard();
@@ -321,6 +336,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.setInitialBoardState();
     localStorage.removeItem(LocalStorage.GAME_STATS);
     localStorage.removeItem(LocalStorage.NEXT_FIGURE);
+    localStorage.removeItem(LocalStorage.GAME_INFORMATION);
     this.stopGame();
     this.textStateOverlay = GameState.LOST;
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
