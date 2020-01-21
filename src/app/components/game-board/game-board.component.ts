@@ -1,6 +1,6 @@
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { UserService } from '../../services/user.service';
@@ -165,8 +165,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.setInitialBoardState();
       });
 
-    this.subscriptionLevel = this.gameService.onUpdateGameInformation().subscribe((gameStats) => {
-      if (this.currentLevel !== gameStats.level) {
+    this.subscriptionLevel = this.gameService
+      .onUpdateGameInformation()
+      .pipe(
+        tap((gameStats) => {
+          this.gameInformation = gameStats;
+        }),
+        filter((gameStats) => this.currentLevel !== gameStats.level),
+      )
+      .subscribe((gameStats) => {
         this.stopGame();
         this.currentLevel = gameStats.level;
         this.duration =
@@ -176,9 +183,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         if (this.isPlaying) {
           this.playGame();
         }
-      }
-      this.gameInformation = gameStats;
-    });
+      });
   }
 
   ngOnDestroy(): void {
