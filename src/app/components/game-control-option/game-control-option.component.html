@@ -27,7 +27,11 @@
           <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
         </div>
       </div>
-      <button class="game-button game-button--option" (click)="backToDefaultControls()">
+      <button
+        class="game-button game-button--option"
+        id="default"
+        (click)="backToDefaultControls()"
+      >
         use default controls
       </button>
     </section>
@@ -56,6 +60,7 @@
         <div class="option__key--enter">
           <span class="option__label">{{ controlsEnum.PLAY }}</span>
           <div
+            id="play"
             [ngClass]="{ 'option__key--active': activeField === controlsEnum.PLAY }"
             (click)="setControl(controlsEnum.PLAY)"
             class="option__key"
@@ -101,7 +106,12 @@
           <span class="option__label option__label--move">move {{ controlsEnum.RIGHT }}</span>
         </div>
       </div>
-      <button class="game-button game-button--option" type="button" (click)="saveControls()">
+      <button
+        class="game-button game-button--option"
+        id="custom"
+        type="button"
+        (click)="saveControls()"
+      >
         set my controls
       </button>
     </section>

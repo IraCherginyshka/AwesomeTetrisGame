@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserService } from '../../services/user.service';
-import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-player-profile-header',
@@ -17,7 +16,7 @@ export class PlayerProfileHeaderComponent implements OnInit {
   constructor(private userService: UserService, private toastrService: ToastrService) {}
 
   ngOnInit(): void {
-    this.currentUser = JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER));
+    this.currentUser = JSON.parse(this.userService.getCurrentUser());
   }
 
   public onLogout(): void {

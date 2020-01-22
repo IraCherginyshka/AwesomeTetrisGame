@@ -52,7 +52,7 @@ export class UserService {
     localStorage.removeItem(LocalStorage.ACCESS_USER);
     localStorage.removeItem(LocalStorage.USER_NAME);
     this.token = null;
-    this.authListener.next('logout');
+    this.authListener.next(null);
     this.logoutListener.next(true);
     return this.http.get(`${this.endpoint}/logout`);
   }
@@ -69,11 +69,14 @@ export class UserService {
     return localStorage.getItem(LocalStorage.USER_NAME);
   }
 
+  public getCurrentUser(): string {
+    return localStorage.getItem(LocalStorage.ACCESS_USER);
+  }
   public getAuthListener(): Observable<{}> {
     return this.authListener.asObservable();
   }
 
-  public onLogoutListener(): Observable<{}> {
+  public onLogoutListener(): Observable<boolean> {
     return this.logoutListener.asObservable();
   }
 }

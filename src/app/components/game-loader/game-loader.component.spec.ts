@@ -15,6 +15,7 @@ describe('GameLoaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GameLoaderComponent);
     component = fixture.componentInstance;
+    localStorage.clear();
     fixture.detectChanges();
   });
 

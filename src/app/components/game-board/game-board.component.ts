@@ -55,7 +55,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private toastrService: ToastrService,
     private userService: UserService,
-  ) {}
+  ) {
+    this.currentFigure = FigureModel.getRandomFigure();
+  }
 
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
@@ -67,7 +69,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
-    if (localStorage.getItem(LocalStorage.GAME_STATS)) {
+    const saveGameStats = localStorage.getItem(LocalStorage.GAME_STATS);
+
+    if (saveGameStats) {
       const {
         boardMatrix,
         currentFigure,
@@ -75,7 +79,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         figurePosition,
         duration,
         lineWithFigure,
-      } = JSON.parse(localStorage.getItem(LocalStorage.GAME_STATS));
+      } = JSON.parse(saveGameStats);
       this.isPlaying = false;
       this.boardMatrix = boardMatrix;
       this.currentFigure = currentFigure;

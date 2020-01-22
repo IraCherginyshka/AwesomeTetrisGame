@@ -46,9 +46,11 @@ $ npm run eslint
 `auto` steps:
 
 - checkout on `pr-pages` branch
+- run "npm ci"
+- run "npm run eslint" & "npm run test"
 - run "ng build --prod",
 - copy `dist/` directory to the `server/` directory
-- delete all unnecessary files and directories
+- delete all source files and folders that are not required for deployment
 
 OpenShift platform was chosen to deploy the project.
 
