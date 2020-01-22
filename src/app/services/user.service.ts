@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Md5 } from 'ts-md5/dist/md5';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ export class UserService {
   private authListener = new BehaviorSubject<PlayerData | string>(
     JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER)),
   );
+  private logoutListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, public router: Router) {}
 
@@ -52,6 +53,7 @@ export class UserService {
     localStorage.removeItem(LocalStorage.USER_NAME);
     this.token = null;
     this.authListener.next('logout');
+    this.logoutListener.next(true);
     return this.http.get(`${this.endpoint}/logout`);
   }
 
@@ -69,5 +71,9 @@ export class UserService {
 
   public getAuthListener(): Observable<{}> {
     return this.authListener.asObservable();
+  }
+
+  public onLogoutListener(): Observable<{}> {
+    return this.logoutListener.asObservable();
   }
 }

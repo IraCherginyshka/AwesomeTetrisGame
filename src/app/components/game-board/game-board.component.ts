@@ -111,8 +111,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptionLogout = this.userService
-      .getAuthListener()
-      .pipe(filter((action) => action === 'logout'))
+      .onLogoutListener()
+      .pipe(filter((isLogout) => !!isLogout))
       .subscribe(() => {
         this.stopGame();
         this.setInitialComponentState();
