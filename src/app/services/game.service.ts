@@ -35,14 +35,20 @@ export class GameService {
     previousFigure: FiguresColors[][];
     randomNextFigure: FiguresColors[][];
   }>();
-  private numberLinesSubject = new BehaviorSubject({
-    lines: 0,
-    score: 0,
-    level: 1,
-  });
+  private numberLinesSubject: BehaviorSubject<GameStatsObject>;
   private lostGameSubject = new Subject<boolean>();
 
-  constructor(private http: HttpClient, public router: Router) {}
+  constructor(private http: HttpClient, public router: Router) {
+    const savedInformation = JSON.parse(localStorage.getItem(LocalStorage.GAME_INFORMATION));
+    if (savedInformation) {
+      this.currentLevel = savedInformation.level;
+      this.currentScore = savedInformation.score;
+      this.currentNumberLines = savedInformation.lines;
+    }
+    const initialInformation = { lines: 0, score: 0, level: 1 };
+
+    this.numberLinesSubject = new BehaviorSubject(savedInformation || initialInformation);
+  }
 
   public static calculateScore(lines: number, level: number): number {
     return (
@@ -64,7 +70,7 @@ export class GameService {
     return this.http.post(`${this.endpoint}/add_result`, gameResult);
   }
 
-  getPlayerGameResult(): Observable<GameResult[]> {
+  public getPlayerGameResult(): Observable<GameResult[]> {
     return this.http
       .get(`${this.endpoint}/result`)
       .pipe(map((data: GameResult[]) => data.map((el) => new GameResult(el))));
@@ -137,6 +143,13 @@ export class GameService {
     const lines = this.currentNumberLines;
     const score = this.currentScore;
     const level = this.currentLevel;
+    this.numberLinesSubject.next({ lines, score, level });
+  }
+
+  public setSavedInformation({ lines, score, level }: GameStatsObject): void {
+    this.currentLevel = level;
+    this.currentScore = score;
+    this.currentNumberLines = lines;
     this.numberLinesSubject.next({ lines, score, level });
   }
 

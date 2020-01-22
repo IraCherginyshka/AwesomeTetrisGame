@@ -49,7 +49,7 @@ export class PlayerProfileComponent implements OnInit {
     }
   }
 
-  onLogout(): void {
+  public onLogout(): void {
     this.toastrService.warning('You have logged out!');
     this.userService.logoutUser().subscribe();
     this.router.navigate(['/login']);
