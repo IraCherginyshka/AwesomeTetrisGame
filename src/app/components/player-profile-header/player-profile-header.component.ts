@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserService } from '../../services/user.service';
-import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-player-profile-header',
@@ -22,12 +21,11 @@ export class PlayerProfileHeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER));
+    this.currentUser = JSON.parse(this.userService.getCurrentUser());
   }
 
   onLogout(): void {
     this.toastrService.warning('You have logged out!');
     this.userService.logoutUser().subscribe();
-    this.router.navigate(['/login']);
   }
 }

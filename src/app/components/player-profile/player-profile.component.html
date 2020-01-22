@@ -1,10 +1,10 @@
 <div class="container main">
   <div class="profile">
-    <img class="icon" src="../../../assets/images/{{ currentUser.avatar }}" alt="icon" />
+    <img class="icon" src="../../../assets/images/{{ currentUser?.avatar }}" alt="icon" />
     <section class="profile__information">
-      <p class="profile__information--name">{{ currentUser.username }}</p>
-      <p>{{ userAge }} years, {{ currentUser.gender }}</p>
-      <p>{{ currentUser.country }}</p>
+      <p class="profile__information--name">{{ currentUser?.username }}</p>
+      <p>{{ userAge }} years, {{ currentUser?.gender }}</p>
+      <p>{{ currentUser?.country }}</p>
       <button class="game-button" (click)="onLogout()">
         Logout
       </button>

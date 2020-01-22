@@ -67,6 +67,10 @@ export class UserService {
     return localStorage.getItem(LocalStorage.USER_NAME);
   }
 
+  getCurrentUser(): string {
+    return localStorage.getItem(LocalStorage.ACCESS_USER);
+  }
+
   getAuthListener(): Observable<{}> {
     return this.authListener.asObservable();
   }

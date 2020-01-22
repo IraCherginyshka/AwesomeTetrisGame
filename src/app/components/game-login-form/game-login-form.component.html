@@ -40,6 +40,7 @@
       <button
         class="game-button login__button"
         type="submit"
+        (click)="onLogin()"
         [disabled]="!logInForm.valid"
         [title]="!logInForm.valid ? 'Please complete all required fields' : 'Log In'"
       >

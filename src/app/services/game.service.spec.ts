@@ -1,12 +1,28 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { GameService } from './game.service';
 
 describe('GameService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let httpTestingController: HttpTestingController;
+  let gameService: GameService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [GameService],
+    });
+
+    gameService = TestBed.get(GameService);
+    httpTestingController = TestBed.get(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
+  });
 
   it('should be created', () => {
-    const service: GameService = TestBed.get(GameService);
-    expect(service).toBeTruthy();
+    expect(gameService).toBeTruthy();
   });
 });
