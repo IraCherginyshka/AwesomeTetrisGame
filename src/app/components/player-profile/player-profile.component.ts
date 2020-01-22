@@ -48,7 +48,7 @@ export class PlayerProfileComponent implements OnInit {
     this.userAge = moment().diff(this.currentUser.dateOfBirth, 'years');
   }
 
-  onLogout(): void {
+  public onLogout(): void {
     this.toastrService.warning('You have logged out!');
     this.userService.logoutUser().subscribe();
     this.router.navigate(['/login']);

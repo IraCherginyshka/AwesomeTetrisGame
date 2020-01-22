@@ -21,7 +21,7 @@ export class UserService {
 
   constructor(private http: HttpClient, public router: Router) {}
 
-  createUser(user: UserData): Observable<object> {
+  public createUser(user: UserData): Observable<object> {
     const md5 = new Md5();
     const newUser: PlayerData = {
       username: user.userInformation.username,
@@ -34,7 +34,7 @@ export class UserService {
     return this.http.post(`${this.endpoint}/sign_up`, newUser);
   }
 
-  loginUser(userInform: {
+  public loginUser(userInform: {
     username: string;
     password: string;
   }): Observable<{ token: string; user: PlayerData }> {
@@ -46,7 +46,7 @@ export class UserService {
     return this.http.post<{ token: string; user: PlayerData }>(`${this.endpoint}/login`, userData);
   }
 
-  logoutUser(): Observable<object> {
+  public logoutUser(): Observable<object> {
     localStorage.removeItem(LocalStorage.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorage.ACCESS_USER);
     localStorage.removeItem(LocalStorage.USER_NAME);
@@ -55,19 +55,19 @@ export class UserService {
     return this.http.get(`${this.endpoint}/logout`);
   }
 
-  setUser(user: PlayerData): void {
+  public setUser(user: PlayerData): void {
     this.authListener.next(user);
   }
 
-  getToken(): string {
+  public getToken(): string {
     return localStorage.getItem(LocalStorage.ACCESS_TOKEN);
   }
 
-  getUserName(): string {
+  public getUserName(): string {
     return localStorage.getItem(LocalStorage.USER_NAME);
   }
 
-  getAuthListener(): Observable<{}> {
+  public getAuthListener(): Observable<{}> {
     return this.authListener.asObservable();
   }
 }
