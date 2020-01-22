@@ -70,8 +70,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should call the saveControls function by clicking on button Default and set default value to controls', () => {
-    spyOn(component, 'backToDefaultControls').and.callThrough();
-
     const defaultControls = {
       [ControlsEnum.RESET]: DefaultSettings.RESET,
       [ControlsEnum.PAUSE]: DefaultSettings.PAUSE,
@@ -88,16 +86,12 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should call the setControl function by clicking on block and set controls type to activeField', () => {
-    spyOn(component, 'setControl').and.callThrough();
-
     component.setControl(ControlsEnum.PLAY);
 
     expect(component.activeField).toBe('play');
   });
 
   it('should save controls in localStorage if they are equal to the default controls by calling saveControls function', () => {
-    spyOn(component, 'saveControls').and.callThrough();
-
     const customControls = {
       reset: 'o',
       pause: 'p',
@@ -114,8 +108,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should not save controls in localStorage if they are equal to the default controls by calling saveControls function', () => {
-    spyOn(component, 'saveControls').and.callThrough();
-
     const defaultControls = {
       [ControlsEnum.RESET]: DefaultSettings.RESET,
       [ControlsEnum.PAUSE]: DefaultSettings.PAUSE,
@@ -132,8 +124,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should not set a new keyboard to controls if not change isSetMode', () => {
-    spyOn(component, 'keyBoardInput').and.callThrough();
-
     const event = new KeyboardEvent('keypress', {
       key: 'f',
     });
@@ -145,9 +135,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should set a new keyboard to controls if it is valid and unique', () => {
-    spyOn(component, 'setControl').and.callThrough();
-    spyOn(component, 'keyBoardInput').and.callThrough();
-
     component.setControl(ControlsEnum.RIGHT);
 
     const event = new KeyboardEvent('keypress', {
@@ -161,9 +148,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should not set a new keyboard to controls if it is no unique', () => {
-    spyOn(component, 'setControl').and.callThrough();
-    spyOn(component, 'keyBoardInput').and.callThrough();
-
     component.setControl(ControlsEnum.RIGHT);
 
     const event = new KeyboardEvent('keypress', {
@@ -177,9 +161,6 @@ describe('GameControlOptionComponent', () => {
   });
 
   it('should not set a new keyboard to controls if it is no valid', () => {
-    spyOn(component, 'setControl').and.callThrough();
-    spyOn(component, 'keyBoardInput').and.callThrough();
-
     component.setControl(ControlsEnum.RIGHT);
 
     const event = new KeyboardEvent('keypress', {
