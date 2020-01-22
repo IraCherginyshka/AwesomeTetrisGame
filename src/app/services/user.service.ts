@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Md5 } from 'ts-md5/dist/md5';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -15,13 +15,14 @@ import { LocalStorage } from '../enums/local-storage.enum';
 export class UserService {
   private endpoint = environment.url;
   private token: string;
-  private authListener = new BehaviorSubject<PlayerData>(
+  private authListener = new BehaviorSubject<PlayerData | string>(
     JSON.parse(localStorage.getItem(LocalStorage.ACCESS_USER)),
   );
+  private logoutListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, public router: Router) {}
 
-  createUser(user: UserData): Observable<object> {
+  public createUser(user: UserData): Observable<object> {
     const md5 = new Md5();
     const newUser: PlayerData = {
       username: user.userInformation.username,
@@ -34,7 +35,7 @@ export class UserService {
     return this.http.post(`${this.endpoint}/sign_up`, newUser);
   }
 
-  loginUser(userInform: {
+  public loginUser(userInform: {
     username: string;
     password: string;
   }): Observable<{ token: string; user: PlayerData }> {
@@ -46,32 +47,36 @@ export class UserService {
     return this.http.post<{ token: string; user: PlayerData }>(`${this.endpoint}/login`, userData);
   }
 
-  logoutUser(): Observable<object> {
+  public logoutUser(): Observable<object> {
     localStorage.removeItem(LocalStorage.ACCESS_TOKEN);
     localStorage.removeItem(LocalStorage.ACCESS_USER);
     localStorage.removeItem(LocalStorage.USER_NAME);
     this.token = null;
     this.authListener.next(null);
+    this.logoutListener.next(true);
     return this.http.get(`${this.endpoint}/logout`);
   }
 
-  setUser(user: PlayerData): void {
+  public setUser(user: PlayerData): void {
     this.authListener.next(user);
   }
 
-  getToken(): string {
+  public getToken(): string {
     return localStorage.getItem(LocalStorage.ACCESS_TOKEN);
   }
 
-  getUserName(): string {
+  public getUserName(): string {
     return localStorage.getItem(LocalStorage.USER_NAME);
   }
 
-  getCurrentUser(): string {
+  public getCurrentUser(): string {
     return localStorage.getItem(LocalStorage.ACCESS_USER);
   }
-
-  getAuthListener(): Observable<{}> {
+  public getAuthListener(): Observable<{}> {
     return this.authListener.asObservable();
+  }
+
+  public onLogoutListener(): Observable<boolean> {
+    return this.logoutListener.asObservable();
   }
 }

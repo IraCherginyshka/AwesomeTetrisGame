@@ -8,6 +8,7 @@ import { GameService } from '../../services/game.service';
 import { GameState } from '../../enums/game-state.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameStatsObject } from '../../interfaces/game-stats.interface';
+import { UserService } from '../../services/user.service';
 
 describe('GameBoardComponent', () => {
   let component: GameBoardComponent;
@@ -19,7 +20,13 @@ describe('GameBoardComponent', () => {
       providers: [
         MockProvider({
           provider: GameService,
-          methods: ['updateFigures', 'setInitialInformation', 'setNumberFilledLines'],
+          methods: [
+            'updateFigures',
+            'setInitialInformation',
+            'setNumberFilledLines',
+            'setSavedInformation',
+            'setGameState',
+          ],
           overwrite: {
             getGameState(): Observable<GameState> {
               return of(GameState.PAUSE);
@@ -55,6 +62,14 @@ describe('GameBoardComponent', () => {
                 score: 5,
                 level: 5,
               });
+            },
+          },
+        }),
+        MockProvider({
+          provider: UserService,
+          overwrite: {
+            onLogoutListener(): Observable<boolean> {
+              return of(true);
             },
           },
         }),
