@@ -1,12 +1,10 @@
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { MockProvider } from 'ngx-mock-provider';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GameLoginFormComponent } from './game-login-form.component';
 import { UserService } from '../../services/user.service';
@@ -19,15 +17,8 @@ describe('GameLoginFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        BrowserModule,
-        FormsModule,
-        ReactiveFormsModule,
-      ],
-      declarations: [GameLoginFormComponent, ToastContainerDirective],
+      imports: [RouterTestingModule, BrowserModule, FormsModule, ReactiveFormsModule],
+      declarations: [GameLoginFormComponent],
       providers: [
         MockProvider({
           provider: UserService,
@@ -61,7 +52,10 @@ describe('GameLoginFormComponent', () => {
             },
           },
         }),
-        RouterModule,
+        MockProvider({
+          provider: ToastrService,
+          methods: ['warning', 'error'],
+        }),
       ],
     }).compileComponents();
   }));

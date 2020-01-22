@@ -1,8 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { MockProvider } from 'ngx-mock-provider';
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GameBoardComponent } from './game-board.component';
 import { GameService } from '../../services/game.service';
@@ -16,8 +15,7 @@ describe('GameBoardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ToastrModule.forRoot()],
-      declarations: [GameBoardComponent, ToastContainerDirective],
+      declarations: [GameBoardComponent],
       providers: [
         MockProvider({
           provider: GameService,
@@ -59,6 +57,10 @@ describe('GameBoardComponent', () => {
               });
             },
           },
+        }),
+        MockProvider({
+          provider: ToastrService,
+          methods: ['warning'],
         }),
       ],
     }).compileComponents();

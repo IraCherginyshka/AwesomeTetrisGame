@@ -1,30 +1,23 @@
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+import { MockProvider } from 'ngx-mock-provider';
+import { MockComponent } from 'ng2-mock-component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
-import { GameHeaderComponent } from './components/game-header/game-header.component';
-import { PlayerProfileHeaderComponent } from './components/player-profile-header/player-profile-header.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [AppComponent, MockComponent({ selector: 'atg-game-header' })],
+      providers: [
+        MockProvider({
+          provider: ToastrService,
+          methods: ['warning', 'error', 'success'],
+        }),
       ],
-      declarations: [
-        AppComponent,
-        GameHeaderComponent,
-        PlayerProfileHeaderComponent,
-        ToastContainerDirective,
-      ],
-      providers: [RouterModule],
     }).compileComponents();
   }));
 

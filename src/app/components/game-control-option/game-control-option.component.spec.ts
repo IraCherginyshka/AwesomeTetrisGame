@@ -1,6 +1,6 @@
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+import { MockProvider } from 'ngx-mock-provider';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GameControlOptionComponent } from './game-control-option.component';
 import { ControlsEnum } from '../../enums/controls.enum';
@@ -12,9 +12,13 @@ describe('GameControlOptionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ToastrModule.forRoot()],
-      declarations: [GameControlOptionComponent, ToastContainerDirective],
-      providers: [],
+      declarations: [GameControlOptionComponent],
+      providers: [
+        MockProvider({
+          provider: ToastrService,
+          methods: ['error', 'success'],
+        }),
+      ],
     }).compileComponents();
   }));
 
@@ -64,15 +68,6 @@ describe('GameControlOptionComponent', () => {
     expect(component.controls).toEqual(customControls);
   });
 
-  it('should call the saveControls function by clicking on button', () => {
-    spyOn(component, 'saveControls').and.callThrough();
-
-    const button = fixture.debugElement.nativeElement.querySelector('#custom');
-    button.click();
-
-    expect(component.saveControls).toHaveBeenCalled();
-  });
-
   it('should call the saveControls function by clicking on button Default and set default value to controls', () => {
     spyOn(component, 'backToDefaultControls').and.callThrough();
 
@@ -86,20 +81,16 @@ describe('GameControlOptionComponent', () => {
       [ControlsEnum.RIGHT]: DefaultSettings.RIGHT,
     };
 
-    const button = fixture.debugElement.nativeElement.querySelector('#default');
-    button.click();
+    component.backToDefaultControls();
 
-    expect(component.backToDefaultControls).toHaveBeenCalled();
     expect(component.controls).toEqual(defaultControls);
   });
 
   it('should call the setControl function by clicking on block and set controls type to activeField', () => {
     spyOn(component, 'setControl').and.callThrough();
 
-    const block = fixture.debugElement.nativeElement.querySelector('#play');
-    block.click();
+    component.setControl(ControlsEnum.PLAY);
 
-    expect(component.setControl).toHaveBeenCalled();
     expect(component.activeField).toBe('play');
   });
 });

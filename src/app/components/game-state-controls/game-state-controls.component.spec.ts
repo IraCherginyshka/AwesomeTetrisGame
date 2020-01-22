@@ -70,10 +70,8 @@ describe('GameStateControlsComponent', () => {
       spyOn(gameService, 'setGameState');
       spyOn(component, 'resetGame').and.callThrough();
 
-      const button = fixture.debugElement.nativeElement.querySelector('.reset');
-      button.click();
+      component.resetGame();
 
-      expect(component.resetGame).toHaveBeenCalled();
       expect(gameService.setInitialInformation).toHaveBeenCalled();
       expect(gameService.setGameState).toHaveBeenCalledWith('reset');
     },
@@ -87,10 +85,8 @@ describe('GameStateControlsComponent', () => {
       component.isPlaying = true;
 
       fixture.detectChanges();
-      const button = fixture.debugElement.nativeElement.querySelector('.pause');
-      button.click();
+      component.pauseGame();
 
-      expect(component.pauseGame).toHaveBeenCalled();
       expect(gameService.setGameState).toHaveBeenCalledWith('pause');
     },
   ));
@@ -101,10 +97,8 @@ describe('GameStateControlsComponent', () => {
       spyOn(gameService, 'setGameState');
       spyOn(component, 'playGame').and.callThrough();
 
-      const button = fixture.debugElement.nativeElement.querySelector('.play');
-      button.click();
+      component.playGame();
 
-      expect(component.playGame).toHaveBeenCalled();
       expect(gameService.setGameState).toHaveBeenCalledWith('play');
     },
   ));

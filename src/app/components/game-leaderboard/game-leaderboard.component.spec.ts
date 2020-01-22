@@ -90,7 +90,7 @@ describe('GameLeaderboardComponent', () => {
 
   it('should set current player index in result list to currentPlayerPlace field and if it is less than 10, should set false to isCurrentPlayerNotInTop field', () => {
     component.ngOnInit();
-    expect(component.currentPlayerPlace).toBe(3);
+    expect(component.currentPlayerIndex).toBe(3);
     expect(component.isCurrentPlayerNotInTop).toBe(false);
   });
 
@@ -116,7 +116,7 @@ describe('GameLeaderboardComponent', () => {
 
       component.ngOnInit();
       expect(component.isCurrentPlayerNotInTop).toBeTruthy();
-      expect(component.currentPlayerPlace).toBe(11);
+      expect(component.currentPlayerIndex).toBe(11);
       expect(component.currentPlayerNotInTop).toEqual({
         username: 'TestName',
         lines: 32,

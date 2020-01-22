@@ -1,7 +1,6 @@
 import { MockProvider } from 'ngx-mock-provider';
 import { Observable, of } from 'rxjs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
 
 import { GameControlsComponent } from './game-controls.component';
 import { GameService } from '../../services/game.service';
@@ -27,7 +26,6 @@ describe('GameControlsComponent', () => {
             },
           },
         }),
-        RouterModule,
       ],
     }).compileComponents();
   }));

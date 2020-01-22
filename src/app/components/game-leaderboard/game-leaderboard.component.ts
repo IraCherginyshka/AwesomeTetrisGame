@@ -16,7 +16,7 @@ export class GameLeaderboardComponent implements OnInit {
   public currentPlayerName: string | null;
   public isCurrentPlayerNotInTop: boolean;
   public currentPlayerNotInTop: GameResult;
-  public currentPlayerPlace: number;
+  public currentPlayerIndex: number;
 
   constructor(private gameService: GameService, private userService: UserService) {
     this.currentPlayerName = this.userService.getUserName();
@@ -27,12 +27,12 @@ export class GameLeaderboardComponent implements OnInit {
       this.gameResults = results.slice(0, LEADERBOARD_MAX_WIDTH);
 
       if (this.currentPlayerName) {
-        this.currentPlayerPlace = results.findIndex(
-          (player) => player.username === this.currentPlayerName,
+        this.currentPlayerIndex = results.findIndex(
+          ({ username }) => username === this.currentPlayerName,
         );
-        this.isCurrentPlayerNotInTop = this.currentPlayerPlace > LEADERBOARD_MAX_WIDTH;
+        this.isCurrentPlayerNotInTop = this.currentPlayerIndex > LEADERBOARD_MAX_WIDTH;
         if (this.isCurrentPlayerNotInTop) {
-          this.currentPlayerNotInTop = results[this.currentPlayerPlace];
+          this.currentPlayerNotInTop = results[this.currentPlayerIndex];
         }
       }
     });

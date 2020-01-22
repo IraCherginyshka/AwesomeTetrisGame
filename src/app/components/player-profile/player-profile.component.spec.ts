@@ -1,9 +1,8 @@
 import { MockProvider } from 'ngx-mock-provider';
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PlayerProfileComponent } from './player-profile.component';
 import { UserService } from '../../services/user.service';
@@ -16,8 +15,8 @@ describe('PlayerProfileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, BrowserAnimationsModule, ToastrModule.forRoot()],
-      declarations: [PlayerProfileComponent, ToastContainerDirective],
+      imports: [RouterTestingModule],
+      declarations: [PlayerProfileComponent],
       providers: [
         MockProvider({
           provider: UserService,
@@ -54,6 +53,10 @@ describe('PlayerProfileComponent', () => {
               ]);
             },
           },
+        }),
+        MockProvider({
+          provider: ToastrService,
+          methods: ['warning'],
         }),
       ],
     }).compileComponents();

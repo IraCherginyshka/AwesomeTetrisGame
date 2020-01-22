@@ -1,14 +1,12 @@
+import { MockComponent } from 'ng2-mock-component';
 import { MockProvider } from 'ngx-mock-provider';
 import { Observable, of } from 'rxjs';
-import { ToastContainerDirective, ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { GameHeaderComponent } from './game-header.component';
 import { UserService } from '../../services/user.service';
-import { PlayerProfileHeaderComponent } from '../player-profile-header/player-profile-header.component';
 
 describe('GameHeaderComponent', () => {
   let component: GameHeaderComponent;
@@ -16,8 +14,8 @@ describe('GameHeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, BrowserAnimationsModule, ToastrModule.forRoot()],
-      declarations: [GameHeaderComponent, PlayerProfileHeaderComponent, ToastContainerDirective],
+      imports: [RouterTestingModule],
+      declarations: [GameHeaderComponent, MockComponent({ selector: 'atg-player-profile-header' })],
       providers: [
         MockProvider({
           provider: UserService,
@@ -37,8 +35,11 @@ describe('GameHeaderComponent', () => {
             },
           },
         }),
+        MockProvider({
+          provider: ToastrService,
+          methods: ['info', 'success'],
+        }),
       ],
-      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
