@@ -5,6 +5,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { GameStateControlsComponent } from './game-state-controls.component';
 import { GameService } from '../../services/game.service';
 import { GameState } from '../../enums/game-state.enum';
+import { DefaultSettings } from '../../enums/default-settings.enum';
 
 describe('GameStateControlsComponent', () => {
   let component: GameStateControlsComponent;
@@ -115,4 +116,40 @@ describe('GameStateControlsComponent', () => {
       expect(gameService.setGameState).not.toHaveBeenCalledWith('play');
     },
   ));
+
+  it('should call the pause function by pressing the key on keyboard for pause', () => {
+    spyOn(component, 'pauseGame').and.callThrough();
+
+    const event = new KeyboardEvent('keydown', {
+      key: DefaultSettings.PAUSE,
+    });
+    fixture.nativeElement.dispatchEvent(event);
+    component.keyBoardInput(event);
+
+    expect(component.pauseGame).toHaveBeenCalled();
+  });
+
+  it('should call the reset function by pressing the key on keyboard for reset', () => {
+    spyOn(component, 'resetGame').and.callThrough();
+
+    const event = new KeyboardEvent('keydown', {
+      key: DefaultSettings.RESET,
+    });
+    fixture.nativeElement.dispatchEvent(event);
+    component.keyBoardInput(event);
+
+    expect(component.resetGame).toHaveBeenCalled();
+  });
+
+  it('should call the play function by pressing the key on keyboard for play', () => {
+    spyOn(component, 'playGame').and.callThrough();
+
+    const event = new KeyboardEvent('keydown', {
+      key: DefaultSettings.PLAY,
+    });
+    fixture.nativeElement.dispatchEvent(event);
+    component.keyBoardInput(event);
+
+    expect(component.playGame).toHaveBeenCalled();
+  });
 });
