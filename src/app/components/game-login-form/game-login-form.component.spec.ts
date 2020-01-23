@@ -1,15 +1,17 @@
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { MockProvider } from 'ngx-mock-provider';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 import { GameLoginFormComponent } from './game-login-form.component';
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { UserData } from '../../interfaces/user-data.interface';
+import { LocalStorage } from '../../enums/local-storage.enum';
 
 describe('GameLoginFormComponent', () => {
   let component: GameLoginFormComponent;
@@ -82,4 +84,34 @@ describe('GameLoginFormComponent', () => {
     component.logInForm.controls.password.setValue('1Qqqqqqqq');
     expect(component.logInForm.valid).toBeTruthy();
   });
+
+  it('should call setUser in userService, save user name in LS, navigate to game page if login form is valid by calling onLogin function', inject(
+    [UserService, Router],
+    (userService: UserService, router: Router) => {
+      spyOn(userService, 'setUser');
+      spyOn(router, 'navigate');
+
+      component.logInForm.controls.username.setValue('TestName');
+      component.logInForm.controls.password.setValue('1Qqqqqqqq');
+      component.onLogin();
+
+      expect(localStorage.getItem(LocalStorage.USER_NAME)).toBe('TestName');
+      expect(userService.setUser).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['/game']);
+    },
+  ));
+
+  it('should not call setUser in userService, not save user name in LS, not navigate to game page if login form is invalid by calling onLogin function', inject(
+    [UserService, Router],
+    (userService: UserService, router: Router) => {
+      spyOn(userService, 'setUser');
+      spyOn(router, 'navigate');
+
+      component.onLogin();
+
+      expect(localStorage.getItem(LocalStorage.USER_NAME)).toBeNull();
+      expect(userService.setUser).not.toHaveBeenCalled();
+      expect(router.navigate).not.toHaveBeenCalledWith(['/game']);
+    },
+  ));
 });
