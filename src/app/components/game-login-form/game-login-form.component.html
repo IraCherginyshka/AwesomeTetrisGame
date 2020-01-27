@@ -40,6 +40,7 @@
       <button
         class="game-button login__button"
         type="submit"
+        (click)="onLogin()"
         [disabled]="!logInForm.valid"
         [title]="!logInForm.valid ? 'Please complete all required fields' : 'Log In'"
       >
@@ -217,13 +218,8 @@
               formControlName="avatar"
               value="Ironman-Flying.ico"
             />
-            <label class="login__label">
-              <img
-                id="flying"
-                class="icon"
-                src="./../../../assets/images/Ironman-Flying.ico"
-                alt="icon"
-              />
+            <label for="flying" class="login__label">
+              <img class="icon" src="./../../../assets/images/Ironman-Flying.ico" alt="icon" />
             </label>
 
             <input

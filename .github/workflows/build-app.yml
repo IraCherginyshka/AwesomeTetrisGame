@@ -19,13 +19,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build
+    - name: npm install, linter
       run: |
         npm ci
-        npm run build
+        npm run eslint
+    - name: test
+      run:  npm run test
+    - name: build
+      run: npm run build
     - name: copy-files
       run:  cp -r ./dist ./server
-
     - name: clean-up
       run: |
         shopt -s extglob

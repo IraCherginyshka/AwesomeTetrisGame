@@ -1,26 +1,28 @@
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { filter, tap } from 'rxjs/operators';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
+import { UserService } from '../../services/user.service';
 import { GameService } from '../../services/game.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
+import { LocalStorage } from '../../enums/local-storage.enum';
+import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import {
-  QUANTITY_BLOCKS_WIDTH,
-  QUANTITY_BLOCKS_HEIGHT,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  CENTRAL_ITEM,
   ACCELERATION,
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  CENTRAL_ITEM,
   DELAY_DEFAULT,
   DELAY_LEVEL_STEP,
   MAX_SPEED,
+  QUANTITY_BLOCKS_HEIGHT,
+  QUANTITY_BLOCKS_WIDTH,
 } from '../../constants/board-component.const';
-import { LocalStorage } from '../../enums/local-storage.enum';
 
 @Component({
   selector: 'atg-game-board',
@@ -42,19 +44,34 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
+  private gameInformation: GameStatsObject;
   private subscriptionState: Subscription;
   private subscriptionMove: Subscription;
   private subscriptionNext: Subscription;
   private subscriptionLevel: Subscription;
+  private subscriptionLogout: Subscription;
 
-  constructor(private gameService: GameService, private toastrService: ToastrService) {}
+  constructor(
+    private gameService: GameService,
+    private toastrService: ToastrService,
+    private userService: UserService,
+  ) {
+    this.currentFigure = FigureModel.getRandomFigure();
+  }
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
+    event.preventDefault();
+    this.detectDestruction();
+  }
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
-    if (localStorage.getItem(LocalStorage.GAME_STATS)) {
+    const saveGameStats = localStorage.getItem(LocalStorage.GAME_STATS);
+
+    if (saveGameStats) {
       const {
         boardMatrix,
         currentFigure,
@@ -62,7 +79,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         figurePosition,
         duration,
         lineWithFigure,
-      } = JSON.parse(localStorage.getItem(LocalStorage.GAME_STATS));
+      } = JSON.parse(saveGameStats);
       this.isPlaying = false;
       this.boardMatrix = boardMatrix;
       this.currentFigure = currentFigure;
@@ -73,13 +90,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       this.textStateOverlay = GameState.PAUSE;
       this.redrawBoard();
     } else {
-      this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
-        QUANTITY_BLOCKS_WIDTH,
-        QUANTITY_BLOCKS_HEIGHT,
-      );
-      this.duration = DELAY_DEFAULT;
-      this.currentLevel = 1;
-      this.gameService.updateFigures();
+      this.setInitialComponentState();
     }
     this.isLostGame = false;
     this.isPlaying = undefined;
@@ -96,12 +107,23 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
       if (gameState === GameState.PAUSE) {
         this.stopGame();
-        this.saveGameStats();
+        this.saveGameStatsAndInformation();
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
       }
     });
+
+    this.subscriptionLogout = this.userService
+      .onLogoutListener()
+      .pipe(filter((isLogout) => !!isLogout))
+      .subscribe(() => {
+        this.stopGame();
+        this.setInitialComponentState();
+        this.redrawBoard();
+        this.gameService.setGameState(GameState.PAUSE);
+        this.gameService.setInitialInformation();
+      });
 
     this.subscriptionMove = this.gameService
       .onNextStep()
@@ -149,10 +171,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
     this.subscriptionLevel = this.gameService
       .onUpdateGameInformation()
-      .pipe(filter((gameStats) => this.currentLevel !== gameStats.level))
-      .subscribe(({ level }) => {
+      .pipe(
+        tap((gameStats) => {
+          this.gameInformation = gameStats;
+        }),
+        filter((gameStats) => this.currentLevel !== gameStats.level),
+      )
+      .subscribe((gameStats) => {
         this.stopGame();
-        this.currentLevel = level;
+        this.currentLevel = gameStats.level;
         this.duration =
           DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
             ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
@@ -164,22 +191,27 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isLostGame) {
-      this.setInitialBoardState();
-      this.gameService.setInitialInformation();
-    }
-
-    if (this.isPlaying !== undefined && !this.isLostGame) {
-      this.saveGameStats();
-    }
-    this.stopGame();
+    this.detectDestruction();
     this.subscriptionState.unsubscribe();
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
     this.subscriptionLevel.unsubscribe();
   }
 
-  private saveGameStats(): void {
+  private detectDestruction(): void {
+    if (this.isLostGame) {
+      this.setInitialBoardState();
+      this.gameService.setInitialInformation();
+    }
+
+    if (this.isPlaying !== undefined && !this.isLostGame) {
+      this.saveGameStatsAndInformation();
+      this.gameService.setSavedInformation(this.gameInformation);
+    }
+    this.stopGame();
+  }
+
+  private saveGameStatsAndInformation(): void {
     localStorage.setItem(
       LocalStorage.GAME_STATS,
       JSON.stringify({
@@ -191,6 +223,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         lineWithFigure: this.lineWithFigure - 1 >= 0 ? this.lineWithFigure - 1 : 0,
       }),
     );
+    localStorage.setItem(LocalStorage.GAME_INFORMATION, JSON.stringify(this.gameInformation));
   }
 
   private rotateFigure(figureMatrix: FiguresColors[][]): FiguresColors[][] {
@@ -216,6 +249,16 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.lineWithFigure = 0;
     this.figurePosition = CENTRAL_ITEM;
     this.duration = DELAY_DEFAULT;
+  }
+
+  private setInitialComponentState(): void {
+    this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
+      QUANTITY_BLOCKS_WIDTH,
+      QUANTITY_BLOCKS_HEIGHT,
+    );
+    this.duration = DELAY_DEFAULT;
+    this.currentLevel = 1;
+    this.gameService.updateFigures();
   }
 
   private playGame(): void {
@@ -282,6 +325,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     );
     localStorage.removeItem(LocalStorage.GAME_STATS);
     localStorage.removeItem(LocalStorage.NEXT_FIGURE);
+    localStorage.removeItem(LocalStorage.GAME_INFORMATION);
     this.gameService.updateFigures();
     this.gameService.updateFigures();
     this.redrawBoard();
@@ -301,6 +345,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.setInitialBoardState();
     localStorage.removeItem(LocalStorage.GAME_STATS);
     localStorage.removeItem(LocalStorage.NEXT_FIGURE);
+    localStorage.removeItem(LocalStorage.GAME_INFORMATION);
     this.stopGame();
     this.textStateOverlay = GameState.LOST;
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(

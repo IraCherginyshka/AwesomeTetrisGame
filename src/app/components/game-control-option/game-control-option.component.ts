@@ -58,9 +58,11 @@ export class GameControlOptionComponent implements OnInit {
     if (!this.isSetMode) {
       return;
     }
-
-    if (/[A-Za-z0-9]/.test(event.key) && !Object.values(this.controls).includes(event.key)) {
-      this.controls = { ...this.controls, [this.activeField]: event.key };
+    if (
+      /[A-Za-z0-9]/.test(event.key) &&
+      !Object.values(this.controls).includes(event.key.toLowerCase())
+    ) {
+      this.controls = { ...this.controls, [this.activeField]: event.key.toLowerCase() };
       this.isSetMode = false;
       this.activeField = undefined;
     } else {
