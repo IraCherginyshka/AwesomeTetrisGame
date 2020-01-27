@@ -38,7 +38,7 @@ jobs:
       run:  |
         git config user.email "icherhina@gmail.com"
         git config user.name "actions"
-        git push origin --delete pr-pages
+        git push --delete pr-pages
         git checkout -b pr-pages
         git add -A
         git commit -m release
