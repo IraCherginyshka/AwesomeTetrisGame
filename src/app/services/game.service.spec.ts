@@ -17,6 +17,7 @@ describe('GameService', () => {
       providers: [GameService],
     });
 
+    localStorage.clear();
     gameService = TestBed.get(GameService);
     url = 'http://localhost:3000';
   });

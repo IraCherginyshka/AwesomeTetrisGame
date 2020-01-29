@@ -9,7 +9,18 @@
 
 ## Overview
 
-The application will allow user to play Tetris by using controls such as Play, Pause and Reset and controls for rotating or moving blocks - Left, Right, Down, Drop, Rotation. User will be able to use mouse and keyboard, set customer settings (key assignment, show/hide labels for controls).
+The application will allow the user to play Tetris using mouse and keyboard.
+By default, user can control the game using keyboard controls such as :
+
+`r` - reload the game; `p` - pause; `Enter` - start a new game; `Aroows Left`, `Right`, `Up` and `Down` - move a figure to the left and right, rotate and increase the fall speed, respectively.
+
+The Player can customize the keyboard controls. On the `Option page`, there are two blocks,
+the first contains information about the `Default controls` and the second, where user can customize the keyboard controls.
+The User must take into account the validation of the input, namely he can enter only `Latin letters` and `numbers`.
+And if he try to enter the same keyboard control, he will see an error message about the incorrect symbol.
+
+In addition, we will see notifications about setting custom or default controls, if user clicks on the respective buttons.
+Also, next to the game board there is a block with information about the type of controls and a link to the option page.
 
 The application will show information about the level, score, speed, next block view. I will add functionality to the spinner component for visualization of loading status and a component for indication of losing the game.
 
@@ -33,10 +44,10 @@ $ npm run eslint
 
 # Pre-hooks
 "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+   "hooks": {
+     "pre-commit": "lint-staged"
+   }
+ },
 ```
 
 ## Build
@@ -47,8 +58,8 @@ $ npm run eslint
 
 - checkout on `pr-pages` branch
 - run "npm ci"
-- run "npm run eslint" & "npm run test"
-- run "ng build --prod",
+- run "npm run eslint" & "npm run test-headless"
+- run "npm run build",
 - copy `dist/` directory to the `server/` directory
 - delete all source files and folders that are not required for deployment
 
@@ -99,49 +110,57 @@ game.service.ts
 
 ## Way of work
 
-1. Create the backlog (a list of all the desired features of the application) and board in JIRA:
+Create the backlog (a list of all the desired features of the application) and board in JIRA:
 
-   - create Issue: Task, Bug, Story, Sub-Task (“To Do” status) with the origin estimate, assignee and description;
-   - create Epics (Project Skeleton, Game logic, Back-end, User management). Decompose all issues into Epics;
-   - planning, difficulty rating and analysis Sprints (2 weeks);
+- create Issue: Task, Bug, Story, Sub-Task (“To Do” status) with the origin estimate, assignee and description;
+- create Epics (Project Skeleton, Game logic, Back-end, User management). Decompose all issues into Epics;
+- planning, difficulty rating and analysis Sprints (2 weeks);
 
-2. Start work with Issue:
+Start work with Issue:
 
-   - change status of issue to “IN PROGRESS”;
-   - create a New branch in project (name: `feature/ATG-#` or `bugfix/ATG-#`);
+- change status of issue to “IN PROGRESS”;
+- create a New branch in project (name: `feature/ATG-#` or `bugfix/ATG-#`);
 
-3. When the task is finished, create merge request in github:
+When the task is finished, create merge request in github:
 
-   - assign mentor to code review;
-   - log work;
-   - update JIRA with link to request and status of issue “IN REVIEW”;
-   - mentor code review;
+- assign mentor to code review;
+- log work;
+- update JIRA with link to request and status of issue “IN REVIEW”;
+- mentor code review;
 
-   ##### Commit and push all recent changes
+##### Commit and push all recent changes
 
-   - on the project we use a git flow model.
-     Some basic Git commands are:
+- on the project we use a git flow model.
+  Some basic Git commands are:
 
-   ```
-   git status
-   git add
-   git commit -m 'Commit'
-   git pull
-   git push
-   ```
+```
+git status
+git add
+git commit -m 'Commit'
+git pull
+git push
+```
 
-   - [Git flow tutorial](https://leanpub.com/git-flow/read)
+- [Git flow tutorial](https://leanpub.com/git-flow/read)
 
-4. After merging, status of issue must be changed to “DONE”.
+After merging, status of issue must be changed to “DONE”.
+
+## Unit Testing
+
+Unit testing was implemented using the Jasmine test framework.
+
+`Definition of Done (DoD)`:
+
+- Code coverage unit testing >= 80%
 
 ## Technologies
 
 - Angular
-- Node.js
 - Sass
-- Socket.IO
+- Node.js
 - Express
-- Passport.js
+- MongoDB
+- Socket.IO
 
 ## Nice to have requirements
 
