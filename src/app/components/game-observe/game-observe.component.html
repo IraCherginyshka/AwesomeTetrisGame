@@ -1,0 +1,17 @@
+<section class="container main">
+  <div class="spectator__block">
+    <p *ngIf="!activeGames || !activeGames.length" class="spectator__title">No games</p>
+    <ul class="spectator__list">
+      <li *ngFor="let game of activeGames" class="spectator__item">
+        <img class="icon" src="../../../assets/images/{{ game.player.avatar }}" alt="icon" />
+        <p>{{ game.player.username }}</p>
+        <p>LEVEL {{ game.level }}</p>
+        <a class="header-link" [routerLink]="['/spectate/', game.player.username]">
+          <button class="game-button" (click)="connectToSpectateGame(game.player.username)">
+            spectate
+          </button>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

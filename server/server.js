@@ -3,25 +3,16 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const db = require('./db');
+const setHeaders = require('./utils');
 
 const app = express();
-
-const userData = {};
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Name',
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, PUT, OPTIONS');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
+setHeaders(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, './dist/AwesomeTetrisGame')));
+
+const userData = {};
 
 const errorHandler = (res) => {
   return res.status(404).json({

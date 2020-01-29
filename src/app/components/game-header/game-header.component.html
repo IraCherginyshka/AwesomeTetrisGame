@@ -8,13 +8,21 @@
         *ngIf="!userIsAuthenticated; else profile"
         routerLink="/login"
         routerLinkActive="active-link"
-        >login</a
       >
+        login
+      </a>
       <a class="header-link" routerLink="/game" routerLinkActive="active-link">game</a>
       <a class="header-link" routerLink="/option" routerLinkActive="active-link">option</a>
-      <a class="header-link" routerLink="/leaderboard" routerLinkActive="active-link">
-        leaderboard</a
+      <a
+        class="header-link"
+        routerLink="/spectate"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Spectate</a
       >
+      <a class="header-link" routerLink="/leaderboard" routerLinkActive="active-link">
+        leaderboard
+      </a>
     </nav>
   </div>
 </div>

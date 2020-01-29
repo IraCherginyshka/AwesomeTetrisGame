@@ -1,0 +1,47 @@
+@import './src/assets/styles/variables';
+
+.spectator {
+  &__block {
+    width: 100%;
+    min-height: 10rem;
+    padding: 2rem;
+    border: 1px solid $default-color;
+    border-radius: $border-radius;
+
+    & p {
+      text-transform: none;
+      margin: 1rem 0;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+  }
+
+  &__item {
+    position: relative;
+    width: 25rem;
+    margin: 3rem;
+    padding: 2rem;
+    border-radius: $border-radius;
+    background-color: $background-color;
+  }
+}
+
+.icon {
+  max-width: 7rem;
+  margin: 0 1rem;
+}
+
+.game-button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
