@@ -1,4 +1,5 @@
 import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 
 import { GameService } from '../../services/game.service';
@@ -24,9 +25,12 @@ export class GameInformationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.subscriptionJoinedUser = this.socketService.getJoinedUser().subscribe((user) => {
-      this.spectatorList.push(user);
-    });
+    this.subscriptionJoinedUser = this.socketService
+      .getJoinedUser()
+      .pipe(filter((name) => !this.spectatorList.includes(name)))
+      .subscribe((user) => {
+        this.spectatorList.push(user);
+      });
 
     this.subscriptionDisconnectedUser = this.socketService
       .getDisconnectedUser()

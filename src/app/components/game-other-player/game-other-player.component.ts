@@ -66,7 +66,8 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
         this.gameRoom = this.route.snapshot.queryParamMap.get('room');
 
         this.isActiveGame = !!this.activeGames.find((game) => game === this.gameRoom);
-        if (this.currentUser && this.isActiveGame && !this.isConnected) {
+
+        if (this.currentUser && this.isActiveGame) {
           this.socketService.connectToSpectateGame(this.gameRoom, this.currentUser);
           this.isConnected = true;
         }
@@ -94,9 +95,9 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.socketService.leaveSpectateGame(this.currentUser);
     this.subscriptionGameStats.unsubscribe();
     this.subscriptionActiveGames.unsubscribe();
-    this.socketService.leaveSpectateGame(this.currentUser);
   }
 
   private showBoard(): void {
