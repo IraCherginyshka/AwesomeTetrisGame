@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const db = require('./db');
 const setHeaders = require('./utils');
+const socketServer = require('./socketServer');
 
 const app = express();
 setHeaders(app);

@@ -1,6 +1,8 @@
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
@@ -12,14 +14,21 @@ import { ObservePlayerDataInterface } from '../../interfaces/observe-player-data
   styleUrls: ['./game-observe.component.scss'],
 })
 export class GameObserveComponent implements OnInit {
+  @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   public currentUserName: string;
   public activeGames: ObservePlayerDataInterface[];
 
   private subscriptionNewGame: Subscription;
 
-  constructor(private socketService: SocketService, private userService: UserService) {}
+  constructor(
+    private socketService: SocketService,
+    private userService: UserService,
+    private toastrService: ToastrService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
+    this.toastrService.overlayContainer = this.toastContainer;
     this.currentUserName = this.userService.getUserName();
 
     this.subscriptionNewGame = this.socketService
@@ -35,6 +44,12 @@ export class GameObserveComponent implements OnInit {
   }
 
   public connectToSpectateGame(gameRoom: string): void {
-    this.socketService.connectToSpectateGame(gameRoom, this.currentUserName);
+    if (!this.currentUserName) {
+      this.toastrService.error('Please, log in to view the game.', '', {
+        timeOut: 3000,
+      });
+    } else {
+      this.router.navigate([`/spectate/game/`], { queryParams: { room: gameRoom } });
+    }
   }
 }

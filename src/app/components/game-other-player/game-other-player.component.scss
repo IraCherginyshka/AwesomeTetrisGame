@@ -23,24 +23,6 @@
       text-align: center;
     }
   }
-
-  &-label {
-    margin-bottom: $inform-field-margin;
-    font-size: $default-font-size;
-    text-align: center;
-    color: $service-color;
-  }
-
-  &-field {
-    margin: $center;
-    height: $inform-field-height;
-    width: $inform-field-width;
-    background-color: $background-color;
-    border: $primary-border;
-    line-height: $inform-field-height;
-    font-size: $default-font-size;
-    text-align: center;
-  }
 }
 
 .board-canvas {

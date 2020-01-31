@@ -68,6 +68,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
     this.detectDestruction();
+    this.socketService.deleteSpectateGame(this.currentPlayer.username);
   }
 
   ngOnInit(): void {
@@ -119,6 +120,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       if (gameState === GameState.PAUSE) {
         this.stopGame();
         this.saveGameStatsAndInformation();
+        this.socketService.deleteSpectateGame(this.currentPlayer.username);
       }
       if (gameState === GameState.PLAY) {
         this.playGame();

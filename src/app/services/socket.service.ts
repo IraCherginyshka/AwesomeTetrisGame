@@ -28,6 +28,22 @@ export class SocketService {
     this.currentGameRoom = undefined;
   }
 
+  public getJoinedUser(): Observable<string> {
+    return new Observable<string>((observe) => {
+      this.socket.on('user-connect', (user: string) => {
+        observe.next(user);
+      });
+    });
+  }
+
+  public getDisconnectedUser(): Observable<string> {
+    return new Observable<string>((observe) => {
+      this.socket.on('user-disconnect', (user: string) => {
+        observe.next(user);
+      });
+    });
+  }
+
   public changeGameStats(spectateStats: ObserveGameStatsInterface): void {
     this.socket.emit('new-stats', spectateStats);
   }
@@ -42,6 +58,10 @@ export class SocketService {
 
   public createNewSpectateGame(game: ObservePlayerDataInterface): void {
     this.socket.emit('new-active-game', game);
+  }
+
+  public allActiveGames(): void {
+    this.socket.emit('all-active-games');
   }
 
   public getSpectateGames(): Observable<ObservePlayerDataInterface[]> {

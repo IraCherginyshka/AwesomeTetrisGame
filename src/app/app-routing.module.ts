@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'login', component: GameLoginFormComponent },
   { path: 'profile', component: PlayerProfileComponent },
   { path: 'spectate', component: GameObserveComponent },
-  { path: 'spectate/:name', component: GameOtherPlayerComponent },
+  { path: 'spectate/game', component: GameOtherPlayerComponent },
   { path: '**', redirectTo: '/game', pathMatch: 'full' },
 ];
 

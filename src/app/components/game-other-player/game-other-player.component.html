@@ -6,7 +6,12 @@
     </div>
     <div class="information">
       <div class="profile">
-        <img class="icon" src="../../../assets/images/{{ player?.avatar }}" alt="icon" />
+        <img
+          *ngIf="!!player"
+          class="icon"
+          src="../../../assets/images/{{ player?.avatar }}"
+          alt="icon"
+        />
         <section class="profile__information">
           <p class="profile__information--name">{{ player?.username }}</p>
           <p>{{ age }} years, {{ player?.gender }}</p>
@@ -15,16 +20,16 @@
       </div>
       <div class="information-block--wrap">
         <div class="information-block">
-          <p class="information-label">level</p>
-          <div class="information-field">{{ gameInformation?.level }}</div>
+          <p class="information-root__label">level</p>
+          <div class="information-root__field">{{ gameInformation?.level }}</div>
         </div>
         <div class="information-block">
-          <p class="information-label">score</p>
-          <div class="information-field">{{ gameInformation?.score }}</div>
+          <p class="information-root__label">score</p>
+          <div class="information-root__field">{{ gameInformation?.score }}</div>
         </div>
         <div class="information-block">
-          <p class="information-label">lines</p>
-          <div class="information-field">{{ gameInformation?.lines }}</div>
+          <p class="information-root__label">lines</p>
+          <div class="information-root__field">{{ gameInformation?.lines }}</div>
         </div>
       </div>
     </div>

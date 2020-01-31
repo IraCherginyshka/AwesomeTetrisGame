@@ -7,11 +7,6 @@
     padding: 2rem;
     border: 1px solid $default-color;
     border-radius: $border-radius;
-
-    & p {
-      text-transform: none;
-      margin: 1rem 0;
-    }
   }
 
   &__list {
@@ -25,6 +20,7 @@
   &__item {
     position: relative;
     width: 25rem;
+    min-height: 17.5rem;
     margin: 3rem;
     padding: 2rem;
     border-radius: $border-radius;

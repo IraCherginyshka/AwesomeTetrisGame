@@ -9,29 +9,25 @@
       text-align: center;
     }
   }
-
-  &-label {
-    margin-bottom: $inform-field-margin;
-    font-size: $default-font-size;
-    text-align: center;
-    color: $service-color;
-  }
-
-  &-field {
-    margin: $center;
-    height: $inform-field-height;
-    width: $inform-field-width;
-    background-color: $background-color;
-    border: $primary-border;
-    line-height: $inform-field-height;
-    font-size: $default-font-size;
-    text-align: center;
-  }
 }
 .game-button {
   &:hover {
     border-color: $primary-color;
     box-shadow: inset 0 (-$controls-button-height) 0 0 $secondary-color;
     cursor: pointer;
+  }
+}
+
+.spectator {
+  margin-top: $primary-indent;
+  &--no {
+    margin-top: $primary-indent;
+    color: $service-color;
+  }
+
+  &__list {
+    margin-top: $primary-indent;
+    text-transform: none;
+    list-style: none;
   }
 }

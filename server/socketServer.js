@@ -15,12 +15,12 @@ let games = [];
 
 io.on('connection', (socket) => {
   socket.on('join-game', (gameRoom, username) => {
-    console.log(`${username} join`); //next feature
     socket.join(gameRoom);
+    socket.to(gameRoom).emit('user-connect', username);
   });
 
   socket.on('leave-game', (gameRoom, username) => {
-    console.log(`${username} join`);
+    socket.to(gameRoom).emit('user-disconnect', username);
     socket.leave(gameRoom);
   });
 
@@ -39,11 +39,17 @@ io.on('connection', (socket) => {
         games.splice(sameGameIndex, 1, newGame);
       }
     }
+
+    socket.join(newGame.player.username);
     io.emit('active-games', games);
   });
 
   socket.on('delete-game', (game) => {
     games = games.filter(({ username }) => username !== game.username);
+    io.emit('active-games', games);
+  });
+
+  socket.on('all-active-games', () => {
     io.emit('active-games', games);
   });
 });
