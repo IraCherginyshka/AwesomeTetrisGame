@@ -95,6 +95,7 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionGameStats.unsubscribe();
+    this.subscriptionActiveGames.unsubscribe();
     this.socketService.leaveSpectateGame(this.currentUser);
   }
 
