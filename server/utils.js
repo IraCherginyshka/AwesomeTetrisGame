@@ -1,4 +1,8 @@
-const setHeaders = (app) => {
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+
+const setMiddleware = (app) => {
   app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -9,6 +13,9 @@ const setHeaders = (app) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
   });
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(express.static(path.join(__dirname, './dist/AwesomeTetrisGame')));
 };
 
-module.exports = setHeaders;
+module.exports = setMiddleware;

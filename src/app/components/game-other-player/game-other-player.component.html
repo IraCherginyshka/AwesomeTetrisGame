@@ -1,7 +1,7 @@
 <div class="container main">
   <section class="game">
     <div>
-      <div *ngIf="gameStatus !== 'play'" class="overlay">{{ gameStatus }}</div>
+      <div *ngIf="gameStatus !== gameState.PLAY" class="overlay">{{ gameStatus }}</div>
       <canvas #spectate_canvas class="board-canvas"></canvas>
     </div>
     <div class="information">

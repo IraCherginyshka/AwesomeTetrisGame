@@ -1,5 +1,4 @@
 import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 
 import { GameService } from '../../services/game.service';
@@ -15,7 +14,7 @@ import { SocketService } from '../../services/socket.service';
 export class GameInformationComponent implements OnInit {
   public gameStats$: Observable<GameStatsObject>;
   public isCustomControls = !!localStorage.getItem(LocalStorage.CONTROLS);
-  public spectatorList: string[] = [];
+  public spectatorList = new Set();
 
   private subscriptionJoinedUser: Subscription;
   private subscriptionDisconnectedUser: Subscription;
@@ -25,17 +24,14 @@ export class GameInformationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.subscriptionJoinedUser = this.socketService
-      .getJoinedUser()
-      .pipe(filter((name) => !this.spectatorList.includes(name)))
-      .subscribe((user) => {
-        this.spectatorList.push(user);
-      });
+    this.subscriptionJoinedUser = this.socketService.getJoinedUser().subscribe((user) => {
+      this.spectatorList.add(user);
+    });
 
     this.subscriptionDisconnectedUser = this.socketService
       .getDisconnectedUser()
       .subscribe((user) => {
-        this.spectatorList = this.spectatorList.filter((username) => username !== user);
+        this.spectatorList.delete(user);
       });
   }
 }

@@ -24,6 +24,7 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
   public gameInformation: GameStatsObject;
   public player: PlayerData;
   public age: number;
+  public readonly gameState = GameState;
 
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   @ViewChild('spectate_canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
@@ -91,7 +92,7 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
         this.showBoard();
       });
 
-    this.socketService.allActiveGames();
+    this.socketService.getAllActiveGames();
   }
 
   ngOnDestroy(): void {

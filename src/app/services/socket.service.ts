@@ -1,8 +1,8 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
+import { environment } from '../../environments/environment';
 import { ObserveGameStatsInterface } from '../interfaces/observe-game-stats.interface';
 import { ObservePlayerDataInterface } from '../interfaces/observe-player-data.interface';
 
@@ -11,7 +11,7 @@ import { ObservePlayerDataInterface } from '../interfaces/observe-player-data.in
 })
 export class SocketService {
   private socket: SocketIOClient.Socket;
-  private endpoint = 'http://localhost:3030';
+  private endpoint = environment.url;
   private currentGameRoom: string;
 
   constructor() {
@@ -60,7 +60,7 @@ export class SocketService {
     this.socket.emit('new-active-game', game);
   }
 
-  public allActiveGames(): void {
+  public getAllActiveGames(): void {
     this.socket.emit('all-active-games');
   }
 
