@@ -125,9 +125,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       if (gameState === GameState.PLAY) {
         this.playGame();
       }
-      if (this.userIsAuthenticated) {
-        this.sendStatsToSocket();
-      }
+      this.sendStatsToSocket();
     });
 
     this.subscriptionLogout = this.userService
@@ -148,18 +146,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           if (this.checkCollisionDetection(-1, this.currentFigure)) {
             this.figurePosition -= 1;
             this.redrawBoard();
-            if (this.userIsAuthenticated) {
-              this.sendStatsToSocket();
-            }
           }
         }
         if (nextPosition === FiguresMovement.RIGHT) {
           if (this.checkCollisionDetection(1, this.currentFigure)) {
             this.figurePosition += 1;
             this.redrawBoard();
-            if (this.userIsAuthenticated) {
-              this.sendStatsToSocket();
-            }
           }
         }
         if (nextPosition === FiguresMovement.ROTATE) {
@@ -167,18 +159,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           if (this.checkCollisionDetection(0, rotateFigure)) {
             this.currentFigure = rotateFigure;
             this.redrawBoard();
-            if (this.userIsAuthenticated) {
-              this.sendStatsToSocket();
-            }
           }
         }
         if (nextPosition === FiguresMovement.DOWN) {
           this.stopGame();
           this.duration = ACCELERATION;
           this.playGame();
-          if (this.userIsAuthenticated) {
-            this.sendStatsToSocket();
-          }
         }
         if (nextPosition === FiguresMovement.DOWN_OFF) {
           this.stopGame();
@@ -187,10 +173,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
               ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
               : MAX_SPEED;
           this.playGame();
-          if (this.userIsAuthenticated) {
-            this.sendStatsToSocket();
-          }
         }
+
+        this.sendStatsToSocket();
       });
 
     this.subscriptionNext = this.gameService
@@ -205,9 +190,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .pipe(
         tap((gameStats) => {
           this.gameInformation = gameStats;
-          if (this.userIsAuthenticated) {
-            this.sendStatsToSocket();
-          }
+          this.sendStatsToSocket();
         }),
         filter((gameStats) => this.currentLevel !== gameStats.level),
       )
@@ -235,17 +218,19 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private sendStatsToSocket(): void {
-    this.socketService.changeGameStats({
-      player: this.currentPlayer,
-      matrix: this.currentMatrix,
-      // eslint-disable-next-line no-nested-ternary
-      gameStatus: this.isLostGame
-        ? GameState.LOST
-        : this.isPlaying
-        ? GameState.PLAY
-        : GameState.PAUSE,
-      gameInformation: this.gameInformation,
-    });
+    if (this.userIsAuthenticated) {
+      this.socketService.changeGameStats({
+        player: this.currentPlayer,
+        matrix: this.currentMatrix,
+        // eslint-disable-next-line no-nested-ternary
+        gameStatus: this.isLostGame
+          ? GameState.LOST
+          : this.isPlaying
+          ? GameState.PLAY
+          : GameState.PAUSE,
+        gameInformation: this.gameInformation,
+      });
+    }
   }
 
   private detectDestruction(): void {
@@ -322,17 +307,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
       if (noCollision) {
         this.takeMoveDown();
-        if (this.userIsAuthenticated) {
-          this.sendStatsToSocket();
-        }
       } else if (!noCollision && !this.lineWithFigure) {
         this.lostGame();
       } else {
         this.deleteFilledLines();
-        if (this.userIsAuthenticated) {
-          this.sendStatsToSocket();
-        }
       }
+      this.sendStatsToSocket();
     }, this.duration);
   }
 
