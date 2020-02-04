@@ -1,27 +1,19 @@
-const express = require('express');
+const app = require('express')();
 const path = require('path');
-const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const db = require('./db');
+const setMiddleware = require('./utils');
+const socketIO = require('socket.io');
 
-const app = express();
+setMiddleware(app);
+
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+const io = socketIO(server);
 
 const userData = {};
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Name',
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, PUT, OPTIONS');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, './dist/AwesomeTetrisGame')));
+let games = [];
 
 const errorHandler = (res) => {
   return res.status(404).json({
@@ -93,8 +85,45 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './dist/AwesomeTetrisGame/index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+io.on('connection', (socket) => {
+  socket.on('join-game', (gameRoom, username) => {
+    socket.join(gameRoom);
+    socket.to(gameRoom).emit('user-connect', username);
+  });
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+  socket.on('leave-game', (gameRoom, username) => {
+    socket.to(gameRoom).emit('user-disconnect', username);
+    socket.leave(gameRoom);
+  });
+
+  socket.on('new-stats', (newStats) => {
+    socket.broadcast.to(newStats.player.username).emit('current-stats', newStats);
+  });
+
+  socket.on('new-active-game', (newGame) => {
+    const sameGameIndex = games.findIndex(
+      ({ player }) => player.username === newGame.player.username,
+    );
+    if (sameGameIndex === -1) {
+      games.push(newGame);
+    } else {
+      if (games[sameGameIndex].level !== newGame.level) {
+        games.splice(sameGameIndex, 1, newGame);
+      }
+    }
+
+    socket.join(newGame.player.username);
+    io.emit('active-games', games);
+  });
+
+  socket.on('delete-game', (game) => {
+    games = games.filter(({ username }) => username !== game.username);
+    io.emit('active-games', games);
+  });
+
+  socket.on('all-active-games', () => {
+    io.emit('active-games', games);
+  });
+});
 
 module.exports = app;

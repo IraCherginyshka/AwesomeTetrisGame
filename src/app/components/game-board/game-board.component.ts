@@ -5,6 +5,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 
 import { UserService } from '../../services/user.service';
 import { GameService } from '../../services/game.service';
+import { SocketService } from '../../services/socket.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
@@ -12,6 +13,7 @@ import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameState } from '../../enums/game-state.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
 import { GameStatsObject } from '../../interfaces/game-stats.interface';
+import { PlayerData } from '../../interfaces/player-data.interface';
 import {
   ACCELERATION,
   CANVAS_HEIGHT,
@@ -33,6 +35,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   public isPlaying: boolean;
   public isLostGame: boolean;
   public textStateOverlay: string;
+  public userIsAuthenticated: boolean;
 
   @ViewChild('canvas', { static: true }) private canvas: ElementRef<HTMLCanvasElement>;
   private ctx: CanvasRenderingContext2D;
@@ -44,17 +47,20 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
+  private currentPlayer: PlayerData;
   private gameInformation: GameStatsObject;
   private subscriptionState: Subscription;
   private subscriptionMove: Subscription;
   private subscriptionNext: Subscription;
   private subscriptionLevel: Subscription;
   private subscriptionLogout: Subscription;
+  private subscriptionLogin: Subscription;
 
   constructor(
     private gameService: GameService,
     private toastrService: ToastrService,
     private userService: UserService,
+    private socketService: SocketService,
   ) {
     this.currentFigure = FigureModel.getRandomFigure();
   }
@@ -62,12 +68,14 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
     this.detectDestruction();
+    this.socketService.deleteSpectateGame(this.currentPlayer.username);
   }
 
   ngOnInit(): void {
     this.canvas.nativeElement.width = CANVAS_WIDTH;
     this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.currentPlayer = JSON.parse(this.userService.getCurrentUser());
 
     const saveGameStats = localStorage.getItem(LocalStorage.GAME_STATS);
 
@@ -95,6 +103,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.isLostGame = false;
     this.isPlaying = undefined;
 
+    this.subscriptionLogin = this.userService.getAuthListener().subscribe((user) => {
+      this.userIsAuthenticated = !!user;
+    });
+
     this.subscriptionState = this.gameService.getGameState().subscribe((gameState: GameState) => {
       this.textStateOverlay = GameState.PAUSE;
       this.isPlaying = gameState !== GameState.PAUSE;
@@ -108,10 +120,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       if (gameState === GameState.PAUSE) {
         this.stopGame();
         this.saveGameStatsAndInformation();
+        this.socketService.deleteSpectateGame(this.currentPlayer.username);
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
       }
+      this.sendStatsToSocket();
     });
 
     this.subscriptionLogout = this.userService
@@ -160,6 +174,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
               : MAX_SPEED;
           this.playGame();
         }
+
+        this.sendStatsToSocket();
       });
 
     this.subscriptionNext = this.gameService
@@ -174,6 +190,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .pipe(
         tap((gameStats) => {
           this.gameInformation = gameStats;
+          this.sendStatsToSocket();
         }),
         filter((gameStats) => this.currentLevel !== gameStats.level),
       )
@@ -196,6 +213,24 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subscriptionMove.unsubscribe();
     this.subscriptionNext.unsubscribe();
     this.subscriptionLevel.unsubscribe();
+    this.subscriptionLogout.unsubscribe();
+    this.subscriptionLogin.unsubscribe();
+  }
+
+  private sendStatsToSocket(): void {
+    if (this.userIsAuthenticated) {
+      this.socketService.changeGameStats({
+        player: this.currentPlayer,
+        matrix: this.currentMatrix,
+        // eslint-disable-next-line no-nested-ternary
+        gameStatus: this.isLostGame
+          ? GameState.LOST
+          : this.isPlaying
+          ? GameState.PLAY
+          : GameState.PAUSE,
+        gameInformation: this.gameInformation,
+      });
+    }
   }
 
   private detectDestruction(): void {
@@ -264,6 +299,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private playGame(): void {
     this.timeInterval = window.setInterval(() => {
       const noCollision = this.checkCollisionDetection(0, this.currentFigure);
+      if (this.userIsAuthenticated) {
+        this.socketService.createNewSpectateGame({
+          player: this.currentPlayer,
+          level: this.currentLevel,
+        });
+      }
       if (noCollision) {
         this.takeMoveDown();
       } else if (!noCollision && !this.lineWithFigure) {
@@ -271,6 +312,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       } else {
         this.deleteFilledLines();
       }
+      this.sendStatsToSocket();
     }, this.duration);
   }
 
@@ -337,6 +379,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private lostGame(): void {
     this.redrawBoard();
     this.isLostGame = true;
+    this.sendStatsToSocket();
     this.isPlaying = false;
     this.gameService.setLostGame().subscribe(() => {
       this.toastrService.warning('You have successfully added your result to Leaderboard');
@@ -352,5 +395,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
+    this.socketService.deleteSpectateGame(this.currentPlayer.username);
   }
 }
