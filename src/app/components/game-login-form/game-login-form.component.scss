@@ -33,6 +33,7 @@
         border: $primary-border;
         border-radius: $border-radius;
         transition: border-color 0.3s ease-out;
+        word-wrap: break-spaces;
 
         &:hover {
           border: 1.5px solid $secondary-color;

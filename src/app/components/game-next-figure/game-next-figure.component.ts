@@ -3,13 +3,9 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 
 import { BoardModel } from '../../models/board.model';
 import { GameService } from '../../services/game.service';
+import { ResizeService } from '../../services/resize.service';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
-import {
-  BLOCK_SIZE,
-  BLOCK_SIZE_MOBILE,
-  BREAKPOINT_TABLET,
-} from '../../constants/board-component.const';
 
 @Component({
   selector: 'atg-game-next-figure',
@@ -24,19 +20,9 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   private blockSize: number;
   private subscriptionNext: Subscription;
   private subscriptionLost: Subscription;
+  private subscriptionResize: Subscription;
 
-  constructor(private gameService: GameService) {}
-
-  @HostListener('window:resize', ['$event']) onResize({ target }: { target: Window }): void {
-    if (target.innerWidth > BREAKPOINT_TABLET) {
-      this.blockSize = BLOCK_SIZE;
-    } else {
-      this.blockSize = BLOCK_SIZE_MOBILE;
-    }
-    if (this.nextFigure) {
-      this.setInitialState(this.nextFigure);
-    }
-  }
+  constructor(private gameService: GameService, private resizeService: ResizeService) {}
 
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
@@ -46,12 +32,12 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (window.innerWidth > BREAKPOINT_TABLET) {
-      this.blockSize = BLOCK_SIZE;
-    } else {
-      this.blockSize = BLOCK_SIZE_MOBILE;
-    }
     this.ctx = this.nextCanvas.nativeElement.getContext('2d');
+
+    this.subscriptionResize = this.resizeService.onResizeBlock().subscribe(() => {
+      this.setInitialState(this.nextFigure);
+    });
+
     this.subscriptionNext = this.gameService
       .onNewFigureCreated()
       .subscribe(({ randomNextFigure }) => {
@@ -62,17 +48,19 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
       this.isLostGame = true;
     });
 
-    if (!localStorage.getItem(LocalStorage.GAME_STATS)) {
-      this.gameService.updateFigures();
-    }
+    const nextFigureLS = JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE));
 
-    if (localStorage.getItem(LocalStorage.NEXT_FIGURE)) {
-      this.setInitialState(JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE)));
+    if (!nextFigureLS) {
+      this.gameService.updateFigures();
+    } else {
+      this.setInitialState(nextFigureLS);
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptionNext.unsubscribe();
+    this.subscriptionResize.unsubscribe();
+
     if (!this.isLostGame) {
       localStorage.setItem(LocalStorage.NEXT_FIGURE, JSON.stringify(this.nextFigure));
     }
@@ -81,6 +69,7 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   private setInitialState(nextFigure: FiguresColors[][]): void {
     const newBoard = new BoardModel(this.ctx, true);
     this.nextFigure = nextFigure;
+    this.blockSize = this.resizeService.blockSize;
     this.nextCanvas.nativeElement.width = this.nextFigure[0].length * this.blockSize;
     this.nextCanvas.nativeElement.height = this.nextFigure.length * this.blockSize;
     newBoard.drawBoard(this.nextFigure, this.blockSize);
