@@ -7,12 +7,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../constants/board-component.const';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { GameState } from '../../enums/game-state.enum';
 import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { BoardModel } from '../../models/board.model';
+import {
+  BLOCK_SIZE,
+  BLOCK_SIZE_MOBILE,
+  BREAKPOINT_TABLET,
+  QUANTITY_BLOCKS_HEIGHT,
+  QUANTITY_BLOCKS_WIDTH,
+} from '../../constants/board-component.const';
 
 @Component({
   selector: 'atg-game-other-player',
@@ -35,6 +41,7 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
   private isActiveGame: boolean;
   private isConnected: boolean;
   private gameRoom: string;
+  private blockSize: number;
   private subscriptionGameStats: Subscription;
   private subscriptionActiveGames: Subscription;
 
@@ -46,15 +53,31 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
+  @HostListener('window:resize', ['$event']) onResize({ target }: { target: Window }): void {
+    if (target.innerWidth > BREAKPOINT_TABLET) {
+      this.blockSize = BLOCK_SIZE;
+    } else {
+      this.blockSize = BLOCK_SIZE_MOBILE;
+    }
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
+    this.showBoard();
+  }
+
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
     this.socketService.leaveSpectateGame(this.currentUser);
   }
 
   ngOnInit(): void {
+    if (window.innerWidth > BREAKPOINT_TABLET) {
+      this.blockSize = BLOCK_SIZE;
+    } else {
+      this.blockSize = BLOCK_SIZE_MOBILE;
+    }
     this.toastrService.overlayContainer = this.toastContainer;
-    this.canvas.nativeElement.width = CANVAS_WIDTH;
-    this.canvas.nativeElement.height = CANVAS_HEIGHT;
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
     this.ctx = this.canvas.nativeElement.getContext('2d');
 
     this.currentUser = this.userService.getUserName();
@@ -103,6 +126,6 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
 
   private showBoard(): void {
     const board = new BoardModel(this.ctx, false);
-    board.drawBoard(this.currentMatrix);
+    board.drawBoard(this.currentMatrix, this.blockSize);
   }
 }

@@ -54,3 +54,28 @@
     text-align: left;
   }
 }
+
+@media (max-width: $breakpoint-tablet) {
+  .profile {
+    &__information {
+      font-size: 1.3rem;
+      &--name {
+        font-size: 2rem;
+      }
+    }
+  }
+  .icon {
+    object-fit: contain;
+    max-width: 10rem;
+  }
+
+  .leaderboard {
+    &__field--index {
+      margin-right: 0.5rem;
+    }
+
+    &__player-name {
+      flex-basis: 10rem;
+    }
+  }
+}

@@ -59,3 +59,15 @@
   margin: 2rem;
   border: 2px solid $service-color;
 }
+
+@media (max-width: $breakpoint-tablet) {
+  .leaderboard {
+    &__field--index {
+      margin-right: 0.5rem;
+    }
+
+    &__player-name {
+      flex-basis: 8rem;
+    }
+  }
+}

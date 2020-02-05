@@ -16,8 +16,9 @@ import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import { PlayerData } from '../../interfaces/player-data.interface';
 import {
   ACCELERATION,
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
+  BLOCK_SIZE,
+  BLOCK_SIZE_MOBILE,
+  BREAKPOINT_TABLET,
   CENTRAL_ITEM,
   DELAY_DEFAULT,
   DELAY_LEVEL_STEP,
@@ -47,6 +48,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
+  private blockSize: number;
   private currentPlayer: PlayerData;
   private gameInformation: GameStatsObject;
   private subscriptionState: Subscription;
@@ -65,6 +67,17 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.currentFigure = FigureModel.getRandomFigure();
   }
 
+  @HostListener('window:resize', ['$event']) onResize({ target }: { target: Window }): void {
+    if (target.innerWidth > BREAKPOINT_TABLET) {
+      this.blockSize = BLOCK_SIZE;
+    } else {
+      this.blockSize = BLOCK_SIZE_MOBILE;
+    }
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
+    this.redrawBoard();
+  }
+
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
     this.detectDestruction();
@@ -72,8 +85,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.canvas.nativeElement.width = CANVAS_WIDTH;
-    this.canvas.nativeElement.height = CANVAS_HEIGHT;
+    if (window.innerWidth > BREAKPOINT_TABLET) {
+      this.blockSize = BLOCK_SIZE;
+    } else {
+      this.blockSize = BLOCK_SIZE_MOBILE;
+    }
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
     this.ctx = this.canvas.nativeElement.getContext('2d');
     this.currentPlayer = JSON.parse(this.userService.getCurrentUser());
 
@@ -277,7 +295,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       this.figurePosition,
     );
 
-    newBoard.drawBoard(this.currentMatrix);
+    newBoard.drawBoard(this.currentMatrix, this.blockSize);
   }
 
   private setInitialBoardState(): void {

@@ -25,13 +25,13 @@ export class BoardModel {
       .filter((index) => index !== -1);
   }
 
-  public drawBoard(matrix: FiguresColors[][]): void {
+  public drawBoard(matrix: FiguresColors[][], blockSize: number): void {
     matrix.forEach((line, indexY) => {
       line.forEach((item, indexX) => {
         (this.isNextFigure
           ? new NextBlockModel(this.ctx, item)
           : new GameBlockModel(this.ctx, item)
-        ).fillBoardBlock(indexX, indexY);
+        ).fillBoardBlock(indexX, indexY, blockSize);
       });
     });
   }

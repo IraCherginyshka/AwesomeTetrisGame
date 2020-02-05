@@ -17,8 +17,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.9rem 0;
-    flex-wrap: wrap;
+    text-align: left;
     &--gender {
+      margin-top: 1rem;
       flex-direction: column;
     }
     &--radio {
@@ -41,6 +42,7 @@
 
     &--avatar {
       justify-content: center;
+      flex-wrap: wrap;
 
       & label {
         padding: 1rem;
@@ -71,6 +73,7 @@
     text-transform: lowercase;
     color: $service-color;
     font-size: $text-form-font-size;
+    text-align: right;
     &--warning {
       font-family: sans-serif;
       position: absolute;
@@ -121,5 +124,27 @@
   & .icon {
     max-width: $max-width-icon;
     margin: 0 1rem;
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .login {
+    &__form {
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    &__text {
+      font-size: 0.5rem;
+    }
+
+    &__input {
+      margin-left: 1rem;
+    }
+
+    & .icon {
+      max-width: $max-width-icon;
+      margin: 0 1rem;
+    }
   }
 }

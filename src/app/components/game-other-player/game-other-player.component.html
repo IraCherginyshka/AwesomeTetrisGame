@@ -1,9 +1,5 @@
 <div class="container main">
   <section class="game">
-    <div>
-      <div *ngIf="gameStatus !== gameState.PLAY" class="overlay">{{ gameStatus }}</div>
-      <canvas #spectate_canvas class="board-canvas"></canvas>
-    </div>
     <div class="information" *ngIf="!!player">
       <div class="profile">
         <img class="icon" src="../../../assets/images/{{ player.avatar }}" alt="icon" />
@@ -27,6 +23,10 @@
           <div class="information-root__field">{{ gameInformation.lines }}</div>
         </div>
       </div>
+    </div>
+    <div>
+      <div *ngIf="gameStatus !== gameState.PLAY" class="overlay">{{ gameStatus }}</div>
+      <canvas #spectate_canvas class="board-canvas"></canvas>
     </div>
   </section>
 </div>
