@@ -9,6 +9,7 @@ import { GameState } from '../../enums/game-state.enum';
 import { FiguresMovement } from '../../enums/figures-movement.enum';
 import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import { UserService } from '../../services/user.service';
+import {SocketService} from "../../services/socket.service";
 
 describe('GameBoardComponent', () => {
   let component: GameBoardComponent;
@@ -18,6 +19,10 @@ describe('GameBoardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [GameBoardComponent],
       providers: [
+        MockProvider({
+          provider: SocketService,
+          methods: ['getAllActiveGames', 'deleteSpectateGame', 'changeGameStats', 'createNewSpectateGame'],
+        }),
         MockProvider({
           provider: GameService,
           methods: [
@@ -71,6 +76,26 @@ describe('GameBoardComponent', () => {
             onLogoutListener(): Observable<boolean> {
               return of(true);
             },
+            getCurrentUser(): string {
+              return JSON.stringify({
+                username: 'TestName',
+                password: 'string',
+                gender: 'string',
+                dateOfBirth: '2000-01-01',
+                country: 'string',
+                avatar: 'America.ico',
+              });
+            },
+            getAuthListener(): Observable<{}> {
+              return of({
+                username: 'TestName',
+                password: 'string',
+                gender: 'string',
+                dateOfBirth: '2000-01-01',
+                country: 'string',
+                avatar: 'America.ico',
+              })
+            }
           },
         }),
         MockProvider({
