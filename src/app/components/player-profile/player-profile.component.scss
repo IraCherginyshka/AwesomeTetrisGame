@@ -42,6 +42,14 @@
     list-style: none;
   }
 
+  &__header {
+    border: none;
+    color: $primary-color;
+    &:hover {
+      border: none;
+    }
+  }
+
   &__field {
     flex-basis: 24%;
     text-align: center;
