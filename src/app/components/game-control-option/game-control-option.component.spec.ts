@@ -1,6 +1,7 @@
 import { ToastrService } from 'ngx-toastr';
 import { MockProvider } from 'ngx-mock-provider';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { GameControlOptionComponent } from './game-control-option.component';
 import { ControlsEnum } from '../../enums/controls.enum';
@@ -13,6 +14,7 @@ describe('GameControlOptionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [GameControlOptionComponent],
       providers: [
         MockProvider({

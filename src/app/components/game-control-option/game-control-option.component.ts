@@ -1,10 +1,12 @@
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DefaultSettings } from '../../enums/default-settings.enum';
 import { ControlsEnum } from '../../enums/controls.enum';
-import { ControlsStateObject } from '../../interfaces/controls-state.interface';
 import { LocalStorage } from '../../enums/local-storage.enum';
+import { ControlsStateObject } from '../../interfaces/controls-state.interface';
+import { BREAKPOINT_TABLET } from '../../constants/board-component.const';
 
 @Component({
   selector: 'atg-game-control-option',
@@ -21,10 +23,20 @@ export class GameControlOptionComponent implements OnInit {
   private isSetMode = false;
   private defaultControls: ControlsStateObject;
 
-  constructor(private toastrService: ToastrService) {}
+  constructor(private toastrService: ToastrService, private router: Router) {}
+
+  @HostListener('window:resize', ['$event']) onResize({ target }: { target: Window }): void {
+    if (target.innerWidth < BREAKPOINT_TABLET) {
+      this.router.navigate(['/game']);
+    }
+  }
 
   ngOnInit(): void {
     this.toastrService.overlayContainer = this.toastContainer;
+
+    if (window.innerWidth < BREAKPOINT_TABLET) {
+      this.router.navigate(['/game']);
+    }
 
     this.defaultControls = {
       [ControlsEnum.RESET]: DefaultSettings.RESET,
