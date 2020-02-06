@@ -11,6 +11,7 @@ html {
   font-size: 13px;
   letter-spacing: 1.5px;
   background-color: $primary-color;
+  touch-action: manipulation;
 }
 
 * {
