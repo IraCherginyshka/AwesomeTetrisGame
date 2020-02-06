@@ -27,3 +27,9 @@
     }
   }
 }
+
+@media (max-width: $breakpoint-tablet) {
+  .player {
+    top: 7.3rem;
+  }
+}

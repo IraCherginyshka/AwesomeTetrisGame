@@ -23,6 +23,7 @@ import { PlayerProfileComponent } from './components/player-profile/player-profi
 import { PlayerProfileHeaderComponent } from './components/player-profile-header/player-profile-header.component';
 import { GameOtherPlayerComponent } from './components/game-other-player/game-other-player.component';
 import { GameObserveComponent } from './components/game-observe/game-observe.component';
+import { ResizeDirective } from './directives/resize.directive';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { GameObserveComponent } from './components/game-observe/game-observe.com
     PlayerProfileHeaderComponent,
     GameOtherPlayerComponent,
     GameObserveComponent,
+    ResizeDirective,
   ],
   imports: [
     BrowserModule,

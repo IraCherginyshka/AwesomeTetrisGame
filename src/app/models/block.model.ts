@@ -1,4 +1,4 @@
-import { BLOCK_SIZE, BORDER_COLOR } from '../constants/board-component.const';
+import { BORDER_COLOR } from '../constants/board-component.const';
 
 export abstract class BlockModel {
   constructor(protected ctx: CanvasRenderingContext2D, private color: string) {
@@ -6,10 +6,10 @@ export abstract class BlockModel {
     this.ctx.strokeStyle = BORDER_COLOR;
   }
 
-  fillBoardBlock(x: number, y: number): void {
-    this.ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-    this.fillStroke(x, y);
+  fillBoardBlock(x: number, y: number, z: number): void {
+    this.ctx.fillRect(x * z, y * z, z, z);
+    this.fillStroke(x, y, z);
   }
 
-  protected abstract fillStroke(x: number, y: number): void;
+  protected abstract fillStroke(x: number, y: number, z: number): void;
 }

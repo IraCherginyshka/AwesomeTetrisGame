@@ -16,3 +16,12 @@
   color: $secondary-color;
   font-size: $h1-font-size;
 }
+
+@media (max-width: $breakpoint-tablet) {
+  .overlay {
+    width: $board-width-mobile + 2px;
+    height: $board-height-mobile + 3px;
+    line-height: $board-height-mobile;
+    font-size: 3rem;
+  }
+}

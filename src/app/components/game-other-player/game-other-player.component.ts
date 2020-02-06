@@ -7,12 +7,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../constants/board-component.const';
+import { ResizeService } from '../../services/resize.service';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { GameState } from '../../enums/game-state.enum';
 import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import { PlayerData } from '../../interfaces/player-data.interface';
 import { BoardModel } from '../../models/board.model';
+import {
+  QUANTITY_BLOCKS_HEIGHT,
+  QUANTITY_BLOCKS_WIDTH,
+} from '../../constants/board-component.const';
 
 @Component({
   selector: 'atg-game-other-player',
@@ -35,13 +39,16 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
   private isActiveGame: boolean;
   private isConnected: boolean;
   private gameRoom: string;
+  private blockSize: number;
   private subscriptionGameStats: Subscription;
   private subscriptionActiveGames: Subscription;
+  private subscriptionResize: Subscription;
 
   constructor(
     private socketService: SocketService,
     private userService: UserService,
     private toastrService: ToastrService,
+    private resizeService: ResizeService,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -52,10 +59,15 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.toastrService.overlayContainer = this.toastContainer;
-    this.canvas.nativeElement.width = CANVAS_WIDTH;
-    this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.setCanvasSize();
+
+    this.subscriptionResize = this.resizeService.onResizeBlock().subscribe((size) => {
+      this.setCanvasSize();
+      this.showBoard();
+    });
+
+    this.toastrService.overlayContainer = this.toastContainer;
 
     this.currentUser = this.userService.getUserName();
 
@@ -101,8 +113,14 @@ export class GameOtherPlayerComponent implements OnInit, OnDestroy {
     this.subscriptionActiveGames.unsubscribe();
   }
 
+  private setCanvasSize(): void {
+    this.blockSize = this.resizeService.blockSize;
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
+  }
+
   private showBoard(): void {
     const board = new BoardModel(this.ctx, false);
-    board.drawBoard(this.currentMatrix);
+    board.drawBoard(this.currentMatrix, this.blockSize);
   }
 }

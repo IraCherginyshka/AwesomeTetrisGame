@@ -10,6 +10,15 @@
       </button>
     </section>
   </div>
+  <header class="leaderboard leaderboard__header">
+    <ul class="leaderboard__list">
+      <li class="leaderboard__field--index">№</li>
+      <li class="leaderboard__field leaderboard__player-name">name</li>
+      <li class="leaderboard__field">score</li>
+      <li class="leaderboard__field">level</li>
+      <li class="leaderboard__field">lines</li>
+    </ul>
+  </header>
   <ul class="leaderboard" *ngFor="let result of currentUserResults; let i = index">
     <li class="leaderboard__list">
       <span class="leaderboard__field--index">{{ i + 1 }}</span>

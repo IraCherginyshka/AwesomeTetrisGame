@@ -6,6 +6,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { UserService } from '../../services/user.service';
 import { GameService } from '../../services/game.service';
 import { SocketService } from '../../services/socket.service';
+import { ResizeService } from '../../services/resize.service';
 import { FigureModel } from '../../models/figure.model';
 import { BoardModel } from '../../models/board.model';
 import { FiguresColors } from '../../enums/figures-colors.enum';
@@ -16,8 +17,6 @@ import { GameStatsObject } from '../../interfaces/game-stats.interface';
 import { PlayerData } from '../../interfaces/player-data.interface';
 import {
   ACCELERATION,
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
   CENTRAL_ITEM,
   DELAY_DEFAULT,
   DELAY_LEVEL_STEP,
@@ -47,6 +46,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
+  private blockSize: number;
   private currentPlayer: PlayerData;
   private gameInformation: GameStatsObject;
   private subscriptionState: Subscription;
@@ -55,12 +55,14 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionLevel: Subscription;
   private subscriptionLogout: Subscription;
   private subscriptionLogin: Subscription;
+  private subscriptionResize: Subscription;
 
   constructor(
     private gameService: GameService,
     private toastrService: ToastrService,
     private userService: UserService,
     private socketService: SocketService,
+    private resizeService: ResizeService,
   ) {
     this.currentFigure = FigureModel.getRandomFigure();
   }
@@ -68,13 +70,20 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
     event.preventDefault();
     this.detectDestruction();
-    this.socketService.deleteSpectateGame(this.currentPlayer.username);
+    if (this.userIsAuthenticated) {
+      this.socketService.deleteSpectateGame(this.currentPlayer.username);
+    }
   }
 
   ngOnInit(): void {
-    this.canvas.nativeElement.width = CANVAS_WIDTH;
-    this.canvas.nativeElement.height = CANVAS_HEIGHT;
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.setCanvasSize();
+
+    this.subscriptionResize = this.resizeService.onResizeBlock().subscribe(() => {
+      this.setCanvasSize();
+      this.redrawBoard();
+    });
+
     this.currentPlayer = JSON.parse(this.userService.getCurrentUser());
 
     const saveGameStats = localStorage.getItem(LocalStorage.GAME_STATS);
@@ -120,7 +129,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       if (gameState === GameState.PAUSE) {
         this.stopGame();
         this.saveGameStatsAndInformation();
-        this.socketService.deleteSpectateGame(this.currentPlayer.username);
+        if (this.userIsAuthenticated) {
+          this.socketService.deleteSpectateGame(this.currentPlayer.username);
+        }
       }
       if (gameState === GameState.PLAY) {
         this.playGame();
@@ -205,6 +216,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           this.playGame();
         }
       });
+    this.redrawBoard();
   }
 
   ngOnDestroy(): void {
@@ -215,6 +227,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subscriptionLevel.unsubscribe();
     this.subscriptionLogout.unsubscribe();
     this.subscriptionLogin.unsubscribe();
+    this.subscriptionResize.unsubscribe();
+  }
+
+  private setCanvasSize(): void {
+    this.blockSize = this.resizeService.blockSize;
+    this.canvas.nativeElement.width = QUANTITY_BLOCKS_WIDTH * this.blockSize;
+    this.canvas.nativeElement.height = QUANTITY_BLOCKS_HEIGHT * this.blockSize;
   }
 
   private sendStatsToSocket(): void {
@@ -277,7 +296,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       this.figurePosition,
     );
 
-    newBoard.drawBoard(this.currentMatrix);
+    newBoard.drawBoard(this.currentMatrix, this.blockSize);
   }
 
   private setInitialBoardState(): void {
@@ -395,6 +414,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       QUANTITY_BLOCKS_WIDTH,
       QUANTITY_BLOCKS_HEIGHT,
     );
-    this.socketService.deleteSpectateGame(this.currentPlayer.username);
+
+    if (this.userIsAuthenticated) {
+      this.socketService.deleteSpectateGame(this.currentPlayer.username);
+    }
   }
 }

@@ -11,23 +11,4 @@
     <p class="information-root__label">lines</p>
     <div class="information-root__field">{{ (gameStats$ | async).lines }}</div>
   </div>
-  <div class="information-block--controls">
-    <p class="information-root__label">
-      {{ isCustomControls ? 'use custom controls' : 'use default controls' }}
-    </p>
-    <a class="header-link" routerLink="/option" routerLinkActive="active-link">
-      <button class="game-button">
-        change
-      </button>
-    </a>
-  </div>
 </div>
-<section class="spectator">
-  <p>Active Viewers:</p>
-  <p *ngIf="!spectatorList || !spectatorList.length" class="spectator--no">No Viewers</p>
-  <ul class="spectator__list">
-    <li *ngFor="let name of spectatorList" class="spectator__item">
-      {{ name }}
-    </li>
-  </ul>
-</section>

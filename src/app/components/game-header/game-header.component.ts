@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { UserService } from '../../services/user.service';
 import { PlayerData } from '../../interfaces/player-data.interface';
@@ -13,6 +13,7 @@ import { LocalStorage } from '../../enums/local-storage.enum';
 })
 export class GameHeaderComponent implements OnInit, OnDestroy {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
+  @ViewChild('checkbox', { static: true }) checkbox: ElementRef<HTMLInputElement>;
   public userIsAuthenticated = !!localStorage.getItem(LocalStorage.ACCESS_USER);
 
   private authSubscription: Subscription;
@@ -37,5 +38,9 @@ export class GameHeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authSubscription.unsubscribe();
+  }
+
+  public hideCheckbox(): void {
+    this.checkbox.nativeElement.checked = false;
   }
 }
