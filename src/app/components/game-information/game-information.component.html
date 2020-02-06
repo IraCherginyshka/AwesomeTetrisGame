@@ -1,24 +1,14 @@
 <div class="information">
   <div class="information-block">
-    <p class="information-label">level</p>
-    <div class="information-field">{{ (gameStats$ | async).level }}</div>
+    <p class="information-root__label">level</p>
+    <div class="information-root__field">{{ (gameStats$ | async).level }}</div>
   </div>
   <div class="information-block">
-    <p class="information-label">score</p>
-    <div class="information-field">{{ (gameStats$ | async).score }}</div>
+    <p class="information-root__label">score</p>
+    <div class="information-root__field">{{ (gameStats$ | async).score }}</div>
   </div>
   <div class="information-block">
-    <p class="information-label">lines</p>
-    <div class="information-field">{{ (gameStats$ | async).lines }}</div>
-  </div>
-  <div class="information-block--controls">
-    <p class="information-label">
-      {{ isCustomControls ? 'use custom controls' : 'use default controls' }}
-    </p>
-    <a class="header-link" routerLink="/option" routerLinkActive="active-link">
-      <button class="game-button">
-        change
-      </button>
-    </a>
+    <p class="information-root__label">lines</p>
+    <div class="information-root__field">{{ (gameStats$ | async).lines }}</div>
   </div>
 </div>

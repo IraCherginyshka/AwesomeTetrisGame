@@ -2,9 +2,14 @@
 
 .state-controls {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
   margin-bottom: $primary-indent;
+
+  & .flex-max {
+    width: 100%;
+    text-align: center;
+  }
 
   & .state-control {
     width: $controls-button-width;
@@ -26,15 +31,35 @@
       background-color: $secondary-color;
     }
   }
+
   & .horizontal {
     display: flex;
   }
+
   & .icon-arrow {
     padding-top: 0.5rem;
     width: 3rem;
   }
+
   & .icon-arrow--secondary {
     padding-top: 0.25rem;
     width: 2.5rem;
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .state-controls {
+    & .state-control {
+      margin: 0.2rem;
+    }
+
+    & .flex-max--down {
+      width: $controls-button-width;
+    }
+
+    & .right {
+      order: 1;
+      margin-left: 0.6rem;
+    }
   }
 }

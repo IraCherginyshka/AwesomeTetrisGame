@@ -1,20 +1,26 @@
 <div class="state-controls">
-  <button class="state-control rotation" (click)="moveFigure(moveStep.ROTATE)">
-    <img class="icon-arrow--secondary" src="../../../assets/images/arrowsRotate.png" alt="arrows" />
-  </button>
-  <div class="horizontal">
-    <button class="state-control left" (click)="moveFigure(moveStep.LEFT)">
-      <img class="icon-arrow" src="../../../assets/images/arrowsLeft.png" alt="arrows" />
-    </button>
-    <button class="state-control right" (click)="moveFigure(moveStep.RIGHT)">
-      <img class="icon-arrow" src="../../../assets/images/arrowsRight.png" alt="arrows" />
+  <div class="flex-max">
+    <button class="state-control rotation" (click)="moveFigure(moveStep.ROTATE)">
+      <img
+        class="icon-arrow--secondary"
+        src="../../../assets/images/arrowsRotate.png"
+        alt="arrows"
+      />
     </button>
   </div>
-  <button
-    class="state-control down"
-    (mousedown)="moveFigure(moveStep.DOWN)"
-    (mouseup)="moveFigure(moveStep.DOWN_OFF)"
-  >
-    <img class="icon-arrow--secondary" src="../../../assets/images/arrowsDown.png" alt="arrows" />
+  <button class="state-control left" (click)="moveFigure(moveStep.LEFT)">
+    <img class="icon-arrow" src="../../../assets/images/arrowsLeft.png" alt="arrows" />
   </button>
+  <button class="state-control right" (click)="moveFigure(moveStep.RIGHT)">
+    <img class="icon-arrow" src="../../../assets/images/arrowsRight.png" alt="arrows" />
+  </button>
+  <div class="flex-max flex-max--down">
+    <button
+      class="state-control down"
+      (mousedown)="moveFigure(moveStep.DOWN)"
+      (mouseup)="moveFigure(moveStep.DOWN_OFF)"
+    >
+      <img class="icon-arrow--secondary" src="../../../assets/images/arrowsDown.png" alt="arrows" />
+    </button>
+  </div>
 </div>

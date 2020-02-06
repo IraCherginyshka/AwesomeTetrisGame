@@ -1,6 +1,8 @@
 <div class="player">
-  <p class="player-inf">{{ currentUser?.username }}</p>
-  <img class="icon" src="../../../assets/images/{{ currentUser?.avatar }}" alt="icon" />
+  <p class="player-inf mobile-display-none">{{ currentUser?.username }}</p>
+  <a class="header-link" routerLink="/profile" routerLinkActive="active-link">
+    <img class="icon" src="../../../assets/images/{{ currentUser?.avatar }}" alt="icon" />
+  </a>
   <button class="game-button" (click)="onLogout()">
     Logout
   </button>

@@ -1,9 +1,9 @@
 import { Subscription } from 'rxjs';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { BoardModel } from '../../models/board.model';
 import { GameService } from '../../services/game.service';
-import { BLOCK_SIZE } from '../../constants/board-component.const';
+import { ResizeService } from '../../services/resize.service';
 import { FiguresColors } from '../../enums/figures-colors.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
 
@@ -17,13 +17,27 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
   private ctx: CanvasRenderingContext2D;
   private nextFigure: FiguresColors[][];
   private isLostGame = false;
+  private blockSize: number;
   private subscriptionNext: Subscription;
   private subscriptionLost: Subscription;
+  private subscriptionResize: Subscription;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private resizeService: ResizeService) {}
+
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event): void {
+    event.preventDefault();
+    if (!this.isLostGame) {
+      localStorage.setItem(LocalStorage.NEXT_FIGURE, JSON.stringify(this.nextFigure));
+    }
+  }
 
   ngOnInit(): void {
     this.ctx = this.nextCanvas.nativeElement.getContext('2d');
+
+    this.subscriptionResize = this.resizeService.onResizeBlock().subscribe(() => {
+      this.setInitialState(this.nextFigure);
+    });
+
     this.subscriptionNext = this.gameService
       .onNewFigureCreated()
       .subscribe(({ randomNextFigure }) => {
@@ -34,27 +48,30 @@ export class GameNextFigureComponent implements OnInit, OnDestroy {
       this.isLostGame = true;
     });
 
-    if (!localStorage.getItem(LocalStorage.GAME_STATS)) {
-      this.gameService.updateFigures();
-    }
+    const nextFigureLS = JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE));
 
-    if (localStorage.getItem(LocalStorage.NEXT_FIGURE)) {
-      this.setInitialState(JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE)));
+    if (!nextFigureLS) {
+      this.gameService.updateFigures();
+    } else {
+      this.setInitialState(nextFigureLS);
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptionNext.unsubscribe();
+    this.subscriptionResize.unsubscribe();
+
     if (!this.isLostGame) {
       localStorage.setItem(LocalStorage.NEXT_FIGURE, JSON.stringify(this.nextFigure));
     }
   }
 
   private setInitialState(nextFigure: FiguresColors[][]): void {
-    this.nextFigure = nextFigure;
     const newBoard = new BoardModel(this.ctx, true);
-    this.nextCanvas.nativeElement.width = this.nextFigure[0].length * BLOCK_SIZE;
-    this.nextCanvas.nativeElement.height = this.nextFigure.length * BLOCK_SIZE;
-    newBoard.drawBoard(this.nextFigure);
+    this.nextFigure = nextFigure;
+    this.blockSize = this.resizeService.blockSize;
+    this.nextCanvas.nativeElement.width = this.nextFigure[0].length * this.blockSize;
+    this.nextCanvas.nativeElement.height = this.nextFigure.length * this.blockSize;
+    newBoard.drawBoard(this.nextFigure, this.blockSize);
   }
 }

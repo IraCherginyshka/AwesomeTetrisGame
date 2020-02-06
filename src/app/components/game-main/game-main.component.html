@@ -1,13 +1,31 @@
-<div class="container main">
+<main class="container main">
   <div class="game">
-    <atg-game-information></atg-game-information>
+    <div class="game__information">
+      <section class="spectator">
+        <p>Active Viewers:</p>
+        <p *ngIf="!spectatorList || !spectatorList.size" class="spectator--no">No Viewers</p>
+        <ul class="spectator__list">
+          <li *ngFor="let name of spectatorList" class="spectator__item">{{ name }}</li>
+        </ul>
+      </section>
+
+      <atg-game-next-figure class="next"></atg-game-next-figure>
+      <atg-game-information class="stats"></atg-game-information>
+    </div>
     <atg-game-board></atg-game-board>
-    <div>
-      <atg-game-next-figure></atg-game-next-figure>
-      <div class="wrap-controls">
-        <atg-game-state-controls></atg-game-state-controls>
-        <atg-game-controls></atg-game-controls>
+    <div class="wrap-controls">
+      <div class="information-block--controls mobile-display-none">
+        <p class="information-label">
+          {{ isCustomControls ? 'use custom controls' : 'use default controls' }}
+        </p>
+        <a class="header-link" routerLink="/option" routerLinkActive="active-link">
+          <button class="game-button">
+            change
+          </button>
+        </a>
       </div>
+      <atg-game-state-controls class="state-controls"></atg-game-state-controls>
+      <atg-game-controls class="game-controls"></atg-game-controls>
     </div>
   </div>
-</div>
+</main>
