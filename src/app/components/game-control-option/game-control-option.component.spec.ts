@@ -7,6 +7,8 @@ import { GameControlOptionComponent } from './game-control-option.component';
 import { ControlsEnum } from '../../enums/controls.enum';
 import { DefaultSettings } from '../../enums/default-settings.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
+import { ResizeService } from '../../services/resize.service';
+import { Observable, of } from 'rxjs';
 
 describe('GameControlOptionComponent', () => {
   let component: GameControlOptionComponent;
@@ -20,6 +22,14 @@ describe('GameControlOptionComponent', () => {
         MockProvider({
           provider: ToastrService,
           methods: ['error', 'success'],
+        }),
+        MockProvider({
+          provider: ResizeService,
+          overwrite: {
+            onResizeBlock(): Observable<undefined> {
+              return of(undefined);
+            },
+          },
         }),
       ],
     }).compileComponents();

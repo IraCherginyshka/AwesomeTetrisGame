@@ -1,19 +1,21 @@
+import { Subscription } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DefaultSettings } from '../../enums/default-settings.enum';
 import { ControlsEnum } from '../../enums/controls.enum';
 import { LocalStorage } from '../../enums/local-storage.enum';
 import { ControlsStateObject } from '../../interfaces/controls-state.interface';
-import { BREAKPOINT_TABLET } from '../../constants/board-component.const';
+import { BLOCK_SIZE_MOBILE } from '../../constants/board-component.const';
+import { ResizeService } from '../../services/resize.service';
 
 @Component({
   selector: 'atg-game-control-option',
   templateUrl: './game-control-option.component.html',
   styleUrls: ['./game-control-option.component.scss'],
 })
-export class GameControlOptionComponent implements OnInit {
+export class GameControlOptionComponent implements OnInit, OnDestroy {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   public controls: ControlsStateObject;
   public readonly controlsEnum = ControlsEnum;
@@ -22,21 +24,37 @@ export class GameControlOptionComponent implements OnInit {
 
   private isSetMode = false;
   private defaultControls: ControlsStateObject;
+  private subscriptionResize: Subscription;
 
-  constructor(private toastrService: ToastrService, private router: Router) {}
+  constructor(
+    private toastrService: ToastrService,
+    private resizeService: ResizeService,
+    private router: Router,
+  ) {}
 
-  @HostListener('window:resize', ['$event']) onResize({ target }: { target: Window }): void {
-    if (target.innerWidth < BREAKPOINT_TABLET) {
-      this.router.navigate(['/game']);
+  @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
+    event.preventDefault();
+    if (!this.isSetMode) {
+      return;
+    }
+    if (
+      /[A-Za-z0-9]/.test(event.key) &&
+      !Object.values(this.controls).includes(event.key.toLowerCase())
+    ) {
+      this.controls = { ...this.controls, [this.activeField]: event.key.toLowerCase() };
+      this.isSetMode = false;
+      this.activeField = undefined;
+    } else {
+      this.toastrService.error('This symbol is incorrect', '', {
+        timeOut: 3000,
+      });
     }
   }
 
   ngOnInit(): void {
     this.toastrService.overlayContainer = this.toastContainer;
 
-    if (window.innerWidth < BREAKPOINT_TABLET) {
-      this.router.navigate(['/game']);
-    }
+    this.redirectToGamePage();
 
     this.defaultControls = {
       [ControlsEnum.RESET]: DefaultSettings.RESET,
@@ -63,25 +81,14 @@ export class GameControlOptionComponent implements OnInit {
     } else {
       this.controls = this.defaultControls;
     }
+
+    this.subscriptionResize = this.resizeService.onResizeBlock().subscribe(() => {
+      this.redirectToGamePage();
+    });
   }
 
-  @HostListener('window:keydown', ['$event']) keyBoardInput(event: KeyboardEvent): void {
-    event.preventDefault();
-    if (!this.isSetMode) {
-      return;
-    }
-    if (
-      /[A-Za-z0-9]/.test(event.key) &&
-      !Object.values(this.controls).includes(event.key.toLowerCase())
-    ) {
-      this.controls = { ...this.controls, [this.activeField]: event.key.toLowerCase() };
-      this.isSetMode = false;
-      this.activeField = undefined;
-    } else {
-      this.toastrService.error('This symbol is incorrect', '', {
-        timeOut: 3000,
-      });
-    }
+  ngOnDestroy(): void {
+    this.subscriptionResize.unsubscribe();
   }
 
   public setControl(control: ControlsEnum): void {
@@ -120,5 +127,11 @@ export class GameControlOptionComponent implements OnInit {
     return Object.keys(this.controls).every(
       (key) => `${this.controls[key]}` === `${this.defaultControls[key]}`,
     );
+  }
+
+  private redirectToGamePage(): void {
+    if (this.resizeService.blockSize === BLOCK_SIZE_MOBILE) {
+      this.router.navigate(['/game']);
+    }
   }
 }
