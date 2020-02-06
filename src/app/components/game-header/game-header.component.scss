@@ -5,12 +5,14 @@
   padding: 2rem 0;
 
   & .logo {
+    display: inline-block;
     margin: $center;
     font-size: $h1-font-size;
 
     & span {
       background-color: $secondary-color;
       padding: 0 0.1rem;
+      line-height: $h1-font-size - 2rem;
     }
   }
 
@@ -76,7 +78,7 @@
     &__toggle {
       display: block;
       position: absolute;
-      top: 9.2rem;
+      top: 11rem;
       z-index: 1;
 
       & input {
@@ -161,7 +163,7 @@
     }
 
     &__logout {
-      top: 6.9rem;
+      top: 9rem;
     }
   }
 }
