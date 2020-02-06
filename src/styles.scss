@@ -5,11 +5,12 @@ $fa-font-path: '../node_modules/@fortawesome/fontawesome-free/webfonts';
 @import '~@fortawesome/fontawesome-free/scss/regular';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/v4-shims';
+@import url('https://fonts.googleapis.com/css?family=Anton&display=swap');
 
 html {
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 1.5px;
-  touch-action: none;
+  background-color: $primary-color;
 }
 
 * {

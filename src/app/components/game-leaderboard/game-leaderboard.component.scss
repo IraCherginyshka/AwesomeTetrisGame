@@ -62,12 +62,17 @@
 
 @media (max-width: $breakpoint-tablet) {
   .leaderboard {
+    padding: 0.3rem;
     &__field--index {
       margin-right: 0.5rem;
     }
 
+    &__list {
+      padding: 0.5rem;
+    }
+
     &__player-name {
-      flex-basis: 8rem;
+      flex-basis: 9rem;
     }
   }
 }

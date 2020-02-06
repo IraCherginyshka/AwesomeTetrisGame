@@ -5,11 +5,13 @@
   padding: 2rem 0;
 
   & .logo {
-    width: $width-logo;
     margin: $center;
     font-size: $h1-font-size;
-    background-color: $secondary-color;
-    line-height: $h1-font-size - 0.3rem;
+
+    & span {
+      background-color: $secondary-color;
+      padding: 0 0.1rem;
+    }
   }
 
   & .wrap-links {
