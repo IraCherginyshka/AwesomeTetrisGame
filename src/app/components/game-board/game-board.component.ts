@@ -108,6 +108,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       this.redrawBoard();
     } else {
       this.setInitialComponentState();
+      this.setInitialBoardState();
     }
     this.isLostGame = false;
     this.isPlaying = undefined;
