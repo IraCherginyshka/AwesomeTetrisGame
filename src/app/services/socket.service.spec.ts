@@ -20,11 +20,6 @@ describe('SocketService', () => {
     expect(socketService).toBeTruthy();
   });
 
-  it('should set undefined to gameRoom field after calling leaveSpectateGame function', () => {
-    socketService.leaveSpectateGame('TestName');
-    expect(socketService['currentGameRoom']).toBeUndefined();
-  });
-
   it('should set "room1" to gameRoom field after calling connectToSpectateGame function with "room1", "TestName"', () => {
     socketService.connectToSpectateGame('room1', 'TestName');
     expect(socketService['currentGameRoom']).toBe('room1');
