@@ -24,6 +24,7 @@ import { PlayerProfileHeaderComponent } from './components/player-profile-header
 import { GameOtherPlayerComponent } from './components/game-other-player/game-other-player.component';
 import { GameObserveComponent } from './components/game-observe/game-observe.component';
 import { ResizeDirective } from './directives/resize.directive';
+import { LongPressDirective } from './directives/long-press.directive';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ResizeDirective } from './directives/resize.directive';
     GameOtherPlayerComponent,
     GameObserveComponent,
     ResizeDirective,
+    LongPressDirective,
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,7 @@ export class GameControlsComponent implements OnInit, OnDestroy {
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
   private controls: Partial<ControlsStateObject>;
+  private readonly figureMovement = FiguresMovement;
 
   constructor(private gameService: GameService) {}
 
@@ -85,9 +86,5 @@ export class GameControlsComponent implements OnInit, OnDestroy {
     if (event.key === this.controls[ControlsEnum.DROP]) {
       this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
-  }
-
-  public moveFigure(step: FiguresMovement): void {
-    this.gameService.setMoveStep(step);
   }
 }
