@@ -28,8 +28,22 @@
   }
 }
 
+@media (max-width: $breakpoint-laptop) {
+  .player {
+    width: 17rem;
+
+    & .icon {
+      display: none;
+    }
+  }
+}
+
 @media (max-width: $breakpoint-tablet) {
   .player {
     top: 9.5rem;
+
+    & .icon {
+      display: inline-block;
+    }
   }
 }
