@@ -9,22 +9,34 @@
 
 ## Overview
 
+The main aim of this project was creating the tetris game logic. And for the best game flow on the game page there are:
+
+- the game board with different seven figures and all general tetris logic,
+- block with next figure view,
+- actual game stats (`level`, `score`, `lines`),
+- block with information about type of controls (`default` or `custom`),
+- information about spectators,
+- block with controls for playing tetris game (`left`, `right`, `rotate`, `down`).
+
+The authorization was implemented into the project using MEAN Stack and a user must login into the app to save his game results to `Leaderboard` or to be able to spectate the other players’ game in real time.
+In order to make it possible forms were created, with validations, ability to select the favorite icon and enter general information.
+The authorized user has a `Profile` page with his top 10 game results.
+
 The application will allow the user to play Tetris using mouse and keyboard.
 By default, user can control the game using keyboard controls such as :
 
 `r` - reload the game; `p` - pause; `Enter` - start a new game; `Aroows Left`, `Right`, `Up` and `Down` - move a figure to the left and right, rotate and increase the fall speed, respectively.
 
-The Player can customize the keyboard controls. On the `Option page`, there are two blocks,
-the first contains information about the `Default controls` and the second, where user can customize the keyboard controls.
+The Player can customize the keyboard controls and these settings remain even after reloading the app.
+On the `Option page`, there are two blocks, the first contains information about the `Default controls` and the second, where user can customize the keyboard controls.
 The User must take into account the validation of the input, namely he can enter only `Latin letters` and `numbers`.
 And if he try to enter the same keyboard control, he will see an error message about the incorrect symbol.
 
-In addition, we will see notifications about setting custom or default controls, if user clicks on the respective buttons.
-Also, next to the game board there is a block with information about the type of controls and a link to the option page.
+In addition, there is the `Leaderboard` page with all authorized players’ top ten game results.
+And if current players' top result isn’t in the top ten, the separate block with his place in the board and game stats will appear.
 
-The application will show information about the level, score, speed, next block view. I will add functionality to the spinner component for visualization of loading status and a component for indication of losing the game.
-
-Also, the application will allow user to see leaderboard and become part of it by winning the game (for this functionality authorization and back-end will be used in the app).
+All authorized players can observe the other players' game in real time. In order to make it possible SocketIO was introduced into the project.
+First of all, user must visit the `Spectate` page, where all active games are shown with actual game level and choose one of these games and then he will be able to observe the selected game stats and the current board status.
 
 ## Project setup
 
@@ -80,7 +92,9 @@ AwesomeTetrisGame/
 |  └── app/ - directory for files in which application logic and data are defined
 |  |   └── components/ - directory for components, templates, styles and unit tests
 |  |   └── constants/ - directory for application constants
+|  |   └── directives/ - directory for application directives
 |  |   └── enums/ - directory for enums
+|  |   └── interfaces/ - directory for interfaces
 |  |   └── models/ - directory for models
 |  |   └── services - directory for services
 |  └── assets/ - directory for static assets
@@ -151,17 +165,28 @@ Unit testing was implemented using the Jasmine test framework.
 
 `Definition of Done (DoD)`:
 
-- Code coverage unit testing >= 80%
+The Code coverage report has such a progress:
+
+- 79.87% `Statements`
+- 595/74558.6% `Branches`
+- 109/18675.49% `Functions`
+- 154/20479.27% `Lines`
+
+## Socket.IO logic
+
+Socket.IO allows synchronized communication to take place simply within the app, which means real-time communication.
+Our application sends messages about connection, creating and destroy the game room, joining and leaving the certain game room, changing game bord status to the server, along with content.
+The listening for messages types `connection`, `new-active-game`, `delete-game`,`join-game`, `leave-game`, `new-stats`, `all-active-games` were added to Socket.IO server.
+When the message arrive, server calls the respective callback function and as result spectators can see all active games, observe the other players' game in real time, his actual game stats and game board status.
+In addition, player can view the list of his spectators.
 
 ## Technologies
 
 - Angular
+- TypeScript
 - Sass
+- RxJS
 - Node.js
 - Express
 - MongoDB
 - Socket.IO
-
-## Nice to have requirements
-
-Game implementation in group at the same time and with showing of all progress while playing (using WebSocket).
