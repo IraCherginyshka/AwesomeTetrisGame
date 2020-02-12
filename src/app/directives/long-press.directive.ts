@@ -18,15 +18,11 @@ export class LongPressDirective {
   startPress(event: Event): void {
     this.gameService.setMoveStep(this.moveStep);
 
-    if (this.moveStep === FiguresMovement.ROTATE) {
-      this.interval = window.setInterval(() => {
-        this.gameService.setMoveStep(FiguresMovement.ROTATE);
-      }, 250);
-    } else {
-      this.interval = window.setInterval(() => {
-        this.gameService.setMoveStep(this.moveStep);
-      }, 125);
-    }
+    const updateInterval = this.moveStep === FiguresMovement.ROTATE ? 250 : 125;
+
+    this.interval = window.setInterval(() => {
+      this.gameService.setMoveStep(this.moveStep);
+    }, updateInterval);
   }
 
   @HostListener('touchend')
