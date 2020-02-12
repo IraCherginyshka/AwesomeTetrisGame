@@ -15,17 +15,17 @@ export class LongPressDirective {
 
   @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
-  onMouseDown(event: Event): void {
+  startPress(event: Event): void {
     this.gameService.setMoveStep(this.moveStep);
 
-    if (this.moveStep !== FiguresMovement.ROTATE) {
-      this.interval = window.setInterval(() => {
-        this.gameService.setMoveStep(this.moveStep);
-      }, 125);
-    } else {
+    if (this.moveStep === FiguresMovement.ROTATE) {
       this.interval = window.setInterval(() => {
         this.gameService.setMoveStep(FiguresMovement.ROTATE);
       }, 250);
+    } else {
+      this.interval = window.setInterval(() => {
+        this.gameService.setMoveStep(this.moveStep);
+      }, 125);
     }
   }
 

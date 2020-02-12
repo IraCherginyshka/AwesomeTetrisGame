@@ -15,14 +15,13 @@ import { LocalStorage } from '../../enums/local-storage.enum';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent implements OnInit, OnDestroy {
-  public moveStep = FiguresMovement;
+  public readonly figureMovement = FiguresMovement;
 
   private isPlaying: boolean;
   private isLostGame: boolean;
   private subscriptionState: Subscription;
   private subscriptionLost: Subscription;
   private controls: Partial<ControlsStateObject>;
-  private readonly figureMovement = FiguresMovement;
 
   constructor(private gameService: GameService) {}
 

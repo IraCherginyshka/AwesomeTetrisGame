@@ -31,7 +31,7 @@ describe('ResizeDirective', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create component and di', () => {
+  it('should create component', () => {
     expect(component).toBeDefined();
   });
 
