@@ -29,7 +29,7 @@ describe('GameService', () => {
   it('should post the correct game result, call next in lostGameSubject and return undefined', inject(
     [HttpClient],
     (backend: HttpClient) => {
-      spyOn(gameService, 'onLostGame').and.callThrough();
+      spyOn(gameService, 'sendResult').and.callThrough();
       spyOn(backend, 'post').and.callThrough();
       spyOn(window.localStorage, 'getItem').and.callFake(() => {
         return 'TestName';
@@ -43,11 +43,7 @@ describe('GameService', () => {
 
       gameService.setSavedInformation(savedStats);
 
-      gameService.onLostGame().subscribe((action) => {
-        expect(action).toBeUndefined();
-      });
-
-      gameService.setLostGame();
+      gameService.sendResult();
 
       expect(backend.post).toHaveBeenCalledWith(`${url}/add_result`, gameResult);
     },
@@ -59,13 +55,13 @@ describe('GameService', () => {
     gameService.setNumberFilledLines(2);
 
     gameService.onUpdateGameInformation().subscribe((stats) => {
-      expect(stats).toEqual({ lines: 2, score: 22, level: 1 });
+      expect(stats).toEqual({ lines: 2, score: 50, level: 1 });
     });
   });
 
   it('should call next in numberLinesSubject and return stats by calling setSavedInformation function with stats', () => {
     spyOn(gameService, 'onUpdateGameInformation').and.callThrough();
-    const savedStats = { lines: 20, score: 220, level: 4 };
+    const savedStats = { lines: 20, score: 220, level: 3 };
 
     gameService.setSavedInformation(savedStats);
 
@@ -76,7 +72,7 @@ describe('GameService', () => {
 
   it('should call next in numberLinesSubject and return initial stats by calling setInitialInformation function', () => {
     spyOn(gameService, 'onUpdateGameInformation').and.callThrough();
-    const initialState = { lines: 0, score: 0, level: 1 };
+    const initialState = { lines: 0, score: 0, level: 0 };
 
     gameService.setInitialInformation();
 
