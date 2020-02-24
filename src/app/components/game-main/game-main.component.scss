@@ -57,7 +57,7 @@
   }
 }
 
-@media (max-width: $breakpoint-tablet) {
+@media (max-width: $breakpoint-laptop) {
   .game {
     flex-wrap: wrap;
     align-items: start;
@@ -79,12 +79,9 @@
     & .wrap-controls {
       margin-top: 0.2rem;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      align-items: center;
     }
-  }
-
-  .game-controls {
-    order: -1;
   }
 
   .spectator {
@@ -116,5 +113,17 @@
     &-label {
       font-size: 1rem;
     }
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .game {
+    & .wrap-controls {
+      flex-direction: column;
+    }
+  }
+
+  .game-controls {
+    order: -1;
   }
 }

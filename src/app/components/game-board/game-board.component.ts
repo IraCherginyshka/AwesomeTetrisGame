@@ -1,5 +1,5 @@
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
@@ -42,7 +42,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private currentFigure: FiguresColors[][];
   private currentMatrix: FiguresColors[][];
   private figurePosition: number;
-  private timeInterval: number;
   private duration: number;
   private lineWithFigure: number;
   private currentLevel: number;
@@ -56,6 +55,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private subscriptionLogout: Subscription;
   private subscriptionLogin: Subscription;
   private subscriptionResize: Subscription;
+  private timeInterval: Subscription;
 
   constructor(
     private gameService: GameService,
@@ -153,6 +153,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
     this.subscriptionMove = this.gameService
       .onNextStep()
+      .pipe(filter(() => this.isPlaying))
       .subscribe((nextPosition: FiguresMovement) => {
         if (nextPosition === FiguresMovement.LEFT) {
           if (this.checkCollisionDetection(-1, this.currentFigure)) {
@@ -194,7 +195,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       .onNewFigureCreated()
       .subscribe(({ previousFigure }) => {
         this.currentFigure = previousFigure;
-        this.setInitialBoardState();
+        this.lineWithFigure = 0;
+        this.figurePosition = CENTRAL_ITEM;
       });
 
     this.subscriptionLevel = this.gameService
@@ -208,12 +210,14 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       )
       .subscribe((gameStats) => {
         this.stopGame();
+
         this.currentLevel = gameStats.level;
         this.duration =
           DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel > MAX_SPEED
             ? DELAY_DEFAULT - DELAY_LEVEL_STEP * this.currentLevel
             : MAX_SPEED;
-        if (this.isPlaying) {
+
+        if (this.isPlaying && !this.isLostGame) {
           this.playGame();
         }
       });
@@ -317,7 +321,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private playGame(): void {
-    this.timeInterval = window.setInterval(() => {
+    this.timeInterval = interval(this.duration).subscribe(() => {
       const noCollision = this.checkCollisionDetection(0, this.currentFigure);
       if (this.userIsAuthenticated) {
         this.socketService.createNewSpectateGame({
@@ -333,7 +337,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.deleteFilledLines();
       }
       this.sendStatsToSocket();
-    }, this.duration);
+    });
   }
 
   private checkCollisionDetection(step: number, figure: FiguresColors[][]): boolean {
@@ -368,7 +372,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.boardMatrix = this.currentMatrix;
     this.gameService.updateFigures();
     this.redrawBoard();
-    this.setInitialBoardState();
+    this.lineWithFigure = 0;
+    this.figurePosition = CENTRAL_ITEM;
   }
 
   private takeMoveDown(): void {
@@ -377,7 +382,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private stopGame(): void {
-    clearInterval(this.timeInterval);
+    if (this.timeInterval) {
+      this.timeInterval.unsubscribe();
+    }
   }
 
   private resetGame(): void {
@@ -397,19 +404,26 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   }
 
   private lostGame(): void {
+    this.stopGame();
+    this.setInitialBoardState();
     this.redrawBoard();
     this.isLostGame = true;
     this.sendStatsToSocket();
     this.isPlaying = false;
-    this.gameService.setLostGame().subscribe(() => {
-      this.toastrService.warning('You have successfully added your result to Leaderboard');
-    });
+
+    this.gameService.setLostGame();
+
+    if (this.userIsAuthenticated) {
+      this.gameService.sendResult().subscribe(() => {
+        this.toastrService.warning('You have successfully added your result to Leaderboard');
+      });
+    }
+
     this.gameService.updateFigures();
-    this.setInitialBoardState();
     localStorage.removeItem(LocalStorage.GAME_STATS);
     localStorage.removeItem(LocalStorage.NEXT_FIGURE);
     localStorage.removeItem(LocalStorage.GAME_INFORMATION);
-    this.stopGame();
+
     this.textStateOverlay = GameState.LOST;
     this.boardMatrix = BoardModel.makeBoardEmptyMatrix(
       QUANTITY_BLOCKS_WIDTH,

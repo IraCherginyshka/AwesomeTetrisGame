@@ -45,7 +45,7 @@ export class GameService {
       this.currentScore = savedInformation.score;
       this.currentNumberLines = savedInformation.lines;
     }
-    const initialInformation = { lines: 0, score: 0, level: 1 };
+    const initialInformation = { lines: 0, score: 0, level: 0 };
 
     this.numberLinesSubject = new BehaviorSubject(savedInformation || initialInformation);
   }
@@ -53,20 +53,22 @@ export class GameService {
   public static calculateScore(lines: number, level: number): number {
     return (
       (lines / 2) *
-      (2 * (DEFAULT_LINE_SCORE + DEFAULT_LINE_SCORE * level) + DEFAULT_STEP * (lines - 1))
+      (2 * (DEFAULT_LINE_SCORE + DEFAULT_LINE_SCORE * (level + 1)) + DEFAULT_STEP * lines)
     );
   }
 
-  public setLostGame(): Observable<object> {
+  public setLostGame(): void {
     this.isLostGame = true;
+    this.lostGameSubject.next();
+  }
+
+  public sendResult(): Observable<object> {
     const gameResult: GameResult = {
       username: localStorage.getItem(LocalStorage.USER_NAME),
       lines: this.currentNumberLines,
       score: this.currentScore,
       level: this.currentLevel,
     };
-
-    this.lostGameSubject.next();
     return this.http.post(`${this.endpoint}/add_result`, gameResult);
   }
 
@@ -119,12 +121,13 @@ export class GameService {
   }
 
   public setNumberFilledLines(numberLines: number): void {
-    const initialScore = numberLines * DEFAULT_STEP;
-    this.currentNumberLines = numberLines ? this.currentNumberLines + numberLines : numberLines;
-    this.currentScore = initialScore
-      ? this.currentScore + GameService.calculateScore(numberLines, this.currentLevel)
-      : initialScore;
-    if (this.currentNumberLines >= GAME_STEP_LEVEL * this.currentLevel) {
+    const previousNumberLines = this.currentNumberLines;
+    const previousScore = this.currentScore;
+
+    this.currentNumberLines = previousNumberLines + numberLines;
+    this.currentScore = previousScore + GameService.calculateScore(numberLines, this.currentLevel);
+
+    if (this.currentNumberLines >= GAME_STEP_LEVEL * (this.currentLevel + 1)) {
       this.currentLevel += 1;
     }
 
@@ -136,7 +139,7 @@ export class GameService {
   }
 
   public setInitialInformation(): void {
-    this.currentLevel = 1;
+    this.currentLevel = 0;
     this.currentScore = 0;
     this.currentNumberLines = 0;
 

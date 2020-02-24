@@ -1,32 +1,31 @@
 import { MockProvider } from 'ngx-mock-provider';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ResizeDirective } from './resize.directive';
-import { ResizeService } from '../services/resize.service';
+import { LongPressDirective } from './long-press.directive';
+import { GameService } from '../services/game.service';
 
 @Component({
-  template: '<p atgResize>Testing Directives is awesome!</p>',
+  template: '<p atgLongPress>Testing Directives is awesome!</p>',
 })
 class TestComponent {}
 
-describe('ResizeDirective', () => {
+describe('LongPressDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let resizeDirective: ResizeDirective;
+  let longPressDirective: LongPressDirective;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, ResizeDirective],
+      declarations: [TestComponent, LongPressDirective],
       providers: [
-        ResizeDirective,
+        LongPressDirective,
         MockProvider({
-          provider: ResizeService,
-          methods: ['setBlockSize'],
+          provider: GameService,
+          methods: ['setMoveStep'],
         }),
       ],
     });
-    resizeDirective = TestBed.get(ResizeDirective);
+    longPressDirective = TestBed.inject(LongPressDirective);
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
   });
@@ -36,6 +35,6 @@ describe('ResizeDirective', () => {
   });
 
   it('should be initialization', () => {
-    expect(resizeDirective).toBeTruthy();
+    expect(longPressDirective).toBeTruthy();
   });
 });

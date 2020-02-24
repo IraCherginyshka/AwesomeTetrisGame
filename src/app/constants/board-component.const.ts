@@ -7,5 +7,7 @@ export const BORDER_COLOR = '#979797';
 export const CENTRAL_ITEM = 5;
 export const DELAY_DEFAULT = 700;
 export const MAX_SPEED = 100;
+export const LONG_PRESS_SPEED_ROTATE = 250;
+export const LONG_PRESS_SPEED = 125;
 export const DELAY_LEVEL_STEP = 100;
 export const ACCELERATION = 27;
