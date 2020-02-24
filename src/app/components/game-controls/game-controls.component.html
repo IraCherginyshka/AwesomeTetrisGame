@@ -1,6 +1,6 @@
 <div class="state-controls">
   <div class="flex-max">
-    <button class="state-control rotation" (click)="moveFigure(moveStep.ROTATE)">
+    <button atgLongPress [move]="figureMovement.ROTATE" class="state-control rotation">
       <img
         class="icon-arrow--secondary"
         src="../../../assets/images/arrowsRotate.png"
@@ -8,18 +8,14 @@
       />
     </button>
   </div>
-  <button class="state-control left" (click)="moveFigure(moveStep.LEFT)">
+  <button atgLongPress [move]="figureMovement.LEFT" class="state-control left">
     <img class="icon-arrow" src="../../../assets/images/arrowsLeft.png" alt="arrows" />
   </button>
-  <button class="state-control right" (click)="moveFigure(moveStep.RIGHT)">
+  <button atgLongPress [move]="figureMovement.RIGHT" class="state-control right">
     <img class="icon-arrow" src="../../../assets/images/arrowsRight.png" alt="arrows" />
   </button>
   <div class="flex-max flex-max--down">
-    <button
-      class="state-control down"
-      (mousedown)="moveFigure(moveStep.DOWN)"
-      (mouseup)="moveFigure(moveStep.DOWN_OFF)"
-    >
+    <button atgLongPress [move]="figureMovement.DOWN" class="state-control down">
       <img class="icon-arrow--secondary" src="../../../assets/images/arrowsDown.png" alt="arrows" />
     </button>
   </div>

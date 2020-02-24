@@ -15,7 +15,7 @@ import { LocalStorage } from '../../enums/local-storage.enum';
   styleUrls: ['./game-controls.component.scss'],
 })
 export class GameControlsComponent implements OnInit, OnDestroy {
-  public moveStep = FiguresMovement;
+  public readonly figureMovement = FiguresMovement;
 
   private isPlaying: boolean;
   private isLostGame: boolean;
@@ -85,9 +85,5 @@ export class GameControlsComponent implements OnInit, OnDestroy {
     if (event.key === this.controls[ControlsEnum.DROP]) {
       this.gameService.setMoveStep(FiguresMovement.DOWN_OFF);
     }
-  }
-
-  public moveFigure(step: FiguresMovement): void {
-    this.gameService.setMoveStep(step);
   }
 }
