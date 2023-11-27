@@ -26,7 +26,7 @@ export class GameService {
   private currentFigure: FiguresColors[][];
   private nextFigure =
     JSON.parse(localStorage.getItem(LocalStorage.NEXT_FIGURE)) || FigureModel.getRandomFigure();
-  private currentLevel = 1;
+  private currentLevel = 0;
   private currentNumberLines = 0;
   private currentScore = 0;
   private movementSubject = new Subject<FiguresMovement>();
